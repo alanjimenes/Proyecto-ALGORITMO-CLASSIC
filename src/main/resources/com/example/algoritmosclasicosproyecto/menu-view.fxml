@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.algoritmosclasicosproyecto.controladores.MenuController">
+   <children>
+      <HBox layoutX="50.0" layoutY="14.0" prefHeight="65.0" prefWidth="600.0" style="-fx-background-color: #088395;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="btnParadas" mnemonicParsing="false" onAction="#btnParadasClick" style="-fx-border-color: transparent; -fx-background-color: #088395;" text="Paradas" textFill="WHITE">
+               <font>
+                  <Font name="Consolas Bold" size="34.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnRutas" mnemonicParsing="false" onAction="#btnRutasClick" style="-fx-border-color: transparent; -fx-background-color: #088395;" text="Rutas" textFill="WHITE">
+               <font>
+                  <Font name="Consolas Bold" size="34.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnMapa" mnemonicParsing="false" onAction="#btnMapaClick" style="-fx-border-color: transparent; -fx-background-color: #088395;" text="Mapa" textFill="WHITE">
+               <font>
+                  <Font name="Consolas Bold" size="34.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </HBox>
+      <BorderPane fx:id="pnlContenedor" layoutX="200.0" layoutY="131.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0" />
+   </children>
+</AnchorPane>

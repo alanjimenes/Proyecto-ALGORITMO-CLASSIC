@@ -1,0 +1,56 @@
+package com.example.algoritmosclasicosproyecto.controladores;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
+
+import javax.swing.text.AbstractDocument;
+import java.util.Objects;
+
+public class MenuController {
+    @FXML
+    public Button btnMapa, btnRutas, btnParadas;
+
+    @FXML
+    public BorderPane pnlContenedor;
+
+    public void btnMapaClick(){
+        estilizarBotones(btnMapa);
+        cambiarPanel("mapa");
+    }
+
+    public void btnRutasClick(){
+        estilizarBotones(btnRutas);
+        cambiarPanel("rutas");
+
+    }
+
+    public void btnParadasClick(){
+        estilizarBotones(btnParadas);
+        cambiarPanel("paradas");
+    }
+
+    public void estilizarBotones(Button btn){
+        String estiloBase = "-fx-background-color:   #088395; -fx-border-color: transparent";
+
+        String estiloClick = "-fx-background-color:   #005461; -fx-border-color: transparent";
+
+        btnMapa.setStyle(btn.getText().equals(btnMapa.getText()) ? estiloClick : estiloBase);
+        btnRutas.setStyle(btn.getText().equals(btnRutas.getText()) ? estiloClick : estiloBase);
+        btnParadas.setStyle(btn.getText().equals(btnParadas.getText()) ? estiloClick : estiloBase);
+    }
+
+    public void cambiarPanel(String nombre){
+        try{
+            AnchorPane contenido = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/algoritmosclasicosproyecto/" + nombre + "-view.fxml")));
+            pnlContenedor.getChildren().clear();
+            pnlContenedor.setCenter(contenido);
+        }
+        catch (Exception ignored){
+            ignored.printStackTrace();
+        }
+    }
+}
