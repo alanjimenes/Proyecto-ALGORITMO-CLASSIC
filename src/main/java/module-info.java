@@ -3,6 +3,7 @@ module com.example.algoritmosclasicosproyecto {
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop;
+    requires org.postgresql.jdbc;
 
     opens com.example.algoritmosclasicosproyecto to javafx.fxml;
     exports com.example.algoritmosclasicosproyecto;

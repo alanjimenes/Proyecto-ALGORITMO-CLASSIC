@@ -1,5 +1,6 @@
 package com.example.algoritmosclasicosproyecto.logica;
 
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.*;
 import java.sql.Connection;
@@ -106,7 +107,7 @@ public class Transporte {
             }
         }
 
-        String sql = "insert into ruta (id_origen, id_destino, tiempo_minuto, distancia_km, costo, requiere_trasbordo) values (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into ruta (id_origen, id_destino, tiempo_minuto, distancia_km, costo, trasbordo) values (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -157,7 +158,7 @@ public class Transporte {
 
     public void editRuta(String id_origin, String id_destination, double tiempo, double distancia, double costo, boolean trasbordo) {
         if (listaAdyacencia.containsKey(id_origin)) {
-            String sql = "update ruta set tiempo_minuto = ?, distancia_km = ?, costo = ?, requiere_trasbordo = ? WHERE id_origen = ? AND id_destino = ?";
+            String sql = "update ruta set tiempo_minuto = ?, distancia_km = ?, costo = ?, trasbordo = ? WHERE id_origen = ? AND id_destino = ?";
 
             try (Connection conn = Conexion.conectar();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -278,6 +279,58 @@ public class Transporte {
         }
 
         return camino;
+    }
+
+
+    public void cargarDatosDesdeBD() {
+        System.out.println("Iniciando carga del grafo desde Supabase...");
+
+        paradaMap.clear();
+        listaAdyacencia.clear();
+
+        String sqlParadas = "select id, nombre from parada";
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sqlParadas);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String nombre = rs.getString("nombre");
+                paradaMap.put(id, new Parada(id, nombre));
+                listaAdyacencia.put(id, new ArrayList<>());
+            }
+            System.out.println("Vértices cargados: " + paradaMap.size());
+
+        } catch (SQLException e) {
+            System.err.println("Error al cargar paradas: " + e.getMessage());
+            return;
+        }
+        String sqlRutas = "select id_origen, id_destino, tiempo_minuto, distancia_km, costo, trasbordo from ruta";
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sqlRutas);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            int contadorRutas = 0;
+            while (rs.next()) {
+                String origen = rs.getString("id_origen");
+                String destino = rs.getString("id_destino");
+
+                if (paradaMap.containsKey(origen) && paradaMap.containsKey(destino)) {
+                    double tiempo = rs.getDouble("tiempo_minuto");
+                    double distancia = rs.getDouble("distancia_km");
+                    double costo = rs.getDouble("costo");
+                    boolean trasbordo = rs.getBoolean("trasbordo");
+
+                    Parada paradaDestino = paradaMap.get(destino);
+                    listaAdyacencia.get(origen).add(new Ruta(paradaDestino, tiempo, distancia, costo, trasbordo));
+                    contadorRutas++;
+                }
+            }
+            System.out.println("Aristas cargadas: " + contadorRutas);
+
+        } catch (SQLException e) {
+            System.err.println("Error al cargar rutas: " + e.getMessage());
+        }
     }
 
 }
