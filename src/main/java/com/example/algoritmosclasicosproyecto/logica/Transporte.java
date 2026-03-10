@@ -129,42 +129,73 @@ public class Transporte {
         }
     }
 
-    public void deleteRuta(String id_Origin, String id_Destination) {
-        if (listaAdyacencia.containsKey(id_Origin)) {
-            List<Ruta> rutas = listaAdyacencia.get(id_Origin);
-            rutas.removeIf(ruta -> ruta.getDestino().getId().equals(id_Destination));
+    public void deleteRuta(String id_origin, String id_destination) {
+        if (listaAdyacencia.containsKey(id_origin)) {
+            String sql = "delete from ruta where id_origen = ? and id_destino = ?";
+
+            try (Connection conn = Conexion.conectar();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, id_origin);
+                pstmt.setString(2, id_destination);
+
+                int filasAfectadas = pstmt.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    List<Ruta> rutas = listaAdyacencia.get(id_origin);
+                    rutas.removeIf(ruta -> ruta.getDestino().getId().equals(id_destination));
+                    System.out.println("Ruta eliminada exitosamente.");
+                } else {
+                    System.err.println("La ruta no existe en la base de datos.");
+                }
+
+            } catch (SQLException e) {
+                System.err.println("Error al eliminar ruta en BD: " + e.getMessage());
+            }
         }
     }
 
     public void editRuta(String id_origin, String id_destination, double tiempo, double distancia, double costo, boolean trasbordo) {
+        if (listaAdyacencia.containsKey(id_origin)) {
+            String sql = "update ruta set tiempo_minuto = ?, distancia_km = ?, costo = ?, requiere_trasbordo = ? WHERE id_origen = ? AND id_destino = ?";
 
-        if (!paradaMap.containsKey(id_origin) || !paradaMap.containsKey(id_destination)) {
-            System.err.println("Error: El origen o destino no existe.");
-            return;
-        }
+            try (Connection conn = Conexion.conectar();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        if (tiempo < 0 || distancia < 0 || costo < 0) {
-            System.err.println("Error: Tiempo, distancia y costo no pueden ser negativos.");
-            return;
-        }
+                pstmt.setDouble(1, tiempo);
+                pstmt.setDouble(2, distancia);
+                pstmt.setDouble(3, costo);
+                pstmt.setBoolean(4, trasbordo);
+                pstmt.setString(5, id_origin);
+                pstmt.setString(6, id_destination);
 
-        List<Ruta> rutas = listaAdyacencia.get(id_origin);
-        boolean encontrada = false;
-        int i = 0;
-        while (i < rutas.size() && !encontrada) {
-            Ruta r = rutas.get(i);
-            if (r.getDestino().getId().equals(id_destination)) {
-                r.setTiempoMinuto(tiempo);
-                r.setDistanciaKm(distancia);
-                r.setCosto(costo);
-                r.setRequiereTrasbordo(trasbordo);
-                encontrada = true;
+                int filasAfectadas = pstmt.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    List<Ruta> rutas = listaAdyacencia.get(id_origin);
+                    boolean encontrada = false;
+                    int i = 0;
+                    while (i < rutas.size() && !encontrada) {
+                        Ruta r = rutas.get(i);
+                        if (r.getDestino().getId().equals(id_destination)) {
+                            r.setTiempoMinuto(tiempo);
+                            r.setDistanciaKm(distancia);
+                            r.setCosto(costo);
+                            r.setRequiereTrasbordo(trasbordo);
+                            encontrada = true;
+                        }
+                        i++;
+                    }
+                    System.out.println("Ruta editada exitosamente.");
+                } else {
+                    System.err.println("La ruta no existe en la base de datos.");
+                }
+
+            } catch (SQLException e) {
+                System.err.println("Error al editar ruta en BD: " + e.getMessage());
             }
-            i++;
-        }
-
-        if (!encontrada) {
-            System.err.println("Error: La ruta de " + id_origin + " a " + id_destination + " no existe.");
+        } else {
+            System.err.println("Error: El origen no existe.");
         }
     }
 
