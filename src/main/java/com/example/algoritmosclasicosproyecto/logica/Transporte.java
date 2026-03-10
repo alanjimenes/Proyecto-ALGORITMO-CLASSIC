@@ -26,6 +26,7 @@ public class Transporte {
     public List<Parada> getTodasLasParadas() {
         return new ArrayList<>(paradaMap.values());
     }
+
     public void addParada(String id, String nombre) {
         if (!paradaMap.containsKey(id)) {
             String sql = "insert into parada values (?,?)";
