@@ -41,20 +41,49 @@ public class Transporte {
 
     public void editParada(String id, String nombre) {
         if (paradaMap.containsKey(id)) {
-            Parada p = paradaMap.get(id);
-            p.setNombre(nombre);
+            String sql = "update parada set nombre = ? where id = ?";
+
+            try (Connection conn = Conexion.conectar();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, nombre);
+                pstmt.setString(2, id);
+                int filas = pstmt.executeUpdate();
+
+                if (filas > 0) {
+                    paradaMap.get(id).setNombre(nombre);
+                    System.out.println("Parada modificada a: " + nombre);
+                }
+
+            } catch (SQLException e) {
+                System.err.println("Error al editar parada en BD: " + e.getMessage());
+            }
         } else {
-            System.out.println("Error: La parada con ID " + id + " no existe.");
+            System.err.println("Error: La parada con ID " + id + " no existe.");
         }
     }
 
     public void deleteParada(String id) {
         if (paradaMap.containsKey(id)) {
-            paradaMap.remove(id);
-            listaAdyacencia.remove(id);
-            for (List<Ruta> rutas : listaAdyacencia.values()) {
-                rutas.removeIf(ruta -> ruta.getDestino().getId().equals(id));
+            String sql = "delete from parada where id = ?";
+            try (Connection conn = Conexion.conectar();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, id);
+                int filas = pstmt.executeUpdate();
+
+                if (filas > 0) {
+                    paradaMap.remove(id);
+                    listaAdyacencia.remove(id);
+                    for (List<Ruta> rutas : listaAdyacencia.values()) {
+                        rutas.removeIf(ruta -> ruta.getDestino().getId().equals(id));
+                    }
+                    System.out.println("Parada y sus conexiones eliminadas.");
+                }
+
+            } catch (SQLException e) {
+                System.err.println("Error al eliminar parada en BD: " + e.getMessage());
             }
+        } else {
+            System.err.println("Error: La parada con ID " + id + " no existe.");
         }
     }
 
@@ -69,6 +98,7 @@ public class Transporte {
             return;
         }
 
+
         for (Ruta r : listaAdyacencia.get(id_Origin)) {
             if (r.getDestino().getId().equals(id_Destination)) {
                 System.err.println("Error: Ya existe una ruta de " + id_Origin + " a " + id_Destination);
@@ -76,10 +106,28 @@ public class Transporte {
             }
         }
 
-        Parada destino = paradaMap.get(id_Destination);
-        listaAdyacencia.get(id_Origin).add(new Ruta(destino, tiempo, distancia, costo, trasbordo));
-    }
+        String sql = "insert into ruta (id_origen, id_destino, tiempo_minuto, distancia_km, costo, requiere_trasbordo) values (?, ?, ?, ?, ?, ?)";
 
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, id_Origin);
+            pstmt.setString(2, id_Destination);
+            pstmt.setDouble(3, tiempo);
+            pstmt.setDouble(4, distancia);
+            pstmt.setDouble(5, costo);
+            pstmt.setBoolean(6, trasbordo);
+
+            pstmt.executeUpdate();
+
+            Parada destino = paradaMap.get(id_Destination);
+            listaAdyacencia.get(id_Origin).add(new Ruta(destino, tiempo, distancia, costo, trasbordo));
+            System.out.println("Ruta agregada de " + id_Origin + " a " + id_Destination);
+
+        } catch (SQLException e) {
+            System.err.println("Error al insertar ruta en la BD: " + e.getMessage());
+        }
+    }
     public void deleteRuta(String id_Origin, String id_Destination) {
         if (listaAdyacencia.containsKey(id_Origin)) {
             List<Ruta> rutas = listaAdyacencia.get(id_Origin);
