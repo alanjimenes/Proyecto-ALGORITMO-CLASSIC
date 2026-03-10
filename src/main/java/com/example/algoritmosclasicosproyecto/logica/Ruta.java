@@ -1,13 +1,16 @@
 package com.example.algoritmosclasicosproyecto.logica;
 
 public class Ruta {
+    private Parada origen;
     private Parada destino;
     private double tiempoMinuto;
     private double distanciaKm;
     private double costo;
     private boolean requiereTrasbordo;
 
-    public Ruta(Parada destino, double tiempoMinuto, double distanciaKm, double costo, boolean requiereTrasbordo) {
+
+    public Ruta(Parada origen, Parada destino, double tiempoMinuto, double distanciaKm, double costo, boolean requiereTrasbordo) {
+        this.origen = origen;
         this.destino = destino;
         this.tiempoMinuto = tiempoMinuto;
         this.distanciaKm = distanciaKm;
@@ -21,6 +24,10 @@ public class Ruta {
 
     public void setDestino(Parada destino) {
         this.destino = destino;
+    }
+
+    public Parada getOrigen() {
+        return origen;
     }
 
     public double getTiempoMinuto() {

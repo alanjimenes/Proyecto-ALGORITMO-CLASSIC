@@ -45,14 +45,16 @@ public class ParadasController {
         String id = txtId.getText().trim();
         String nombre = txtNombre.getText().trim();
 
-        if (id.isEmpty() || nombre.isEmpty())
+        if (id.isEmpty() || nombre.isEmpty()) {
+            mostrarAlerta("Error", "ID y Nombre son obligatorios.");
             return;
+        }
 
         Transporte.getInstancia().addParada(id, nombre);
+
         actualizarTabla();
         limpiarFormulario();
     }
-
     @FXML
     void editarParada(ActionEvent event) {
         String id = txtId.getText().trim();
@@ -93,7 +95,17 @@ public class ParadasController {
     }
 
     private void actualizarTabla() {
-        ObservableList<Parada> lista = FXCollections.observableArrayList(Transporte.getInstancia().getTodasLasParadas());
+        ObservableList<Parada> lista = FXCollections.observableArrayList(Transporte.getInstancia().getParadas());
+        tablaParadas.refresh();
         tablaParadas.setItems(lista);
     }
+
+    private void mostrarAlerta(String titulo, String contenido) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(contenido);
+        alerta.showAndWait();
+    }
+
 }
