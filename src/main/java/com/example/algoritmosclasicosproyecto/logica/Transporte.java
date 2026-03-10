@@ -168,7 +168,7 @@ public class Transporte {
         }
     }
 
-    private static class NodoDistancia {
+    private static class NodoDistancia implements Comparable<NodoDistancia> {
         String idParada;
         double distancia;
 
@@ -176,15 +176,19 @@ public class Transporte {
             this.idParada = idParada;
             this.distancia = distancia;
         }
-    }
 
+        @Override
+        public int compareTo(NodoDistancia otro) {
+            return Double.compare(this.distancia, otro.distancia);
+        }
+    }
 
     private double obtenerPesoRuta(Ruta ruta, String criterio) {
         switch (criterio.toLowerCase()) {
             case "tiempo": return ruta.getTiempoMinuto();
             case "distancia": return ruta.getDistanciaKm();
             case "costo": return ruta.getCosto();
-            default: return ruta.getTiempoMinuto(); // Criterio por defecto
+            default: return ruta.getTiempoMinuto();
         }
     }
 
@@ -197,33 +201,34 @@ public class Transporte {
         Map<String, Double> distancias = new HashMap<>();
         Map<String, String> anteriores = new HashMap<>();
 
-        PriorityQueue<NodoDistancia> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> n.distancia));
+        PriorityQueue<NodoDistancia> pq = new PriorityQueue<>();
 
         for (String id : paradaMap.keySet()) {
             distancias.put(id, Double.MAX_VALUE);
         }
         distancias.put(id_Origin, 0.0);
         pq.offer(new NodoDistancia(id_Origin, 0.0));
+        boolean destino = false;
 
-        while (!pq.isEmpty()) {
+        while (!pq.isEmpty() && !destino) {
             NodoDistancia actual = pq.poll();
             String idActual = actual.idParada;
 
+            if (idActual.equals(id_Destination)) {
+                destino = true;
+            } else {
+                if (actual.distancia <= distancias.get(idActual)) {
+                    for (Ruta ruta : listaAdyacencia.get(idActual)) {
+                        String vecinoId = ruta.getDestino().getId();
+                        double peso = obtenerPesoRuta(ruta, criterio);
+                        double nuevaDistancia = distancias.get(idActual) + peso;
 
-            if (idActual.equals(id_Destination)) break;
-
-            if (actual.distancia > distancias.get(idActual)) continue;
-
-
-            for (Ruta ruta : listaAdyacencia.get(idActual)) {
-                String vecinoId = ruta.getDestino().getId();
-                double peso = obtenerPesoRuta(ruta, criterio);
-                double nuevaDistancia = distancias.get(idActual) + peso;
-
-                if (nuevaDistancia < distancias.get(vecinoId)) {
-                    distancias.put(vecinoId, nuevaDistancia);
-                    anteriores.put(vecinoId, idActual);
-                    pq.offer(new NodoDistancia(vecinoId, nuevaDistancia));
+                        if (nuevaDistancia < distancias.get(vecinoId)) {
+                            distancias.put(vecinoId, nuevaDistancia);
+                            anteriores.put(vecinoId, idActual);
+                            pq.offer(new NodoDistancia(vecinoId, nuevaDistancia));
+                        }
+                    }
                 }
             }
         }
@@ -243,6 +248,5 @@ public class Transporte {
 
         return camino;
     }
-
 
 }
