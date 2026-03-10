@@ -128,6 +128,7 @@ public class Transporte {
             System.err.println("Error al insertar ruta en la BD: " + e.getMessage());
         }
     }
+
     public void deleteRuta(String id_Origin, String id_Destination) {
         if (listaAdyacencia.containsKey(id_Origin)) {
             List<Ruta> rutas = listaAdyacencia.get(id_Origin);
@@ -167,7 +168,26 @@ public class Transporte {
         }
     }
 
-    
+    private static class NodoDistancia {
+        String idParada;
+        double distancia;
+
+        public NodoDistancia(String idParada, double distancia) {
+            this.idParada = idParada;
+            this.distancia = distancia;
+        }
+    }
+
+
+    private double obtenerPesoRuta(Ruta ruta, String criterio) {
+        switch (criterio.toLowerCase()) {
+            case "tiempo": return ruta.getTiempoMinuto();
+            case "distancia": return ruta.getDistanciaKm();
+            case "costo": return ruta.getCosto();
+            default: return ruta.getTiempoMinuto(); // Criterio por defecto
+        }
+    }
+
     public List<Parada> dijkstra(String id_Origin, String id_Destination, String criterio) {
         if (!paradaMap.containsKey(id_Origin) || !paradaMap.containsKey(id_Destination)) {
             System.err.println("Error: El origen o destino no existe.");
@@ -177,41 +197,33 @@ public class Transporte {
         Map<String, Double> distancias = new HashMap<>();
         Map<String, String> anteriores = new HashMap<>();
 
+        PriorityQueue<NodoDistancia> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> n.distancia));
+
         for (String id : paradaMap.keySet()) {
             distancias.put(id, Double.MAX_VALUE);
         }
         distancias.put(id_Origin, 0.0);
+        pq.offer(new NodoDistancia(id_Origin, 0.0));
 
-        List<String> noVisitados = new ArrayList<>(paradaMap.keySet());
+        while (!pq.isEmpty()) {
+            NodoDistancia actual = pq.poll();
+            String idActual = actual.idParada;
 
-        while (!noVisitados.isEmpty()) {
-            String actual = null;
-            for (String id : noVisitados) {
-                if (actual == null || distancias.get(id) < distancias.get(actual)) {
-                    actual = id;
-                }
-            }
 
-            if (actual.equals(id_Destination)) break;
-            if (distancias.get(actual) == Double.MAX_VALUE) break;
+            if (idActual.equals(id_Destination)) break;
 
-            noVisitados.remove(actual);
+            if (actual.distancia > distancias.get(idActual)) continue;
 
-            for (Ruta ruta : listaAdyacencia.get(actual)) {
+
+            for (Ruta ruta : listaAdyacencia.get(idActual)) {
                 String vecinoId = ruta.getDestino().getId();
-
-                double peso;
-                switch (criterio) {
-                    case "tiempo":    peso = ruta.getTiempoMinuto(); break;
-                    case "distancia": peso = ruta.getDistanciaKm();  break;
-                    default:          peso = ruta.getCosto();         break;
-                }
-
-                double nuevaDistancia = distancias.get(actual) + peso;
+                double peso = obtenerPesoRuta(ruta, criterio);
+                double nuevaDistancia = distancias.get(idActual) + peso;
 
                 if (nuevaDistancia < distancias.get(vecinoId)) {
                     distancias.put(vecinoId, nuevaDistancia);
-                    anteriores.put(vecinoId, actual);
+                    anteriores.put(vecinoId, idActual);
+                    pq.offer(new NodoDistancia(vecinoId, nuevaDistancia));
                 }
             }
         }
@@ -219,36 +231,18 @@ public class Transporte {
         List<Parada> camino = new ArrayList<>();
         String paso = id_Destination;
 
+        if (distancias.get(id_Destination) == Double.MAX_VALUE) {
+            System.err.println("No existe camino posible entre " + id_Origin + " y " + id_Destination);
+            return null;
+        }
+
         while (paso != null) {
             camino.add(0, paradaMap.get(paso));
             paso = anteriores.get(paso);
         }
 
-        if (camino.isEmpty() || !camino.get(0).getId().equals(id_Origin)) {
-            System.err.println("No existe camino entre " + id_Origin + " y " + id_Destination);
-            return null;
-        }
-
         return camino;
     }
 
-    public void cargarDatosPrueba() {
-        addParada("A", "Monumento");
-        addParada("B", "Centro León");
-        addParada("C", "PUCMM");
-        addParada("D", "Las Colinas");
-        addParada("E", "Los Cerros");
-        addParada("F", "Los Jardines");
 
-
-        addRuta("A", "B",  20,   2.5,   25,  false);
-        addRuta("A", "C",   8,   5.0,   20,  false);
-        addRuta("B", "C",  10,   3.5,   50,  false);
-        addRuta("B", "D",   5,   4.0,   90,  true);
-        addRuta("C", "D",   6,   2.0,   15,  false);
-        addRuta("C", "E",  20,   8.0,    8,  false);
-        addRuta("D", "E",  15,   6.0,   80,  false);
-        addRuta("D", "F",  25,   1.5,   90,  false);
-        addRuta("E", "F",   5,   4.5,    8,  true);
-    }
 }
