@@ -14,7 +14,6 @@ public class Ruta {
         this.costo = costo;
         this.requiereTrasbordo = requiereTrasbordo;
     }
-
     public Parada getDestino() {
         return destino;
     }
