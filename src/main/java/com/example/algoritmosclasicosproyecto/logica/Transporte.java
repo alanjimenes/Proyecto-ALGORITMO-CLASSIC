@@ -310,7 +310,7 @@ public class Transporte {
                 paradaMap.put(id, new Parada(id, nombre));
                 listaAdyacencia.put(id, new ArrayList<>());
             }
-            System.out.println("Vértices cargados: " + paradaMap.size());
+            System.out.println("Paradas cargadas: " + paradaMap.size());
 
         } catch (SQLException e) {
             System.err.println("Error al cargar paradas: " + e.getMessage());
@@ -337,7 +337,7 @@ public class Transporte {
                     contadorRutas++;
                 }
             }
-            System.out.println("Aristas cargadas: " + contadorRutas);
+            System.out.println("Rutas cargadas: " + contadorRutas);
 
         } catch (SQLException e) {
             System.err.println("Error al cargar rutas: " + e.getMessage());
