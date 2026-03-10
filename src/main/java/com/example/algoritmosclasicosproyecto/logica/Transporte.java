@@ -19,7 +19,7 @@ public class Transporte {
     public static Transporte getInstancia() {
         if (instancia == null) {
             instancia = new Transporte();
-            instancia.cargarDatosDesdeBD(); // Se carga de Supabase la primera vez que se usa
+            instancia.cargarDatosDesdeBD();
         }
         return instancia;
     }
