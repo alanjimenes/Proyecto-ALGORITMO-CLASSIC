@@ -50,7 +50,7 @@ public class MapaController {
         for (int i = 0; i < paradas.size(); i++) {
             final Parada parada = paradas.get(i);
 
-            Circle circulo = new Circle(20, Color.web("#088395"));
+            Circle circulo = new Circle(27, Color.web("#088395"));
             circulo.setStroke(Color.WHITE);
             circulo.setStrokeWidth(2.0);
 
