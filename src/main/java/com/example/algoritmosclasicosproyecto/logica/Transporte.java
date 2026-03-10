@@ -10,12 +10,22 @@ import java.sql.SQLException;
 public class Transporte {
     private Map<String, Parada> paradaMap;
     private Map<String, List<Ruta>> listaAdyacencia;
-
-    public Transporte() {
+    private static Transporte instancia;
+    private Transporte() {
         this.paradaMap = new HashMap<>();
         this.listaAdyacencia = new HashMap<>();
     }
 
+    public static Transporte getInstancia() {
+        if (instancia == null) {
+            instancia = new Transporte();
+            instancia.cargarDatosDesdeBD(); // Se carga de Supabase la primera vez que se usa
+        }
+        return instancia;
+    }
+    public List<Parada> getTodasLasParadas() {
+        return new ArrayList<>(paradaMap.values());
+    }
     public void addParada(String id, String nombre) {
         if (!paradaMap.containsKey(id)) {
             String sql = "insert into parada values (?,?)";

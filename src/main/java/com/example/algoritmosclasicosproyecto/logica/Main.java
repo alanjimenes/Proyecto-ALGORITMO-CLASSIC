@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         Transporte redTransporte = new Transporte();
 
         System.out.println("=== 1. INICIALIZACIÓN Y CARGA DE BD ===");
@@ -35,6 +35,6 @@ public class Main {
         } else {
             System.out.println("No se encontró ninguna conexión lógica.");
         }
-    }
+    }*/
 }
 
