@@ -27,6 +27,7 @@ public class Parada {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

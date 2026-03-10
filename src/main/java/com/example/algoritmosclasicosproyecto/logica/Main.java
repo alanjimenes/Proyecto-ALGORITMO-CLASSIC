@@ -15,7 +15,6 @@ public class Main {
         redTransporte.addParada("P2", "Centro Comercial");
         redTransporte.addParada("P3", "Universidad");
 
-
         redTransporte.addRuta("P1", "P2", 10.0, 5.0, 35.0, false);
         redTransporte.addRuta("P2", "P3", 15.0, 8.0, 35.0, false);
         redTransporte.addRuta("P1", "P3", 45.0, 20.0, 50.0, false);
