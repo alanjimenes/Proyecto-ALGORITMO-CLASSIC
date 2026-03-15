@@ -40,7 +40,7 @@ public class ParadasController {
     }
 
     @FXML
-    void agregarParada(ActionEvent event) {
+    void addParada(ActionEvent event) {
         String id = txtId.getText().trim();
         String nombre = txtNombre.getText().trim();
 
@@ -55,7 +55,7 @@ public class ParadasController {
         cleanForm();
     }
     @FXML
-    void editarParada(ActionEvent event) {
+    void editParada(ActionEvent event) {
         String id = txtId.getText().trim();
         String nombre = txtNombre.getText().trim();
 
@@ -68,7 +68,7 @@ public class ParadasController {
     }
 
     @FXML
-    void eliminarParada(ActionEvent event) {
+    void deleteParada(ActionEvent event) {
         String id = txtId.getText().trim();
         if (id.isEmpty()) return;
 

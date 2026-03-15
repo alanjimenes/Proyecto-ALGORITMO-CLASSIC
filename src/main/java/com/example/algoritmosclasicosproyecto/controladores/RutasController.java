@@ -32,7 +32,7 @@ public class RutasController {
     @FXML private TableColumn<Ruta, Double> colTiempo;
     @FXML private TableColumn<Ruta, Double> colDistancia;
     @FXML private TableColumn<Ruta, Double> colCosto;
-    @FXML private TableColumn<Ruta, Boolean> colTrasbordo;
+    @FXML private TableColumn<Ruta, Integer> colTrasbordo;
 
     @FXML
     public void initialize() {
@@ -90,13 +90,13 @@ public class RutasController {
         });
         colTrasbordo.setCellValueFactory(new Callback<CellDataFeatures<Ruta, Integer>, ObservableValue<Integer>>() {
             @Override public SimpleObjectProperty<Integer> call(CellDataFeatures<Ruta, Integer> p) {
-                return new SimpleObjectProperty<>(p.getValue().getTrasbordo());
+                return new SimpleObjectProperty<Integer>((int) p.getValue().getTrasbordo());
             }
         });
     }
 
     private void actualizarTabla() {
-        // Asegúrate de usar getTodasLasParadas() si getParadas() da error
+
         ObservableList<Parada> paradas = FXCollections.observableArrayList(Transporte.getInstancia().getParadas());
         cmbOrigen.setItems(paradas);
         cmbDestino.setItems(paradas);
