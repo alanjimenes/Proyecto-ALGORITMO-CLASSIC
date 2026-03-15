@@ -3,19 +3,19 @@ package com.example.algoritmosclasicosproyecto.logica;
 public class Ruta {
     private Parada origen;
     private Parada destino;
-    private double tiempoMinuto;
-    private double distanciaKm;
+    private double tiempo;
+    private double distancia;
     private double costo;
-    private boolean requiereTrasbordo;
+    private int trasbordo;
 
 
-    public Ruta(Parada origen, Parada destino, double tiempoMinuto, double distanciaKm, double costo, boolean requiereTrasbordo) {
+    public Ruta(Parada origen, Parada destino, double tiempo, double distancia, double costo, int trasbordo) {
         this.origen = origen;
         this.destino = destino;
-        this.tiempoMinuto = tiempoMinuto;
-        this.distanciaKm = distanciaKm;
+        this.tiempo = tiempo;
+        this.distancia = distancia;
         this.costo = costo;
-        this.requiereTrasbordo = requiereTrasbordo;
+        this.trasbordo = trasbordo;
     }
 
     public Parada getDestino() {
@@ -30,20 +30,20 @@ public class Ruta {
         return origen;
     }
 
-    public double getTiempoMinuto() {
-        return tiempoMinuto;
+    public double getTiempo() {
+        return tiempo;
     }
 
-    public void setTiempoMinuto(double tiempoMinuto) {
-        this.tiempoMinuto = tiempoMinuto;
+    public void setTiempo(double tiempo) {
+        this.tiempo = tiempo;
     }
 
-    public double getDistanciaKm() {
-        return distanciaKm;
+    public double getDistancia() {
+        return distancia;
     }
 
-    public void setDistanciaKm(double distanciaKm) {
-        this.distanciaKm = distanciaKm;
+    public void setDistancia(double distancia) {
+        this.distancia = distancia;
     }
 
     public double getCosto() {
@@ -54,11 +54,11 @@ public class Ruta {
         this.costo = costo;
     }
 
-    public boolean isRequiereTrasbordo() {
-        return requiereTrasbordo;
+    public double getTrasbordo() {
+        return trasbordo;
     }
 
-    public void setRequiereTrasbordo(boolean requiereTrasbordo) {
-        this.requiereTrasbordo = requiereTrasbordo;
+    public void setTrasbordo(int trasbordo) {
+        this.trasbordo = trasbordo;
     }
 }

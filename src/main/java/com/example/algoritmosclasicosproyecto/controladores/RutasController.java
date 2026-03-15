@@ -23,7 +23,7 @@ public class RutasController {
     @FXML private TextField txtTiempo;
     @FXML private TextField txtDistancia;
     @FXML private TextField txtCosto;
-    @FXML private CheckBox chkTrasbordo;
+    @FXML private TextField txtTrasbordo;
     @FXML private Button btnAgregar, btnEditar, btnEliminar;
 
     @FXML private TableView<Ruta> tablaRutas;
@@ -37,22 +37,23 @@ public class RutasController {
     @FXML
     public void initialize() {
         comboList();
-        configurarColumnasTabla();
+        tabla();
         actualizarTabla();
 
-        // Listener de selección sin lambdas
+
         tablaRutas.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ruta>() {
             @Override
-            public void changed(ObservableValue<? extends Ruta> obs, Ruta viejaSeleccion, Ruta nuevaSeleccion) {
-                if (nuevaSeleccion != null) {
-                    cmbOrigen.setValue(nuevaSeleccion.getOrigen());
-                    cmbDestino.setValue(nuevaSeleccion.getDestino());
-                    txtTiempo.setText(String.valueOf(nuevaSeleccion.getTiempoMinuto()));
-                    txtDistancia.setText(String.valueOf(nuevaSeleccion.getDistanciaKm()));
-                    txtCosto.setText(String.valueOf(nuevaSeleccion.getCosto()));
-                    chkTrasbordo.setSelected(nuevaSeleccion.isRequiereTrasbordo());
+            public void changed(ObservableValue<? extends Ruta> obs, Ruta antigua, Ruta nueva) {
+                if (nueva != null) {
+                    cmbOrigen.setValue(nueva.getOrigen());
+                    cmbDestino.setValue(nueva.getDestino());
+                    txtTiempo.setText(String.valueOf(nueva.getTiempo()));
+                    txtDistancia.setText(String.valueOf(nueva.getDistancia()));
+                    txtCosto.setText(String.valueOf(nueva.getCosto()));
+                    txtTrasbordo.setText(String.valueOf(Integer.valueOf((int) nueva.getTrasbordo())));
 
-                    // Bloquear claves primarias y botón agregar
+
+
                     cmbOrigen.setDisable(true);
                     cmbDestino.setDisable(true);
                     btnAgregar.setDisable(true);
@@ -62,10 +63,10 @@ public class RutasController {
             }
         });
 
-        limpiarFormulario();
+        cleanform();
     }
 
-    private void configurarColumnasTabla() {
+    private void tabla() {
         colOrigen.setCellValueFactory(new Callback<CellDataFeatures<Ruta, String>, ObservableValue<String>>() {
             @Override public ObservableValue<String> call(CellDataFeatures<Ruta, String> p) { return new SimpleStringProperty(p.getValue().getOrigen().getNombre()); }
         });
@@ -74,12 +75,12 @@ public class RutasController {
         });
         colTiempo.setCellValueFactory(new Callback<CellDataFeatures<Ruta, Double>, ObservableValue<Double>>() {
             @Override public ObservableValue<Double> call(CellDataFeatures<Ruta, Double> p) {
-                return new SimpleObjectProperty<>(p.getValue().getTiempoMinuto());
+                return new SimpleObjectProperty<>(p.getValue().getTiempo());
             }
         });
         colDistancia.setCellValueFactory(new Callback<CellDataFeatures<Ruta, Double>, ObservableValue<Double>>() {
             @Override public ObservableValue<Double> call(CellDataFeatures<Ruta, Double> p) {
-                return new SimpleObjectProperty<>(p.getValue().getDistanciaKm());
+                return new SimpleObjectProperty<>(p.getValue().getDistancia());
             }
         });
         colCosto.setCellValueFactory(new Callback<CellDataFeatures<Ruta, Double>, ObservableValue<Double>>() {
@@ -87,8 +88,10 @@ public class RutasController {
                 return new SimpleObjectProperty<>(p.getValue().getCosto());
             }
         });
-        colTrasbordo.setCellValueFactory(new Callback<CellDataFeatures<Ruta, Boolean>, ObservableValue<Boolean>>() {
-            @Override public ObservableValue<Boolean> call(CellDataFeatures<Ruta, Boolean> p) { return new SimpleObjectProperty<>(p.getValue().isRequiereTrasbordo()); }
+        colTrasbordo.setCellValueFactory(new Callback<CellDataFeatures<Ruta, Integer>, ObservableValue<Integer>>() {
+            @Override public SimpleObjectProperty<Integer> call(CellDataFeatures<Ruta, Integer> p) {
+                return new SimpleObjectProperty<>(p.getValue().getTrasbordo());
+            }
         });
     }
 
@@ -105,7 +108,7 @@ public class RutasController {
 
     @FXML
     void agregarRuta(ActionEvent event) {
-        if (!validarFormulario()) return;
+        if (!checkForm()) return;
 
         Parada origen = cmbOrigen.getValue();
         Parada destino = cmbDestino.getValue();
@@ -114,15 +117,15 @@ public class RutasController {
                 Double.parseDouble(txtTiempo.getText().trim()),
                 Double.parseDouble(txtDistancia.getText().trim()),
                 Double.parseDouble(txtCosto.getText().trim()),
-                chkTrasbordo.isSelected());
+                Integer.parseInt(txtTrasbordo.getText().trim()));
 
         actualizarTabla();
-        limpiarFormulario();
+        cleanform();
     }
 
     @FXML
     void editarRuta(ActionEvent event) {
-        if (!validarFormulario()) return;
+        if (!checkForm()) return;
 
         Parada origen = cmbOrigen.getValue();
         Parada destino = cmbDestino.getValue();
@@ -131,10 +134,10 @@ public class RutasController {
                 Double.parseDouble(txtTiempo.getText().trim()),
                 Double.parseDouble(txtDistancia.getText().trim()),
                 Double.parseDouble(txtCosto.getText().trim()),
-                chkTrasbordo.isSelected());
+                Integer.parseInt(txtTrasbordo.getText().trim()));
 
         actualizarTabla();
-        limpiarFormulario();
+        cleanform();
     }
 
     @FXML
@@ -145,22 +148,22 @@ public class RutasController {
         if (origen != null && destino != null) {
             Transporte.getInstancia().deleteRuta(origen.getId(), destino.getId());
             actualizarTabla();
-            limpiarFormulario();
+            cleanform();
         }
     }
 
     @FXML
     void limpiarFormularioAction(ActionEvent event) {
-        limpiarFormulario();
+        cleanform();
     }
 
-    private void limpiarFormulario() {
+    private void cleanform() {
         cmbOrigen.getSelectionModel().clearSelection();
         cmbDestino.getSelectionModel().clearSelection();
         txtTiempo.clear();
         txtDistancia.clear();
         txtCosto.clear();
-        chkTrasbordo.setSelected(false);
+        txtTrasbordo.clear();
 
         cmbOrigen.setDisable(false);
         cmbDestino.setDisable(false);
@@ -170,16 +173,16 @@ public class RutasController {
         tablaRutas.getSelectionModel().clearSelection();
     }
 
-    private boolean validarFormulario() {
+    private boolean checkForm() {
         Parada origen = cmbOrigen.getValue();
         Parada destino = cmbDestino.getValue();
 
         if (origen == null || destino == null) {
-            mostrarAlerta("Error", "Debe seleccionar origen y destino.");
+            alerta("Error", "Debe seleccionar origen y destino.");
             return false;
         }
         if (origen.getId().equals(destino.getId())) {
-            mostrarAlerta("Error de Lógica", "El origen y el destino no pueden ser iguales.");
+            alerta("Error de Lógica", "El origen y el destino no pueden ser iguales.");
             return false;
         }
 
@@ -189,17 +192,17 @@ public class RutasController {
             double costo = Double.parseDouble(txtCosto.getText().trim());
 
             if (tiempo <= 0 || distancia <= 0 || costo < 0) {
-                mostrarAlerta("Datos Inválidos", "Tiempo y distancia deben ser > 0. El costo no puede ser negativo.");
+                alerta("Datos Inválidos", "Tiempo y distancia deben ser > 0. El costo no puede ser negativo.");
                 return false;
             }
             return true;
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error de Formato", "Ingrese valores numéricos válidos en tiempo, distancia y costo.");
+            alerta("Error de Formato", "Ingrese valores validos.");
             return false;
         }
     }
 
-    private void mostrarAlerta(String titulo, String contenido) {
+    private void alerta(String titulo, String contenido) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);

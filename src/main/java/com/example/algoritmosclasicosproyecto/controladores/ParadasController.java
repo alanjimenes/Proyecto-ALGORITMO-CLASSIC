@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ParadasController {
 
@@ -24,12 +23,12 @@ public class ParadasController {
         colId.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getId()));
         colNombre.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNombre()));
 
-        actualizarTabla();
+        updateTabla();
 
-        tablaParadas.getSelectionModel().selectedItemProperty().addListener((obs, viejaSeleccion, nuevaSeleccion) -> {
-            if (nuevaSeleccion != null) {
-                txtId.setText(nuevaSeleccion.getId());
-                txtNombre.setText(nuevaSeleccion.getNombre());
+        tablaParadas.getSelectionModel().selectedItemProperty().addListener((obs, antigua, nueva) -> {
+            if (nueva != null) {
+                txtId.setText(nueva.getId());
+                txtNombre.setText(nueva.getNombre());
                 txtId.setDisable(true);
                 btnAgregar.setDisable(true);
                 btnEditar.setDisable(false);
@@ -37,7 +36,7 @@ public class ParadasController {
             }
         });
 
-        limpiarFormulario();
+        cleanForm();
     }
 
     @FXML
@@ -46,14 +45,14 @@ public class ParadasController {
         String nombre = txtNombre.getText().trim();
 
         if (id.isEmpty() || nombre.isEmpty()) {
-            mostrarAlerta("Error", "ID y Nombre son obligatorios.");
+            alerta("Error", "ID y Nombre son obligatorios.");
             return;
         }
 
         Transporte.getInstancia().addParada(id, nombre);
 
-        actualizarTabla();
-        limpiarFormulario();
+        updateTabla();
+        cleanForm();
     }
     @FXML
     void editarParada(ActionEvent event) {
@@ -64,8 +63,8 @@ public class ParadasController {
              return;
 
         Transporte.getInstancia().editParada(id, nombre);
-        actualizarTabla();
-        limpiarFormulario();
+        updateTabla();
+        cleanForm();
     }
 
     @FXML
@@ -74,16 +73,16 @@ public class ParadasController {
         if (id.isEmpty()) return;
 
         Transporte.getInstancia().deleteParada(id);
-        actualizarTabla();
-        limpiarFormulario();
+        updateTabla();
+        cleanForm();
     }
 
     @FXML
-    void limpiarFormulario(ActionEvent event) {
-        limpiarFormulario();
+    void cleanForm(ActionEvent event) {
+        cleanForm();
     }
 
-    private void limpiarFormulario() {
+    private void cleanForm() {
         txtId.clear();
         txtNombre.clear();
         txtId.setDisable(false);
@@ -94,13 +93,13 @@ public class ParadasController {
         btnEliminar.setDisable(true);
     }
 
-    private void actualizarTabla() {
+    private void updateTabla() {
         ObservableList<Parada> lista = FXCollections.observableArrayList(Transporte.getInstancia().getParadas());
         tablaParadas.refresh();
         tablaParadas.setItems(lista);
     }
 
-    private void mostrarAlerta(String titulo, String contenido) {
+    private void alerta(String titulo, String contenido) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);

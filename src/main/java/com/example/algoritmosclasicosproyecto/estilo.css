@@ -1,7 +1,0 @@
-.table-view .table-row-cell:selected {
-    -fx-background-color: #005461;
-}
-
-.table-view .table-row-cell:selected .cell {
-    -fx-text-fill: white;
-}

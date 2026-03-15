@@ -1,18 +1,17 @@
-package com.example.algoritmosclasicosproyecto.logica;
+package com.example.algoritmosclasicosproyecto.bd;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexion {
-
     private static final String URL = "jdbc:postgresql://db.oxysriuzwkgsocmdvmst.supabase.co:5432/postgres?user=postgres&password=Daurito2015777";
     public static Connection conectar() {
         try {
             Connection conn = DriverManager.getConnection(URL);
             return conn;
         } catch (SQLException e) {
-            System.err.println("Error de conexión a la base de datos: " + e.getMessage());
+            System.err.println("Error de conexion a la base de datos: " + e.getMessage());
             return null;
         }
     }
@@ -21,7 +20,7 @@ public class Conexion {
     public static void main(String[] args) {
         Connection prueba = conectar();
         if (prueba != null) {
-            System.out.println("¡Conexión exitosa a Supabase!");
+            System.out.println("Conexion exitosa a Supabase");
         }
     }*/
 }
