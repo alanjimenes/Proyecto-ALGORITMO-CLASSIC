@@ -248,6 +248,31 @@ public class Transporte {
         }
     }
 
+    public double calcularTotalRuta(List<Parada> camino, String criterio) {
+        if (camino == null || camino.size() < 2) return 0;
+
+        double total = 0;
+
+        for (int i = 0; i < camino.size() - 1; i++) {
+            String origenId = camino.get(i).getId();
+            String destinoId = camino.get(i + 1).getId();
+
+            for (Ruta ruta : listaRuta.get(origenId)) {
+                if (ruta.getDestino().getId().equals(destinoId)) {
+                    switch (criterio.toLowerCase()) {
+                        case "tiempo":    total += ruta.getTiempo();    break;
+                        case "distancia": total += ruta.getDistancia(); break;
+                        case "costo":     total += ruta.getCosto();     break;
+                        case "trasbordo": total += ruta.getTrasbordo(); break;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return total;
+    }
+
 
 
 }
