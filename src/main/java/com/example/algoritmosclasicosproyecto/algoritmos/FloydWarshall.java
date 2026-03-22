@@ -16,9 +16,7 @@ public class FloydWarshall {
         Map<String, List<Ruta>> listaRuta = transporte.getListaRuta();
         List<String> ids = new ArrayList<>(paradaMap.keySet());
 
-        // Tabla de "¿cuánto cuesta ir de X a Y?"
         Map<String, Map<String, Double>> distancias = new HashMap<>();
-        // Tabla de "¿por dónde paso para ir de X a Y?"
         Map<String, Map<String, String>> siguientes = new HashMap<>();
 
         // Paso 1: todas las distancias empiezan en infinito
@@ -35,7 +33,7 @@ public class FloydWarshall {
         for (String origen : listaRuta.keySet()) {
             for (Ruta ruta : listaRuta.get(origen)) {
                 String destino = ruta.getDestino().getId();
-                distancias.get(origen).put(destino, getPeso(ruta, criterio));
+                distancias.get(origen).put(destino, ruta.getPeso(criterio));
                 siguientes.get(origen).put(destino, destino);
             }
         }
@@ -71,15 +69,5 @@ public class FloydWarshall {
         camino.add(paradaMap.get(id_Destination));
 
         return camino;
-    }
-
-    private static double getPeso(Ruta ruta, String criterio) {
-        switch (criterio.toLowerCase()) {
-            case "tiempo":    return ruta.getTiempo();
-            case "distancia": return ruta.getDistancia();
-            case "costo":     return ruta.getCosto();
-            case "trasbordo": return ruta.getTrasbordo();
-            default:          return ruta.getTiempo();
-        }
     }
 }
