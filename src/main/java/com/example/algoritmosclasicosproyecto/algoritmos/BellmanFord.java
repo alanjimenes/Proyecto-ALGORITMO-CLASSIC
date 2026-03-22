@@ -30,16 +30,13 @@ public class BellmanFord {
 
         int V = paradaMap.size();
 
-
         for (int i = 0; i < V - 1; i++) {
-
             for (String actual : listaRuta.keySet()) {
                 if (distancias.get(actual) == Double.MAX_VALUE) continue;
 
                 for (Ruta ruta : listaRuta.get(actual)) {
                     String vecinoId = ruta.getDestino().getId();
-                    double peso = getPeso(ruta, criterio);
-                    double nuevaDistancia = distancias.get(actual) + peso;
+                    double nuevaDistancia = distancias.get(actual) + ruta.getPeso(criterio);
 
                     if (nuevaDistancia < distancias.get(vecinoId)) {
                         distancias.put(vecinoId, nuevaDistancia);
@@ -62,15 +59,5 @@ public class BellmanFord {
         }
 
         return camino;
-    }
-
-    private static double getPeso(Ruta ruta, String criterio) {
-        switch (criterio.toLowerCase()) {
-            case "tiempo":     return ruta.getTiempo();
-            case "distancia":  return ruta.getDistancia();
-            case "costo":      return ruta.getCosto();
-            case "trasbordo":  return ruta.getTrasbordo();
-            default:           return ruta.getTiempo();
-        }
     }
 }
