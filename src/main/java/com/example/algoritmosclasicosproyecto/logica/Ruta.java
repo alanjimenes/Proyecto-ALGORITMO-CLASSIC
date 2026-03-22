@@ -54,7 +54,7 @@ public class Ruta {
         this.costo = costo;
     }
 
-    public double getTrasbordo() {
+    public int getTrasbordo() {
         return trasbordo;
     }
 

@@ -25,6 +25,15 @@ public class Transporte {
         }
         return instancia;
     }
+
+    public Map<String, Parada> getParadaMap() {
+        return paradaMap;
+    }
+
+    public Map<String, List<Ruta>> getListaRuta() {
+        return listaRuta;
+    }
+
     public List<Ruta> getRutas() {
         List<Ruta> todas = new ArrayList<>();
         for (List<Ruta> rutas : listaRuta.values()) {
@@ -185,6 +194,17 @@ public class Transporte {
     }
 
     public void editRuta(String id_origin, String id_destination, double tiempo, double distancia, double costo, int trasbordo) {
+
+        if (!paradaMap.containsKey(id_origin) || !paradaMap.containsKey(id_destination)) {
+            System.err.println("Error: El origen o destino no existe.");
+            return;
+        }
+
+        if (tiempo < 0 || distancia < 0 || costo < 0 || trasbordo < 0) {
+            System.err.println("Error: Los valores no pueden ser negativos.");
+            return;
+        }
+
         if (listaRuta.containsKey(id_origin)) {
             String sql = "update ruta set tiempo_minuto = ?, distancia_km = ?, costo = ?, trasbordo = ? WHERE id_origen = ? AND id_destino = ?";
 

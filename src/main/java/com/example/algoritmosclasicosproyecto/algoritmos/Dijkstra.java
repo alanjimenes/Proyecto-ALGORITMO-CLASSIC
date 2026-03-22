@@ -5,7 +5,7 @@ import com.example.algoritmosclasicosproyecto.logica.Transporte;
 
 
 import java.util.*;
-public class dijkstra {
+public class Dijkstra {
     private static class NodoDistancia implements Comparable<NodoDistancia> {
         String idParada;
         double distancia;
@@ -25,14 +25,15 @@ public class dijkstra {
         switch (criterio.toLowerCase()) {
             case "tiempo": return ruta.getTiempo();
             case "distancia": return ruta.getDistancia();
+            case "trasbordo": return ruta.getTrasbordo();
             case "costo": return ruta.getCosto();
             default: return ruta.getTiempo();
         }
     }
 
     public static List<Parada> dijkstra(Transporte transporte, String id_Origin, String id_Destination, String criterio) {
-        Map<String, Parada> paradaMap = (Map<String, Parada>) transporte.getParadas();
-        Map<String, List<Ruta>> listaAdyacencia = (Map<String, List<Ruta>>) transporte.getRutas();
+        Map<String, Parada> paradaMap = transporte.getParadaMap();
+        Map<String, List<Ruta>> listaRuta = transporte.getListaRuta();
 
         if (!paradaMap.containsKey(id_Origin) || !paradaMap.containsKey(id_Destination)) {
             System.err.println("Error: El origen o destino no existe.");
