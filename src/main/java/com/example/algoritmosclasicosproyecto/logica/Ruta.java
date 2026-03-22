@@ -18,6 +18,16 @@ public class Ruta {
         this.trasbordo = trasbordo;
     }
 
+
+    public double getPeso(String criterio) {
+        switch (criterio.toLowerCase()) {
+            case "tiempo":    return tiempo;
+            case "distancia": return distancia;
+            case "costo":     return costo;
+            case "trasbordo": return trasbordo;
+            default:          return tiempo;
+        }
+    }
     public Parada getDestino() {
         return destino;
     }

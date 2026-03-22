@@ -6,28 +6,19 @@ import com.example.algoritmosclasicosproyecto.logica.Transporte;
 
 import java.util.*;
 public class Dijkstra {
-    private static class NodoDistancia implements Comparable<NodoDistancia> {
-        String idParada;
+
+    static class NodoDistancia implements Comparable<NodoDistancia> {
+        String id;
         double distancia;
 
-        public NodoDistancia(String idParada, double distancia) {
-            this.idParada = idParada;
+        NodoDistancia(String id, double distancia) {
+            this.id = id;
             this.distancia = distancia;
         }
 
         @Override
         public int compareTo(NodoDistancia otro) {
             return Double.compare(this.distancia, otro.distancia);
-        }
-    }
-
-    private static double WeightRuta(Ruta ruta, String criterio) {
-        switch (criterio.toLowerCase()) {
-            case "tiempo": return ruta.getTiempo();
-            case "distancia": return ruta.getDistancia();
-            case "trasbordo": return ruta.getTrasbordo();
-            case "costo": return ruta.getCosto();
-            default: return ruta.getTiempo();
         }
     }
 
@@ -42,32 +33,30 @@ public class Dijkstra {
 
         Map<String, Double> distancias = new HashMap<>();
         Map<String, String> anteriores = new HashMap<>();
-        PriorityQueue<NodoDistancia> pq = new PriorityQueue<>();
 
         for (String id : paradaMap.keySet()) {
             distancias.put(id, Double.MAX_VALUE);
         }
         distancias.put(id_Origin, 0.0);
-        pq.offer(new NodoDistancia(id_Origin, 0.0));
-        boolean destino = false;
 
-        while (!pq.isEmpty() && !destino) {
+        PriorityQueue<NodoDistancia> pq = new PriorityQueue<>();
+        pq.add(new NodoDistancia(id_Origin, 0.0));
+
+        while (!pq.isEmpty()) {
             NodoDistancia actual = pq.poll();
-            String idActual = actual.idParada;
+            String idActual = actual.id;
 
-            if (idActual.equals(id_Destination)) {
-                destino = true;
-            } else if (actual.distancia <= distancias.get(idActual)) {
-                for (Ruta ruta : listaAdyacencia.getOrDefault(idActual, new ArrayList<>())) {
-                    String vecinoId = ruta.getDestino().getId();
-                    double peso = WeightRuta(ruta, criterio);
-                    double nuevaDistancia = distancias.get(idActual) + peso;
+            if (idActual.equals(id_Destination)) break;
+            if (actual.distancia > distancias.get(idActual)) continue;
 
-                    if (nuevaDistancia < distancias.get(vecinoId)) {
-                        distancias.put(vecinoId, nuevaDistancia);
-                        anteriores.put(vecinoId, idActual);
-                        pq.offer(new NodoDistancia(vecinoId, nuevaDistancia));
-                    }
+            for (Ruta ruta : listaRuta.getOrDefault(idActual, new ArrayList<>())) {
+                String vecinoId = ruta.getDestino().getId();
+                double nuevaDistancia = distancias.get(idActual) + ruta.getPeso(criterio);
+
+                if (nuevaDistancia < distancias.get(vecinoId)) {
+                    distancias.put(vecinoId, nuevaDistancia);
+                    anteriores.put(vecinoId, idActual);
+                    pq.add(new NodoDistancia(vecinoId, nuevaDistancia));
                 }
             }
         }
@@ -86,5 +75,4 @@ public class Dijkstra {
 
         return camino;
     }
-
 }
