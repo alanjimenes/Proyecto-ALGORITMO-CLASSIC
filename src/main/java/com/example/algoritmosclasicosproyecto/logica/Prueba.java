@@ -1,13 +1,51 @@
 package com.example.algoritmosclasicosproyecto.logica;
 
-import com.example.algoritmosclasicosproyecto.algoritmos.*;
-
 import java.util.List;
 
 
 public class Prueba {
+    public static void main(String[] args) {
+            // 1. Inicializamos el motor de transporte
+            Transporte sistema = new Transporte();
+/*
+            System.out.println("=== INICIANDO PRUEBAS CRUD ===\n");
 
-    private static void cargarDatos(Transporte t) {
+            // --- PRUEBAS DE PARADAS ---
+            System.out.println(">>> Test: Agregando Paradas...");
+            sistema.addParada( "Estación Central");
+            sistema.addParada("Terminal Norte");
+            sistema.addParada( "Puerto Madero");
+
+            System.out.println("\n>>> Test: Editando Parada 2...");
+            sistema.editParada(8, "Terminal Norte - Renovada");
+
+            // --- PRUEBAS DE RUTAS ---
+            System.out.println("\n>>> Test: Creando Rutas (Conectando el Grafo)...");
+
+            sistema.addRuta(7, 8, 15.5, 12.0, 2.50, 0);
+            // De Terminal Norte (2) a Puerto Madero (3)
+            sistema.addRuta(8, 9, 20.0, 18.5, 3.75, 1);
+
+            System.out.println("\n>>> Test: Editando parámetros de Ruta (1 -> 2)...");
+            // Bajamos el costo y el tiempo de la primera ruta
+            sistema.editRuta(7, 8, 12.0, 12.0, 2.00, 0);
+*/
+
+
+            // --- PRUEBAS DE ELIMINACIÓN ---
+            System.out.println("\n>>> Test: Eliminando Ruta 2 -> 3...");
+            sistema.deleteRuta(7, 8);
+
+            System.out.println("\n>>> Test: Eliminando Parada 3...");
+            sistema.deleteParada(9);
+
+            System.out.println("\n=== PRUEBAS FINALIZADAS ===");
+        }
+    }
+
+
+
+  /*  private static void cargarDatos(Transporte t) {
         t.addParada("A", "Monumento");
         t.addParada("B", "Centro León");
         t.addParada("C", "PUCMM");
@@ -53,7 +91,6 @@ public class Prueba {
 
         System.out.println();
         System.out.println("Recorrido completo de la red desde Monumento...");
-        System.out.print("BFS: "); BFS.bfs(t, "A").forEach(p -> System.out.print(p.getNombre() + " -> ")); System.out.println();
-        System.out.print("DFS: "); DFS.dfs(t, "A").forEach(p -> System.out.print(p.getNombre() + " -> ")); System.out.println();
-    }
-}
+        System.out.print("BFS: "); BFS.bfs(t, 1).forEach(p -> System.out.print(p.getNombre() + " -> ")); System.out.println();
+        System.out.print("DFS: "); DFS.dfs(t, 2).forEach(p -> System.out.print(p.getNombre() + " -> ")); System.out.println();
+    }*/

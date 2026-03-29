@@ -36,7 +36,7 @@ public class RutasController {
 
     @FXML
     public void initialize() {
-        comboList();
+   /*     comboList();
         tabla();
         actualizarTabla();
 
@@ -217,5 +217,5 @@ public class RutasController {
         };
         cmbOrigen.setConverter(converter);
         cmbDestino.setConverter(converter);
-    }
+    */}
 }

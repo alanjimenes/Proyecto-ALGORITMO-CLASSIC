@@ -8,33 +8,37 @@ import java.util.*;
 
 public class DFS {
 
-    public static List<Parada> dfs(Transporte transporte, String id_Origin) {
-        Map<String, Parada> paradaMap = transporte.getParadaMap();
-        Map<String, List<Ruta>> listaRuta = transporte.getListaRuta();
+    public static List<Parada> dfs(Transporte transporte, int id_Origin) {
+        // Recuperamos los mapas con llaves Integer
+        Map<Integer, Parada> paradaMap = transporte.getParadaMap();
+        Map<Integer, List<Ruta>> listaRuta = transporte.getListaRuta();
 
+        // 1. Cláusula de Guarda: Validar existencia
         if (!paradaMap.containsKey(id_Origin)) {
-            System.err.println("Error: La parada origen no existe.");
+            System.err.println("Error: La parada origen con ID " + id_Origin + " no existe.");
             return null;
         }
 
-        List<Parada> visitados = new ArrayList<>();
-        Set<String> visited = new HashSet<>();
 
-        dfsRecursivo(id_Origin, paradaMap, listaRuta, visited, visitados);
+        List<Parada> ordenDeVisita = new ArrayList<>();
+        Set<Integer> visitados = new HashSet<>();
 
-        return visitados;
+        dfsRecursivo(id_Origin, paradaMap, listaRuta, visitados, ordenDeVisita);
+
+        return ordenDeVisita;
     }
 
-    private static void dfsRecursivo(String actual, Map<String, Parada> paradaMap,
-                                     Map<String, List<Ruta>> listaRuta,
-                                     Set<String> visited, List<Parada> visitados) {
-        visited.add(actual);
-        visitados.add(paradaMap.get(actual));
+    private static void dfsRecursivo(int actualId,  Map<Integer, Parada> paradaMap, Map<Integer, List<Ruta>> listaRuta, Set<Integer> visitados, List<Parada> orden_Visita) {
+        visitados.add(actualId);
+        orden_Visita.add(paradaMap.get(actualId));
 
-        for (Ruta ruta : listaRuta.getOrDefault(actual, new ArrayList<>())) {
-            String vecinoId = ruta.getDestino().getId();
-            if (!visited.contains(vecinoId)) {
-                dfsRecursivo(vecinoId, paradaMap, listaRuta, visited, visitados);
+        List<Ruta> rutasVecinas = listaRuta.getOrDefault(actualId, new ArrayList<>());
+        for (Ruta ruta : rutasVecinas) {
+            int vecinoId = ruta.getDestino().getId();
+
+            // Si el vecino no ha sido visitado, profundizar
+            if (!visitados.contains(vecinoId)) {
+                dfsRecursivo(vecinoId, paradaMap, listaRuta, visitados, orden_Visita);
             }
         }
     }

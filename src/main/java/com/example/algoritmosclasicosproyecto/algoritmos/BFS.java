@@ -8,9 +8,10 @@ import java.util.*;
 
 public class BFS {
 
-    public static List<Parada> bfs(Transporte transporte, String id_Origin) {
-        Map<String, Parada> paradaMap = transporte.getParadaMap();
-        Map<String, List<Ruta>> listaRuta = transporte.getListaRuta();
+    public static List<Parada> bfs(Transporte transporte, int id_Origin) {
+
+        Map<Integer, Parada> paradaMap = transporte.getParadaMap();
+        Map<Integer, List<Ruta>> listaRuta = transporte.getListaRuta();
 
         if (!paradaMap.containsKey(id_Origin)) {
             System.err.println("Error: La parada origen no existe.");
@@ -18,18 +19,20 @@ public class BFS {
         }
 
         List<Parada> visitados = new ArrayList<>();
-        Set<String> visited = new HashSet<>();
-        Queue<String> queue = new LinkedList<>();
+
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
 
         visited.add(id_Origin);
         queue.add(id_Origin);
 
         while (!queue.isEmpty()) {
-            String actual = queue.poll();
+
+            int actual = queue.poll();
             visitados.add(paradaMap.get(actual));
 
             for (Ruta ruta : listaRuta.getOrDefault(actual, new ArrayList<>())) {
-                String vecinoId = ruta.getDestino().getId();
+                int vecinoId = ruta.getDestino().getId();
                 if (!visited.contains(vecinoId)) {
                     visited.add(vecinoId);
                     queue.add(vecinoId);

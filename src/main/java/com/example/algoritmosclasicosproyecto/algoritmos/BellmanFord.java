@@ -11,19 +11,19 @@ import java.util.Map;
 
 public class BellmanFord {
 
-    public static List<Parada> bellmanFord(Transporte transporte, String id_Origin, String id_Destination, String criterio) {
-        Map<String, Parada> paradaMap = transporte.getParadaMap();
-        Map<String, List<Ruta>> listaRuta = transporte.getListaRuta();
+    public static List<Parada> bellmanFord(Transporte transporte, int id_Origin, int id_Destination, String criterio) {
+        Map<Integer, Parada> paradaMap = transporte.getParadaMap();
+        Map<Integer, List<Ruta>> listaRuta = transporte.getListaRuta();
 
         if (!paradaMap.containsKey(id_Origin) || !paradaMap.containsKey(id_Destination)) {
             System.err.println("Error: El origen o destino no existe.");
             return null;
         }
 
-        Map<String, Double> distancias = new HashMap<>();
-        Map<String, String> anteriores = new HashMap<>();
+        Map<Integer, Double> distancias = new HashMap<>();
+        Map<Integer, Integer> anteriores = new HashMap<>();
 
-        for (String id : paradaMap.keySet()) {
+        for (Integer id : paradaMap.keySet()) {
             distancias.put(id, Double.MAX_VALUE);
         }
         distancias.put(id_Origin, 0.0);
@@ -31,11 +31,11 @@ public class BellmanFord {
         int V = paradaMap.size();
 
         for (int i = 0; i < V - 1; i++) {
-            for (String actual : listaRuta.keySet()) {
+            for (Integer actual : listaRuta.keySet()) {
                 if (distancias.get(actual) == Double.MAX_VALUE) continue;
 
                 for (Ruta ruta : listaRuta.get(actual)) {
-                    String vecinoId = ruta.getDestino().getId();
+                    int vecinoId = ruta.getDestino().getId();
                     double nuevaDistancia = distancias.get(actual) + ruta.getPeso(criterio);
 
                     if (nuevaDistancia < distancias.get(vecinoId)) {
@@ -51,8 +51,9 @@ public class BellmanFord {
             return null;
         }
 
+
         List<Parada> camino = new ArrayList<>();
-        String paso = id_Destination;
+        Integer paso = id_Destination;
         while (paso != null) {
             camino.add(0, paradaMap.get(paso));
             paso = anteriores.get(paso);

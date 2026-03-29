@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class ParadasController {
-
+/*
     @FXML private TextField txtId;
     @FXML private TextField txtNombre;
     @FXML private Button btnAgregar, btnEditar, btnEliminar;
@@ -106,5 +106,5 @@ public class ParadasController {
         alerta.setContentText(contenido);
         alerta.showAndWait();
     }
-
+*/
 }
