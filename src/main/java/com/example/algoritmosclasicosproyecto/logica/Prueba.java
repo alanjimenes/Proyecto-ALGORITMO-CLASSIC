@@ -1,12 +1,16 @@
 package com.example.algoritmosclasicosproyecto.logica;
 
+import com.example.algoritmosclasicosproyecto.algoritmos.Dijkstra;
+
 import java.util.List;
+import java.util.Map;
 
 
 public class Prueba {
     public static void main(String[] args) {
-            // 1. Inicializamos el motor de transporte
+
             Transporte sistema = new Transporte();
+            sistema.load_data();
 /*
             System.out.println("=== INICIANDO PRUEBAS CRUD ===\n");
 
@@ -29,7 +33,7 @@ public class Prueba {
             System.out.println("\n>>> Test: Editando parámetros de Ruta (1 -> 2)...");
             // Bajamos el costo y el tiempo de la primera ruta
             sistema.editRuta(7, 8, 12.0, 12.0, 2.00, 0);
-*/
+
 
 
             // --- PRUEBAS DE ELIMINACIÓN ---
@@ -41,8 +45,55 @@ public class Prueba {
 
             System.out.println("\n=== PRUEBAS FINALIZADAS ===");
         }
-    }
+*/
 
+
+        System.out.println("=== SINCRONIZANDO BASE DE DATOS ===");
+        sistema.load_data();
+
+        Map<Integer, Parada> mapa = sistema.getParadaMap();
+
+        // Validación de seguridad
+        if (mapa.size() < 2) {
+            System.err.println("Error: Necesitas al menos 2 paradas en la base de datos para buscar una ruta.");
+            return;
+        }
+
+        // 2. Obtener IDs válidos dinámicamente
+        // Tomaremos la primera y la última parada que se hayan cargado en el mapa
+        Object[] idsDisponibles = mapa.keySet().toArray();
+        int idOrigen = (int) idsDisponibles[0];
+        int idDestino = (int) idsDisponibles[idsDisponibles.length - 1];
+
+        System.out.println("\n=== EJECUTANDO DIJKSTRA ===");
+        System.out.println("Origen:  [" + idOrigen + "] " + mapa.get(idOrigen).getNombre());
+        System.out.println("Destino: [" + idDestino + "] " + mapa.get(idDestino).getNombre());
+        sistema.editRuta(7, 9, 12.5, 19.0, 7.50, 0);
+
+
+        String[] criterios = {"tiempo", "distancia", "costo"};
+
+        for (String criterio : criterios) {
+            System.out.println("\nBuscando por mejor " + criterio.toUpperCase() + "...");
+            List<Parada> camino = Dijkstra.dijkstra(sistema, idOrigen, idDestino, criterio);
+
+            if (camino != null && !camino.isEmpty()) {
+
+                System.out.print("Ruta: ");
+                for (int i = 0; i < camino.size(); i++) {
+                    System.out.print(camino.get(i).getNombre());
+                    if (i < camino.size() - 1) System.out.print(" -> ");
+                }
+
+
+                double total = sistema.calcularTotalRuta(camino, criterio);
+                System.out.println("\nTotal Acumulado (" + criterio + "): " + total);
+            } else {
+                System.err.println("No se encontró conexión para este criterio.");
+            }
+        }
+    }
+    }
 
 
   /*  private static void cargarDatos(Transporte t) {

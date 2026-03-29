@@ -52,7 +52,7 @@ public class Transporte {
         double randomX = 50 + (Math.random() * 700);
         double randomY = 50 + (Math.random() * 400);
 
-        final String SQL = "INSERT INTO parada (nombre, x, y) VALUES (?, ?, ?)";
+        final String SQL = "insert into parada (nombre, x, y) values (?, ?, ?)";
         Connection connection = Conexion.conectar();
 
 
@@ -84,7 +84,7 @@ public class Transporte {
 
     public void editParada(int id, String nombre) {
         if (!paradaMap.containsKey(id)) {
-            System.err.println("Error: La parada con ID " + id + " no existe en memoria.");
+            System.err.println("La parada con ID " + id + " no existe");
             return;
         }
 
@@ -101,7 +101,7 @@ public class Transporte {
             if (filas > 0) {
 
                 paradaMap.get(id).setNombre(nombre);
-             //   System.out.println("Parada " + id + " modificada a: " + nombre);
+                //   System.out.println("Parada " + id + " modificada a: " + nombre);
             }
 
         } catch (SQLException e) {
@@ -141,7 +141,6 @@ public class Transporte {
     }
 
 
-
     public void addRuta(int id_Origin, int id_Destination, double tiempo, double distancia, double costo, int trasbordo) {
 
         if (!paradaMap.containsKey(id_Origin) || !paradaMap.containsKey(id_Destination)) {
@@ -154,7 +153,7 @@ public class Transporte {
             System.err.println("Error: Tiempo, distancia y costo no pueden ser negativos.");
             return;
         }
-        List<Ruta> rutas_origin= listaRuta.get(id_Origin);
+        List<Ruta> rutas_origin = listaRuta.get(id_Origin);
 
         for (int i = 0; i < rutas_origin.size(); i++) {
             Ruta r = rutas_origin.get(i);
@@ -174,7 +173,8 @@ public class Transporte {
         StatementService<Ruta> service = (StatementService<Ruta>) StatementService.getInstance();
 
         try {
-            service.executeUpdate(nuevaRuta, new insertRutaMapper() {});
+            service.executeUpdate(nuevaRuta, new insertRutaMapper() {
+            });
             listaRuta.get(id_Origin).add(nuevaRuta);
             System.out.println("Ruta agregada exitosamente en BD y Grafo.");
 
@@ -194,7 +194,8 @@ public class Transporte {
         Ruta rutaEditada = new Ruta(origen, destino, tiempo, distancia, costo, trasbordo);
         StatementService<Ruta> service = (StatementService<Ruta>) StatementService.getInstance();
         try {
-            service.executeUpdate(rutaEditada, new updateRutaMapper() {});
+            service.executeUpdate(rutaEditada, new updateRutaMapper() {
+            });
             List<Ruta> rutas = listaRuta.get(id_origin);
             boolean encontrada = false;
             int i = 0;
@@ -237,7 +238,8 @@ public class Transporte {
         StatementService<Ruta> service = (StatementService<Ruta>) StatementService.getInstance();
 
         try {
-            service.executeUpdate(ruta_deleted, new deleteRutaMapper() {});
+            service.executeUpdate(ruta_deleted, new deleteRutaMapper() {
+            });
             listaRuta.get(id_origin).removeIf(r -> r.getDestino().getId() == id_destination);
             System.out.println("Ruta eliminada: " + origen.getNombre() + " => " + destino.getNombre());
 
@@ -247,17 +249,12 @@ public class Transporte {
     }
 
 
-
-
-
     public double calcularTotalRuta(List<Parada> camino, String criterio) {
         if (camino == null || camino.size() < 2) {
             return 0;
         }
 
         double total = 0;
-
-
         for (int i = 0; i < camino.size() - 1; i++) {
             int origenId = camino.get(i).getId();
             int destinoId = camino.get(i + 1).getId();
@@ -270,10 +267,18 @@ public class Transporte {
 
                     if (ruta.getDestino().getId() == destinoId) {
                         switch (criterio.toLowerCase()) {
-                            case "tiempo":    total += ruta.getTiempo();    break;
-                            case "distancia": total += ruta.getDistancia(); break;
-                            case "costo":     total += ruta.getCosto();     break;
-                            case "trasbordo": total += ruta.getTrasbordo(); break;
+                            case "tiempo":
+                                total += ruta.getTiempo();
+                                break;
+                            case "distancia":
+                                total += ruta.getDistancia();
+                                break;
+                            case "costo":
+                                total += ruta.getCosto();
+                                break;
+                            case "trasbordo":
+                                total += ruta.getTrasbordo();
+                                break;
                         }
                         break;
                     }
@@ -284,4 +289,52 @@ public class Transporte {
         return total;
     }
 
+
+
+
+
+    public void load_data() {
+        paradaMap.clear();
+        listaRuta.clear();
+
+        String sqlParadas = "select * from parada";
+        String sqlRutas = "select * from ruta";
+
+        try (Connection conn = Conexion.conectar();
+             Statement stmt = conn.createStatement()) {
+            ResultSet rsParadas = stmt.executeQuery(sqlParadas);
+            while (rsParadas.next()) {
+                int id = rsParadas.getInt("id");
+                Parada p = new Parada(id, rsParadas.getString("nombre"),
+                        rsParadas.getDouble("x"), rsParadas.getDouble("y"));
+                paradaMap.put(id, p);
+                listaRuta.put(id, new ArrayList<>());
+            }
+            rsParadas.close();
+
+            ResultSet rsRutas = stmt.executeQuery(sqlRutas);
+            while (rsRutas.next()) {
+                int idOrigen = rsRutas.getInt("id_origen");
+                int idDestino = rsRutas.getInt("id_destino");
+
+                if (paradaMap.containsKey(idOrigen) && paradaMap.containsKey(idDestino)) {
+                    Ruta r = new Ruta(
+                            paradaMap.get(idOrigen),
+                            paradaMap.get(idDestino),
+                            rsRutas.getDouble("tiempo_minuto"),
+                            rsRutas.getDouble("distancia_km"),
+                            rsRutas.getDouble("costo"),
+                            rsRutas.getInt("trasbordo")
+                    );
+                    listaRuta.get(idOrigen).add(r);
+                }
+            }
+            System.out.println("Carga de Paradas: " + paradaMap.size() + "  Rutas cargadas.");
+
+        } catch (SQLException e) {
+            System.err.println("Error al cargar la BD: " + e.getMessage());
+        }
+
+
+    }
 }
