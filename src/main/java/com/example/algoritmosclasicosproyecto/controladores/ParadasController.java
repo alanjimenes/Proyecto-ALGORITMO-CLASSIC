@@ -9,27 +9,29 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class ParadasController {
-/*
+
     @FXML private TextField txtId;
     @FXML private TextField txtNombre;
     @FXML private Button btnAgregar, btnEditar, btnEliminar;
 
     @FXML private TableView<Parada> tablaParadas;
-    @FXML private TableColumn<Parada, String> colId;
+    @FXML private TableColumn<Parada, Integer> colId;
     @FXML private TableColumn<Parada, String> colNombre;
 
     @FXML
     public void initialize() {
-        colId.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
         colNombre.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNombre()));
+        txtId.setDisable(true);
 
         updateTabla();
 
+
         tablaParadas.getSelectionModel().selectedItemProperty().addListener((obs, antigua, nueva) -> {
             if (nueva != null) {
-                txtId.setText(nueva.getId());
+                txtId.setText(String.valueOf(nueva.getId()));
                 txtNombre.setText(nueva.getNombre());
-                txtId.setDisable(true);
+
                 btnAgregar.setDisable(true);
                 btnEditar.setDisable(false);
                 btnEliminar.setDisable(false);
@@ -40,52 +42,55 @@ public class ParadasController {
     }
 
     @FXML
-    void addParada(ActionEvent event) {
-        String id = txtId.getText().trim();
+    void agregarParada(ActionEvent event) {
         String nombre = txtNombre.getText().trim();
 
-        if (id.isEmpty() || nombre.isEmpty()) {
-            alerta("Error", "ID y Nombre son obligatorios.");
+        if (nombre.isEmpty()) {
+            alerta("Error", "El nombre es obligatorio.");
             return;
         }
 
-        Transporte.getInstancia().addParada(id, nombre);
+        Transporte.getInstancia().addParada(nombre);
 
         updateTabla();
         cleanForm();
     }
+
     @FXML
-    void editParada(ActionEvent event) {
-        String id = txtId.getText().trim();
+    void editarParada(ActionEvent event) {
+        String idStr = txtId.getText().trim();
         String nombre = txtNombre.getText().trim();
 
-        if (id.isEmpty() || nombre.isEmpty())
-             return;
+        if (idStr.isEmpty() || nombre.isEmpty()) return;
 
+        int id = Integer.parseInt(idStr); // Convertir a int
         Transporte.getInstancia().editParada(id, nombre);
+
         updateTabla();
         cleanForm();
     }
 
     @FXML
-    void deleteParada(ActionEvent event) {
-        String id = txtId.getText().trim();
-        if (id.isEmpty()) return;
+    void eliminarParada(ActionEvent event) {
+        String idStr = txtId.getText().trim();
 
+        if (idStr.isEmpty()) return;
+
+        int id = Integer.parseInt(idStr); // Convertir a int
         Transporte.getInstancia().deleteParada(id);
+
         updateTabla();
         cleanForm();
     }
 
     @FXML
-    void cleanForm(ActionEvent event) {
+    void limpiarFormulario(ActionEvent event) {
         cleanForm();
     }
 
     private void cleanForm() {
         txtId.clear();
         txtNombre.clear();
-        txtId.setDisable(false);
         tablaParadas.getSelectionModel().clearSelection();
 
         btnAgregar.setDisable(false);
@@ -95,8 +100,8 @@ public class ParadasController {
 
     private void updateTabla() {
         ObservableList<Parada> lista = FXCollections.observableArrayList(Transporte.getInstancia().getParadas());
-        tablaParadas.refresh();
         tablaParadas.setItems(lista);
+        tablaParadas.refresh();
     }
 
     private void alerta(String titulo, String contenido) {
@@ -106,5 +111,4 @@ public class ParadasController {
         alerta.setContentText(contenido);
         alerta.showAndWait();
     }
-*/
 }

@@ -22,7 +22,7 @@
                         </Label>
 
                         <Label text="ID de la Parada:" />
-                        <TextField fx:id="txtId" promptText="Ej: MON-01" />
+                        <TextField fx:id="txtId"  />
 
                         <Label text="Nombre de la Parada:" />
                         <TextField fx:id="txtNombre" promptText="Ej: Monumento" />
