@@ -1,85 +1,229 @@
 package com.example.algoritmosclasicosproyecto.controladores;
 
+import com.example.algoritmosclasicosproyecto.algoritmos.Dijkstra;
 import com.example.algoritmosclasicosproyecto.logica.Parada;
 import com.example.algoritmosclasicosproyecto.logica.Ruta;
 import com.example.algoritmosclasicosproyecto.logica.Transporte;
-import javafx.event.EventHandler;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.util.StringConverter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MapaController {
 
-    @FXML
-    private Pane paneMapa;
+    @FXML private Pane paneMapa;
+    @FXML private ComboBox<Parada> cmbOrigen;
+    @FXML private ComboBox<Parada> cmbDestino;
+    @FXML private ComboBox<String> cmbCriterio;
+
+
+    private final double RADIO_NODO = 20.0;
+    private final double RADIO_VISUAL = 22.0;
+
+
+    private List<Ruta> colorCamino = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        configurarUI();
         dibujarGrafo();
+    }
+
+    private void configurarUI() {
+
+        cmbCriterio.setItems(FXCollections.observableArrayList("Seleccione","Tiempo", "Distancia", "Costo", "Trasbordo"));
+        cmbCriterio.setValue("Seleccione");
+        ObservableList<Parada> paradas = FXCollections.observableArrayList(Transporte.getInstancia().getParadas());
+        cmbOrigen.setItems(paradas);
+        cmbDestino.setItems(paradas);
+
+        StringConverter<Parada> converter = new StringConverter<>() {
+            @Override public String toString(Parada p) { return p == null ? "" : p.getNombre(); }
+            @Override public Parada fromString(String s) { return null; }
+        };
+        cmbOrigen.setConverter(converter);
+        cmbDestino.setConverter(converter);
     }
 
     public void dibujarGrafo() {
         if (paneMapa == null) return;
-
-
         paneMapa.getChildren().clear();
 
         List<Parada> paradas = Transporte.getInstancia().getParadas();
         List<Ruta> rutas = Transporte.getInstancia().getRutas();
 
-        for (int i = 0; i < rutas.size(); i++) {
-            Ruta ruta = rutas.get(i);
+        for (Ruta ruta : rutas) {
             Parada origen = ruta.getOrigen();
             Parada destino = ruta.getDestino();
 
             if (origen != null && destino != null) {
-                Line linea = new Line(origen.getX(), origen.getY(), destino.getX(), destino.getY());
-                linea.setStroke(Color.DARKGRAY);
-                linea.setStrokeWidth(2.5);
-                paneMapa.getChildren().add(linea);
+                boolean esCaminoOptimo = colorCamino.contains(ruta);
+                Color colorRuta = esCaminoOptimo ? Color.GOLD : Color.web("#8D99EE");
+                double grosor = esCaminoOptimo ? 4.0 : 2.5;
+
+                dibujarRuta(origen.getX(), origen.getY(), destino.getX(), destino.getY(), colorRuta, grosor);
             }
         }
 
-        for (int i = 0; i < paradas.size(); i++) {
-            final Parada parada = paradas.get(i);
-
-            Circle circulo = new Circle(27, Color.web("#088395"));
-            circulo.setStroke(Color.WHITE);
-            circulo.setStrokeWidth(2.0);
-
-            Text texto = new Text(parada.getNombre());
-            texto.setFill(Color.BLACK);
-            texto.setStyle("-fx-font-weight: bold;");
-
-            final StackPane nodoVisual = new StackPane();
-            nodoVisual.getChildren().addAll(circulo, texto);
-
-            nodoVisual.setLayoutX(parada.getX() - 20);
-            nodoVisual.setLayoutY(parada.getY() - 20);
-
-            nodoVisual.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-
-                    double nuevoX = event.getSceneX();
-                    double nuevoY = event.getSceneY();
-
-                    parada.setX(nuevoX);
-                    parada.setY(nuevoY);
-
-
-                    dibujarGrafo();
-                }
-            });
-
+        for (Parada parada : paradas) {
+            Group nodoVisual = createNodo(parada);
+            nodoVisual.setLayoutX(parada.getX());
+            nodoVisual.setLayoutY(parada.getY());
             paneMapa.getChildren().add(nodoVisual);
         }
+    }
+
+    private Group createNodo(Parada parada) {
+        Group contenedor = new Group();
+
+        Circle circulo = new Circle(0, 0, RADIO_NODO, Color.web("#62529C"));
+        circulo.setStroke(Color.WHITE);
+        circulo.setStrokeWidth(2.0);
+
+        Text txtId = new Text(String.valueOf(parada.getId()));
+        txtId.setFill(Color.WHITE);
+        txtId.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-font-family: Consolas;");
+
+        double anchoTexto = txtId.getLayoutBounds().getWidth();
+        double altoTexto = txtId.getLayoutBounds().getHeight();
+        txtId.setX(-anchoTexto / 2);
+        txtId.setY(altoTexto / 4);
+
+        Text txtNombre = new Text(parada.getNombre());
+        txtNombre.setFill(Color.web("#333333"));
+        txtNombre.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;");
+        txtNombre.setTextAlignment(TextAlignment.CENTER);
+
+
+        double anchoNombre = txtNombre.getLayoutBounds().getWidth();
+        txtNombre.setX(-anchoNombre / 2);
+        txtNombre.setY(RADIO_NODO + 15);
+
+        contenedor.getChildren().addAll(circulo, txtId, txtNombre);
+
+
+        return contenedor;
+    }
+
+    private void dibujarRuta(double startX, double startY, double endX, double endY, Color color, double grosor) {
+        double dx = endX - startX;
+        double dy = endY - startY;
+        double angulo = Math.atan2(dy, dx);
+
+
+        double inicioX = startX + RADIO_VISUAL * Math.cos(angulo);
+        double inicioY = startY + RADIO_VISUAL * Math.sin(angulo);
+        double finalX = endX - RADIO_VISUAL * Math.cos(angulo);
+        double finalY = endY - RADIO_VISUAL * Math.sin(angulo);
+
+        Line linea = new Line(inicioX, inicioY, finalX, finalY);
+        linea.setStroke(color);
+        linea.setStrokeWidth(grosor);
+
+        Polygon flecha = new Polygon();
+        double tamFlecha = 10.0;
+        flecha.getPoints().addAll(
+                finalX, finalY,
+                finalX - tamFlecha * Math.cos(angulo - Math.PI / 6), finalY - tamFlecha * Math.sin(angulo - Math.PI / 6),
+                finalX - tamFlecha * Math.cos(angulo + Math.PI / 6), finalY - tamFlecha * Math.sin(angulo + Math.PI / 6)
+        );
+
+        flecha.setFill(color == Color.GOLD ? Color.GOLD : color.darker());
+
+        paneMapa.getChildren().addAll(linea, flecha);
+    }
+
+    @FXML
+    void best_ruta(ActionEvent event) {
+        Parada o = cmbOrigen.getValue();
+        Parada d = cmbDestino.getValue();
+        String criterio = cmbCriterio.getValue();
+
+
+        if (o == null || d == null) {
+            alert("Error de Selección", "Debe seleccionar un origen y un destino.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (o.getId() == d.getId()) {
+            alert("Error:", "El origen y el destino no pueden ser la misma parada.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (criterio == null || criterio.equals("Seleccione")) {
+            alert("Error:", "Debe seleccionar un criterio de prioridad valido (Tiempo, Distancia, etc.).", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // 2. Ejecución del Algoritmo
+        List<Parada> caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterio);
+
+        colorCamino.clear();
+
+        if (caminoNodos == null || caminoNodos.size() < 2) {
+            alert("Ruta no encontrada", "No existe un camino posible conectando estos dos puntos.", Alert.AlertType.ERROR);
+            dibujarGrafo();
+            return;
+        }
+
+        double total = 0;
+        Map<Integer, List<Ruta>> listaRuta = Transporte.getInstancia().getListaRuta();
+
+        for (int i = 0; i < caminoNodos.size() - 1; i++) {
+            Parada actual = caminoNodos.get(i);
+            Parada siguiente = caminoNodos.get(i + 1);
+
+            List<Ruta> rutasDesdeActual = listaRuta.getOrDefault(actual.getId(), new ArrayList<>());
+            for (Ruta r : rutasDesdeActual) {
+                if (r.getDestino().getId() == siguiente.getId()) {
+                    colorCamino.add(r);
+                    total += r.getPeso(criterio);
+                    break;
+                }
+            }
+        }
+
+        dibujarGrafo();
+
+
+        String msg = "";
+        msg = String.format("Se ha trazado la ruta en el mapa.");
+
+        alert("Ruta encontrada: ", msg, Alert.AlertType.INFORMATION);
+    }
+
+    @FXML
+    void limpiarBusqueda(ActionEvent event) {
+        colorCamino.clear();
+        cmbOrigen.getSelectionModel().clearSelection();
+        cmbDestino.getSelectionModel().clearSelection();
+        cmbCriterio.setValue("Seleccione");
+        dibujarGrafo();
+    }
+
+
+    private void alert(String titulo, String contenido, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(contenido);
+        alerta.showAndWait();
     }
 }
