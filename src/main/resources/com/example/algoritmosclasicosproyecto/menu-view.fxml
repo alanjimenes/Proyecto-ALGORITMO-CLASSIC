@@ -27,18 +27,17 @@
       <VBox prefHeight="440.0" prefWidth="170.0" style="-fx-background-color: #62529C;" BorderPane.alignment="CENTER">
          <children>
 
-            <VBox alignment="CENTER_LEFT" prefHeight="60.0">
+            <Button fx:id="btnInicio" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnInicioClick" prefHeight="60.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Menú Principal">
+               <font>
+                  <Font name="Consolas Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
                <padding>
                   <Insets left="20.0" />
                </padding>
-               <children>
-                  <Label text="Menú Principal" textFill="WHITE">
-                     <font>
-                        <Font name="Consolas Bold" size="16.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
+            </Button>
 
             <Button fx:id="btnParadas" alignment="CENTER_LEFT" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnParadasClick" prefHeight="55.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Paradas">
                <font>
