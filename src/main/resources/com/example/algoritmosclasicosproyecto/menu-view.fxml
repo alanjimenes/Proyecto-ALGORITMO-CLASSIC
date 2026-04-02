@@ -1,42 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.algoritmosclasicosproyecto.controladores.MenuController">
-   <children>
-      <HBox layoutX="50.0" layoutY="14.0" prefHeight="65.0" prefWidth="600.0" style="-fx-background-color: #088395;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="411.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.algoritmosclasicosproyecto.controladores.MenuController">
+
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #3F326D;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnParadas" mnemonicParsing="false" onAction="#btnParadasClick" style="-fx-border-color: transparent; -fx-background-color: #088395;" text="Paradas" textFill="WHITE">
+            <Label text="Sistema de Rutas" textFill="WHITE">
                <font>
-                  <Font name="Consolas Bold" size="34.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnRutas" mnemonicParsing="false" onAction="#btnRutasClick" style="-fx-border-color: transparent; -fx-background-color: #088395;" text="Rutas" textFill="WHITE">
-               <font>
-                  <Font name="Consolas Bold" size="34.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnMapa" mnemonicParsing="false" onAction="#btnMapaClick" style="-fx-border-color: transparent; -fx-background-color: #088395;" text="Mapa" textFill="WHITE">
-               <font>
-                  <Font name="Consolas Bold" size="34.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
          </children>
       </HBox>
-      <BorderPane fx:id="pnlContenedor" layoutX="200.0" layoutY="131.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0" />
-   </children>
-</AnchorPane>
+   </top>
+
+   <left>
+      <VBox prefHeight="440.0" prefWidth="170.0" style="-fx-background-color: #62529C;" BorderPane.alignment="CENTER">
+         <children>
+
+            <VBox alignment="CENTER_LEFT" prefHeight="60.0">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <children>
+                  <Label text="Menú Principal" textFill="WHITE">
+                     <font>
+                        <Font name="Consolas Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+
+            <Button fx:id="btnParadas" alignment="CENTER_LEFT" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnParadasClick" prefHeight="55.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Paradas">
+               <font>
+                  <Font name="Consolas Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Button>
+
+            <Button fx:id="btnRutas" alignment="CENTER_LEFT" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnRutasClick" prefHeight="55.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Rutas">
+               <font>
+                  <Font name="Consolas Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Button>
+
+            <Button fx:id="btnMapa" alignment="CENTER_LEFT" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnMapaClick" prefHeight="55.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Mapa">
+               <font>
+                  <Font name="Consolas Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Button>
+
+         </children>
+      </VBox>
+   </left>
+
+   <center>
+      <BorderPane fx:id="pnlContenedor" prefHeight="464.0" prefWidth="680.0" style="-fx-background-color: #F4F4F4;" BorderPane.alignment="CENTER" />
+   </center>
+
+</BorderPane>

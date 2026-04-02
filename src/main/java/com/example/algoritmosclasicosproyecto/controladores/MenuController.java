@@ -12,11 +12,15 @@ import java.util.Objects;
 
 public class MenuController {
     @FXML
-    public Button btnMapa, btnRutas, btnParadas;
+    public Button btnInicio, btnMapa, btnRutas, btnParadas;
 
     @FXML
     public BorderPane pnlContenedor;
 
+    public void btnInicioClick() {
+        estilizarBotones(btnInicio);
+        pnlContenedor.getChildren().clear();
+    }
     public void btnMapaClick(){
         estilizarBotones(btnMapa);
         cambiarPanel("mapa");
@@ -34,13 +38,12 @@ public class MenuController {
     }
 
     public void estilizarBotones(Button btn){
-        String estiloBase = "-fx-background-color:   #088395; -fx-border-color: transparent";
+        String estiloBase = "-fx-background-color: transparent; -fx-text-fill: white;";
 
-        String estiloClick = "-fx-background-color:   #005461; -fx-border-color: transparent";
-
-        btnMapa.setStyle(btn.getText().equals(btnMapa.getText()) ? estiloClick : estiloBase);
-        btnRutas.setStyle(btn.getText().equals(btnRutas.getText()) ? estiloClick : estiloBase);
-        btnParadas.setStyle(btn.getText().equals(btnParadas.getText()) ? estiloClick : estiloBase);
+        String estiloClick = "-fx-background-color: #3F326D; -fx-text-fill: white;";
+        btnMapa.setStyle(btn == btnMapa ? estiloClick : estiloBase);
+        btnRutas.setStyle(btn == btnRutas ? estiloClick : estiloBase);
+        btnParadas.setStyle(btn == btnParadas ? estiloClick : estiloBase);
     }
 
     public void cambiarPanel(String nombre){

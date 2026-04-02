@@ -76,7 +76,7 @@ public class ParadasController {
 
         if (idStr.isEmpty()) return;
 
-        int id = Integer.parseInt(idStr); // Convertir a int
+        int id = Integer.parseInt(idStr);
         Transporte.getInstancia().deleteParada(id);
 
         updateTabla();
