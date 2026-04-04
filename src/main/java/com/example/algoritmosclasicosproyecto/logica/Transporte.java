@@ -291,8 +291,15 @@ public class Transporte {
 
 
 
+    /*
+      Usamos el Singleton para que todas las pantallas compartan exactamente los mismos datos en memoria
+      Primero limpiamos las listas primero para no duplicar datos si esta función se ejecuta más de una vez.
+      Luego cargamos las paradas fila por fila y le preparamos a cada una una lista vacía para guardar sus futuras rutas.
+      Y finalmente cargamos las rutas, pero con una regla estricta: antes de agregar una ruta,
+      verificamos que la parada de origen y la de destino realmente existan en la memoria.
 
 
+     */
     public void load_data() {
         paradaMap.clear();
         listaRuta.clear();
@@ -329,7 +336,7 @@ public class Transporte {
                     listaRuta.get(idOrigen).add(r);
                 }
             }
-            System.out.println("Carga de Paradas: " + paradaMap.size() + "  Rutas cargadas.");
+
 
         } catch (SQLException e) {
             System.err.println("Error al cargar la BD: " + e.getMessage());

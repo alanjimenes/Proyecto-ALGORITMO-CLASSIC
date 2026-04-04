@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.algoritmosclasicosproyecto.controladores.RutasController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F4F4F4;"  xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.algoritmosclasicosproyecto.controladores.RutasController">
     <children>
         <VBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
@@ -99,18 +99,16 @@
                     </children>
                 </VBox>
 
-                <TableView fx:id="tablaRutas" style="-fx-border-color: #E0E0E0; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tablaRutas" styleClass="-fx-border-color: #E0E0E0; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colOrigen" editable="false" prefWidth="150.0" text="Origen" />
-                        <TableColumn fx:id="colDestino" editable="false" prefWidth="150.0" text="Destino" />
-                        <TableColumn fx:id="colTiempo" editable="false" prefWidth="70.0" text="Min" />
-                        <TableColumn fx:id="colDistancia" editable="false" prefWidth="70.0" text="Km" />
-                        <TableColumn fx:id="colCosto" editable="false" prefWidth="70.0" text="RD$" />
-                        <TableColumn fx:id="colTrasbordo" editable="false" prefWidth="80.0" text="Trasbordo" />
+                        <TableColumn fx:id="colOrigen" editable="false" prefWidth="150.0" reorderable="false" resizable="false" text="Origen" />
+                        <TableColumn fx:id="colDestino" editable="false" prefWidth="150.0" reorderable="false" resizable="false" text="Destino" />
+                        <TableColumn fx:id="colTiempo" editable="false" prefWidth="70.0" reorderable="false" resizable="false" text="Min" />
+                        <TableColumn fx:id="colDistancia" editable="false" prefWidth="70.0" reorderable="false" resizable="false" text="Km" />
+                        <TableColumn fx:id="colCosto" editable="false" prefWidth="70.0" reorderable="false" resizable="false" text="RD$" />
+                        <TableColumn fx:id="colTrasbordo" editable="false" prefWidth="80.0" reorderable="false" resizable="false" text="Trasbordo" />
                     </columns>
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                    </columnResizePolicy>
+
                 </TableView>
 
             </children>

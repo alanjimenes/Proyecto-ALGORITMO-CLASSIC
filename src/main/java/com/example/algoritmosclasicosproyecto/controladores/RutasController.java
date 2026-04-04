@@ -58,8 +58,60 @@ public class RutasController {
         });
 
         cleanform();
+        inyeccionCss();
+        anchoTabla();
+
     }
 
+    //por culpa de maven se debio hacer un apaño con la liberia base64 para traducir todo este css para las tablas
+    private void inyeccionCss(){
+        String css = """
+            .table-view {
+                -fx-background-color: transparent;
+                -fx-border-color: #E0E0E0;
+                -fx-border-radius: 5px;
+            }
+            .table-view .column-header-background,
+            .table-view .column-header-background .filler {
+                -fx-background-color: #62529C; 
+            }
+            .table-view .column-header {
+                -fx-background-color: transparent;
+                -fx-size: 40px;
+                -fx-border-width: 0 1px 0 0;
+                -fx-border-color: #3F326D;
+            }
+            .table-view .column-header .label {
+                -fx-text-fill: white;
+                -fx-font-weight: bold;
+                -fx-font-family: "Consolas";
+                -fx-alignment: center; 
+            }
+            .table-view .table-cell {
+                -fx-alignment: center;
+                -fx-font-size: 13px;
+                -fx-padding: 5px;
+                -fx-text-fill: #333333;
+            }
+            .table-view .table-row-cell:selected {
+                -fx-background-color: #8D99EE;
+            }
+            .table-view .table-row-cell:selected .text {
+                -fx-fill: white;
+            }
+            """;
+        String base64Css = java.util.Base64.getEncoder().encodeToString(css.getBytes());
+        tablaRutas.getStylesheets().add("data:text/css;base64," + base64Css);
+    }
+    private void anchoTabla(){
+        colOrigen.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.20));
+        colDestino.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.20));
+        colTiempo.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.15));
+        colDistancia.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.15));
+        colCosto.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.15));
+        colTrasbordo.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.14));
+
+    }
     private void configTabla() {
         colOrigen.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getOrigen().getNombre()));
         colDestino.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getDestino().getNombre()));
