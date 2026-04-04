@@ -27,7 +27,7 @@
       <VBox prefHeight="440.0" prefWidth="170.0" style="-fx-background-color: #62529C;" BorderPane.alignment="CENTER">
          <children>
 
-            <Button fx:id="btnInicio" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnInicioClick" prefHeight="60.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Menú Principal">
+            <Button fx:id="btnMapa" alignment="CENTER_LEFT" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnMapaClick" prefHeight="55.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Mapa">
                <font>
                   <Font name="Consolas Bold" size="16.0" />
                </font>
@@ -52,18 +52,6 @@
             </Button>
 
             <Button fx:id="btnRutas" alignment="CENTER_LEFT" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnRutasClick" prefHeight="55.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Rutas">
-               <font>
-                  <Font name="Consolas Bold" size="16.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </Button>
-
-            <Button fx:id="btnMapa" alignment="CENTER_LEFT" graphicTextGap="15.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnMapaClick" prefHeight="55.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Mapa">
                <font>
                   <Font name="Consolas Bold" size="16.0" />
                </font>

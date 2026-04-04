@@ -334,7 +334,5 @@ public class Transporte {
         } catch (SQLException e) {
             System.err.println("Error al cargar la BD: " + e.getMessage());
         }
-
-
     }
 }

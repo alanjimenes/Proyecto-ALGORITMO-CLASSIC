@@ -11,15 +11,15 @@ import java.util.Objects;
 public class MenuController {
 
     @FXML
-    public Button btnInicio, btnMapa, btnRutas, btnParadas;
+    public Button btnMapa, btnRutas, btnParadas;
 
     @FXML
     public BorderPane pnlContenedor;
 
     @FXML
-    public void btnInicioClick() {
-        estilizarBotones(btnInicio);
-        pnlContenedor.getChildren().clear();
+    public void initialize() {
+        // Carga la vista del mapa por defecto al iniciar la aplicación
+        btnMapaClick();
     }
 
     @FXML
@@ -44,7 +44,6 @@ public class MenuController {
         String estiloBase = "-fx-background-color: transparent; -fx-text-fill: white;";
         String estiloClick = "-fx-background-color: #3F326D; -fx-text-fill: white;";
 
-        btnInicio.setStyle(btn == btnInicio ? estiloClick : estiloBase);
         btnMapa.setStyle(btn == btnMapa ? estiloClick : estiloBase);
         btnRutas.setStyle(btn == btnRutas ? estiloClick : estiloBase);
         btnParadas.setStyle(btn == btnParadas ? estiloClick : estiloBase);

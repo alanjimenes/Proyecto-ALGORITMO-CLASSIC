@@ -74,9 +74,9 @@ public class MapaController {
             Parada destino = ruta.getDestino();
 
             if (origen != null && destino != null) {
-                boolean esCaminoOptimo = colorCamino.contains(ruta);
-                Color colorRuta = esCaminoOptimo ? Color.GOLD : Color.web("#8D99EE");
-                double grosor = esCaminoOptimo ? 4.0 : 2.5;
+                boolean optimo = colorCamino.contains(ruta);
+                Color colorRuta = optimo ? Color.GOLD : Color.web("#8D99EE");
+                double grosor = optimo ? 4.0 : 2.5;
 
                 dibujarRuta(origen.getX(), origen.getY(), destino.getX(), destino.getY(), colorRuta, grosor);
             }
@@ -172,7 +172,6 @@ public class MapaController {
             return;
         }
 
-        // 2. Ejecución del Algoritmo
         List<Parada> caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterio);
 
         colorCamino.clear();
