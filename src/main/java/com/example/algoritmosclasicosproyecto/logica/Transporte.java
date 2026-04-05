@@ -159,11 +159,8 @@ public class Transporte {
         }
         List<Ruta> rutas_origin = listaRuta.get(id_Origin);
 
-        for (int i = 0; i < rutas_origin.size(); i++) {
-            Ruta r = rutas_origin.get(i);
-            Parada paradaDestino = r.getDestino();
-            int idExist = paradaDestino.getId();
-            if (idExist == id_Destination) {
+        for (Ruta r : listaRuta.get(id_Origin)) {
+            if (r.getDestino().getId() == id_Destination) {
                 System.err.println("Ya existe una ruta de " + id_Origin + " a " + id_Destination);
                 return;
             }
