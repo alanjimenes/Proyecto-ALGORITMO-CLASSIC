@@ -39,12 +39,12 @@ public class RutasAlternativas {
 
             Ruta conexion = transporte.getRuta(paradaActual, paradaSiguiente);
 
-            transporte.deleteRuta(paradaActual, paradaSiguiente);
+            transporte.deleteRutaTemporal(paradaActual, paradaSiguiente); // ← cambio
 
             List<Parada> alternativa = Dijkstra.dijkstra(transporte, id_Origin, id_Destination, criterio);
 
             if (conexion != null) {
-                transporte.addRuta(paradaActual, paradaSiguiente,
+                transporte.addRutaTemporal(paradaActual, paradaSiguiente, // ← cambio
                         conexion.getTiempo(), conexion.getDistancia(),
                         conexion.getCosto(), conexion.getTrasbordo());
             }
