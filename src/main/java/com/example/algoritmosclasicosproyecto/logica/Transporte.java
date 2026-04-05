@@ -186,11 +186,25 @@ public class Transporte {
             System.err.println("Error al procesar ruta: " + e.getMessage());
         }
     }
+    public Ruta getRuta(int id_Origin, int id_Destination) {
+        if (!listaRuta.containsKey(id_Origin)) return null;
+        for (Ruta r : listaRuta.get(id_Origin)) {
+            if (r.getDestino().getId() == id_Destination) {
+                return r;
+            }
+        }
+        return null;
+    }
 
     public void editRuta(int id_origin, int id_destination, double tiempo, double distancia, double costo, int trasbordo) {
 
         if (!paradaMap.containsKey(id_origin) || !paradaMap.containsKey(id_destination)) {
             System.err.println("Origen o destino no existen.");
+            return;
+        }
+
+        if (tiempo < 0 || distancia < 0 || costo < 0 || trasbordo < 0) {
+            System.err.println("Error: Los valores no pueden ser negativos.");
             return;
         }
         Parada origen = paradaMap.get(id_origin);
