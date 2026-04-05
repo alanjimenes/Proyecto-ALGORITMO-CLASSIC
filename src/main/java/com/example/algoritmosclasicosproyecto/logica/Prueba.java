@@ -2,34 +2,44 @@ package com.example.algoritmosclasicosproyecto.logica;
 
 import com.example.algoritmosclasicosproyecto.algoritmos.Dijkstra;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 
 public class Prueba {
     public static void main(String[] args) {
 
         Transporte sistema = new Transporte();
-        sistema.load_data();
+
+        sistema.getParadaMap().put(1, new Parada(1, "Monumento", 0, 0));
+        sistema.getParadaMap().put(2, new Parada(2, "Centro León", 0, 0));
+        sistema.getParadaMap().put(3, new Parada(3, "PUCMM", 0, 0));
+        sistema.getParadaMap().put(4, new Parada(4, "Las Colinas", 0, 0));
+        sistema.getParadaMap().put(5, new Parada(5, "Los Jardines", 0, 0));
+
+        sistema.getListaRuta().put(1, new ArrayList<>());
+        sistema.getListaRuta().put(2, new ArrayList<>());
+        sistema.getListaRuta().put(3, new ArrayList<>());
+        sistema.getListaRuta().put(4, new ArrayList<>());
+        sistema.getListaRuta().put(5, new ArrayList<>());
+
+        sistema.addRutaTemporal(1, 2, 20, 2.5, 25, 0);
+        sistema.addRutaTemporal(1, 3,  8, 5.0, 20, 0);
+        sistema.addRutaTemporal(2, 4,  5, 4.0, 90, 1);
+        sistema.addRutaTemporal(3, 4,  6, 2.0, 15, 0);
+        sistema.addRutaTemporal(3, 5, 20, 8.0,  8, 0);
+        sistema.addRutaTemporal(4, 5, 10, 3.0, 55, 0);
 
 /*
-            System.out.println("=== INICIANDO PRUEBAS CRUD ===\n");
-            System.out.println(">>> Test: Agregando Paradas...");
             sistema.addParada( "Estación Central");
             sistema.addParada("Terminal Norte");
             sistema.addParada( "Puerto Madero");
-            System.out.println("\n>>> Test: Editando Parada 2...");
             sistema.editParada(8, "Terminal Norte - Renovada");
-            System.out.println("\n>>> Test: Creando Rutas (Conectando el Grafo)...");
             sistema.addRuta(7, 8, 15.5, 12.0, 2.50, 0);
             sistema.addRuta(8, 9, 20.0, 18.5, 3.75, 1);
-            System.out.println("\n>>> Test: Editando parámetros de Ruta (1 -> 2)...");
             sistema.editRuta(7, 8, 12.0, 12.0, 2.00, 0);
-            System.out.println("\n>>> Test: Eliminando Ruta 2 -> 3...");
             sistema.deleteRuta(7, 8);
-            System.out.println("\n>>> Test: Eliminando Parada 3...");
             sistema.deleteParada(9);
-            System.out.println("\n=== PRUEBAS FINALIZADAS ===");
 */
 
 /*
@@ -42,8 +52,6 @@ public class Prueba {
         Object[] idsDisponibles = mapa.keySet().toArray();
         int idOrigen = (int) idsDisponibles[0];
         int idDestino = (int) idsDisponibles[idsDisponibles.length - 1];
-        System.out.println("Origen:  [" + idOrigen + "] " + mapa.get(idOrigen).getNombre());
-        System.out.println("Destino: [" + idDestino + "] " + mapa.get(idDestino).getNombre());
         sistema.editRuta(7, 9, 12.5, 19.0, 7.50, 0);
         String[] criterios = {"tiempo", "distancia", "costo"};
         for (String criterio : criterios) {
@@ -77,18 +85,8 @@ public class Prueba {
         DFS.dfs(t, 2).forEach(p -> System.out.print(p.getNombre() + " -> ")); System.out.println();
 */
 
-        Map<Integer, Parada> mapa = sistema.getParadaMap();
-        if (mapa.size() < 2) {
-            System.err.println("Error: Necesitas al menos 2 paradas en la base de datos.");
-            return;
-        }
-
-        Object[] idsDisponibles = mapa.keySet().toArray();
-        int idOrigen = (int) idsDisponibles[0];
-        int idDestino = (int) idsDisponibles[idsDisponibles.length - 1];
-
-        List<Parada> principal   = Dijkstra.dijkstra(sistema, idOrigen, idDestino, "tiempo");
-        List<Parada> alternativa = Dijkstra.dijkstra(sistema, idOrigen, idDestino, "distancia");
+        List<Parada> principal   = Dijkstra.dijkstra(sistema, 1, 5, "tiempo");
+        List<Parada> alternativa = Dijkstra.dijkstra(sistema, 1, 5, "distancia");
 
         principal.forEach(p -> System.out.print(p.getNombre() + " -> "));
         System.out.println();
