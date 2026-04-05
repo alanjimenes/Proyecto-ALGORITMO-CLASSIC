@@ -26,7 +26,6 @@ public class ParadasController {
 
         updateTabla();
 
-
         tablaParadas.getSelectionModel().selectedItemProperty().addListener((obs, antigua, nueva) -> {
             if (nueva != null) {
                 txtId.setText(String.valueOf(nueva.getId()));
@@ -35,10 +34,62 @@ public class ParadasController {
                 btnAgregar.setDisable(true);
                 btnEditar.setDisable(false);
                 btnEliminar.setDisable(false);
+            } else {
+                cleanForm();
             }
         });
 
         cleanForm();
+
+
+        inyeccionCss();
+        anchoTabla();
+    }
+
+    // Método transferido para inyección Base64 del CSS uniforme
+    private void inyeccionCss(){
+        String css = """
+            .table-view {
+                -fx-background-color: transparent;
+                -fx-border-color: #E0E0E0;
+                -fx-border-radius: 5px;
+            }
+            .table-view .column-header-background,
+            .table-view .column-header-background .filler {
+                -fx-background-color: #62529C; 
+            }
+            .table-view .column-header {
+                -fx-background-color: transparent;
+                -fx-size: 40px;
+                -fx-border-width: 0 1px 0 0;
+                -fx-border-color: #3F326D;
+            }
+            .table-view .column-header .label {
+                -fx-text-fill: white;
+                -fx-font-weight: bold;
+                -fx-font-family: "Consolas";
+                -fx-alignment: center; 
+            }
+            .table-view .table-cell {
+                -fx-alignment: center;
+                -fx-font-size: 13px;
+                -fx-padding: 5px;
+                -fx-text-fill: #333333;
+            }
+            .table-view .table-row-cell:selected {
+                -fx-background-color: #8D99EE;
+            }
+            .table-view .table-row-cell:selected .text {
+                -fx-fill: white;
+            }
+            """;
+        String base64Css = java.util.Base64.getEncoder().encodeToString(css.getBytes());
+        tablaParadas.getStylesheets().add("data:text/css;base64," + base64Css);
+    }
+
+    private void anchoTabla() {
+        colId.prefWidthProperty().bind(tablaParadas.widthProperty().multiply(0.10));
+        colNombre.prefWidthProperty().bind(tablaParadas.widthProperty().multiply(0.89));
     }
 
     @FXML
@@ -46,7 +97,7 @@ public class ParadasController {
         String nombre = txtNombre.getText().trim();
 
         if (nombre.isEmpty()) {
-            alerta("Error", "El nombre es obligatorio.");
+            alerta("Error", "El nombre es obligatorio.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -63,7 +114,7 @@ public class ParadasController {
 
         if (idStr.isEmpty() || nombre.isEmpty()) return;
 
-        int id = Integer.parseInt(idStr); // Convertir a int
+        int id = Integer.parseInt(idStr);
         Transporte.getInstancia().editParada(id, nombre);
 
         updateTabla();
@@ -73,14 +124,25 @@ public class ParadasController {
     @FXML
     void eliminarParada(ActionEvent event) {
         String idStr = txtId.getText().trim();
-
         if (idStr.isEmpty()) return;
 
         int id = Integer.parseInt(idStr);
-        Transporte.getInstancia().deleteParada(id);
+        String nombreParada = txtNombre.getText();
 
-        updateTabla();
-        cleanForm();
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar Eliminacion");
+        confirmacion.setHeaderText("¿Esta seguro de que desea eliminar la parada: " + nombreParada + "?");
+        confirmacion.setContentText("¡ADVERTENCIA! Eliminar esta parada borrará automáticamente TODAS las rutas (origen o destino) que estén conectadas a ella. Esta acción no se puede deshacer.");
+
+        confirmacion.showAndWait().ifPresent(respuesta -> {
+            if (respuesta == ButtonType.OK) {
+                Transporte.getInstancia().deleteParada(id);
+                updateTabla();
+                cleanForm();
+            } else {
+                cleanForm();
+            }
+        });
     }
 
     @FXML
@@ -104,8 +166,9 @@ public class ParadasController {
         tablaParadas.refresh();
     }
 
-    private void alerta(String titulo, String contenido) {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+
+    private void alerta(String titulo, String contenido, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);
         alerta.setContentText(contenido);

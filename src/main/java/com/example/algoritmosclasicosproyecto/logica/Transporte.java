@@ -115,31 +115,35 @@ public class Transporte {
             return;
         }
 
-        String sql = "delete from parada where id = ?";
+        String sqlDeleteRutas = "delete from ruta where id_origen = ? or id_destino = ?";
+        String sqlDeleteParada = "delete from parada where id = ?";
 
         try (Connection conn = Conexion.conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmtRutas = conn.prepareStatement(sqlDeleteRutas);
+             PreparedStatement pstmtParada = conn.prepareStatement(sqlDeleteParada)) {
 
-            pstmt.setInt(1, id);
-            int filas = pstmt.executeUpdate();
+            pstmtRutas.setInt(1, id);
+            pstmtRutas.setInt(2, id);
+            pstmtRutas.executeUpdate();
+
+            pstmtParada.setInt(1, id);
+            int filas = pstmtParada.executeUpdate();
 
             if (filas > 0) {
                 paradaMap.remove(id);
-
                 listaRuta.remove(id);
-                for (List<Ruta> rutas : listaRuta.values()) {
 
+                for (List<Ruta> rutas : listaRuta.values()) {
                     rutas.removeIf(ruta -> ruta.getDestino().getId() == id);
                 }
 
-                System.out.println("Parada " + id + " y todas sus conexiones fueron eliminadas con exito.");
+                System.out.println("Parada " + id + " eliminada en cascada con éxito.");
             }
 
         } catch (SQLException e) {
             System.err.println("Error al eliminar parada en BD: " + e.getMessage());
         }
     }
-
 
     public void addRuta(int id_Origin, int id_Destination, double tiempo, double distancia, double costo, int trasbordo) {
 
