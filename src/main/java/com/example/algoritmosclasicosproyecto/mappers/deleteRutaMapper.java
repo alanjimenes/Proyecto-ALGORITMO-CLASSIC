@@ -1,6 +1,5 @@
 package com.example.algoritmosclasicosproyecto.mappers;
 import com.example.algoritmosclasicosproyecto.logica.Ruta;
-import com.example.algoritmosclasicosproyecto.mappers.PrepareStatementMapper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
