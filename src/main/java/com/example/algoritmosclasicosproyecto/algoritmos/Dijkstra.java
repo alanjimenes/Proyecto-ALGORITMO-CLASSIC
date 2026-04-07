@@ -7,11 +7,11 @@ import java.util.*;
 
 public class Dijkstra {
 
-    /**
-     * Función: NodoDistancia
-     * Objetivo: Clase interna que agrupa el ID de una parada con su distancia acumulada.
-     *           Implementa Comparable para que la PriorityQueue ordene automaticamente
-     *           de menor a mayor distancia siempre procesando primero la parada más barata
+    /*
+      Función: NodoDistancia
+      Objetivo: Clase interna que agrupa el ID de una parada con su distancia acumulada.
+                Implementa Comparable para que la PriorityQueue ordene automaticamente
+                de menor a mayor distancia siempre procesando primero la parada más barata
      */
 
     static class NodoDistancia implements Comparable<NodoDistancia> {
@@ -23,28 +23,28 @@ public class Dijkstra {
             this.distancia = distancia;
         }
 
-        /**
-         * Función: compareTo
-         * Argumento: NodoDistancia otro: el nodo con el que se compara
-         * Objetivo: Definir el criterio de ordenamiento de la PriorityQueue,
-         *           el nodo con menor distancia siempre sale primero
-         * Retorno: (int) negativo si este nodo es menor, positivo si es mayor, 0 si son iguales
+        /*
+          Función: compareTo
+          Argumento: NodoDistancia otro: el nodo con el que se compara
+          Objetivo: Definir el criterio de ordenamiento de la PriorityQueue,
+                    el nodo con menor distancia siempre sale primero
+          Retorno: (int) negativo si este nodo es menor, positivo si es mayor, 0 si son iguales
          */
         @Override
         public int compareTo(NodoDistancia otro) {
             return Double.compare(this.distancia, otro.distancia);
         }
     }
-    /**
-     * Función: dijkstra
-     * Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
-     *            int id_Origin: ID de la parada de inicio,
-     *            int id_Destination: ID de la parada de destino,
-     *            String criterio: criterio de optimización ("tiempo", "distancia", "costo" o "trasbordo")
-     * Objetivo: Encontrar la ruta más corta entre dos paradas según el criterio indicado,
-     *           usando una PriorityQueue para procesar siempre la parada de menor costo acumulado
-     * Retorno: (List<Parada>) Lista ordenada de paradas que forman la ruta más corta.
-     *          Retorna null si alguna parada no existe o no hay camino posible.
+    /*
+      Función: dijkstra
+      Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
+                 int id_Origin: ID de la parada de inicio,
+                 int id_Destination: ID de la parada de destino,
+                 String criterio: criterio de optimización ("tiempo", "distancia", "costo" o "trasbordo")
+      Objetivo: Encontrar la ruta más corta entre dos paradas según el criterio indicado,
+                usando una PriorityQueue para procesar siempre la parada de menor costo acumulado
+      Retorno: (List<Parada>) Lista ordenada de paradas que forman la ruta más corta.
+               Retorna null si alguna parada no existe o no hay camino posible.
      */
 
     public static List<Parada> dijkstra(Transporte transporte, int id_Origin, int id_Destination, String criterio) {

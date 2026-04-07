@@ -11,15 +11,15 @@ public class RutasAlternativas {
     private static final List<String> CRITERIOS = Arrays.asList("tiempo", "distancia", "costo", "trasbordo");
 
 
-    /**
-     * Función: getRutas
-     * Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
-     *            int id_Origin: ID de la parada de inicio,
-     *            int id_Destination: ID de la parada de destino
-     * Objetivo: Calcular para cada criterio disponible una ruta principal y una ruta
-     *           alternativa entre dos paradas
-     * Retorno: (Map<String, List<List<Parada>>>) Mapa donde cada criterio tiene una lista
-     *          con la ruta principal en la posición 0 y la alternativa en la posición 1
+    /*
+     Función: getRutas
+      Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
+                 int id_Origin: ID de la parada de inicio,
+                 int id_Destination: ID de la parada de destino
+      Objetivo: Calcular para cada criterio disponible una ruta principal y una ruta
+                alternativa entre dos paradas
+      Retorno: (Map<String, List<List<Parada>>>) Mapa donde cada criterio tiene una lista
+               con la ruta principal en la posición 0 y la alternativa en la posición 1
      */
 
 
@@ -45,18 +45,18 @@ public class RutasAlternativas {
     }
 
 
-    /**
-     * Función: searchAlternativa
-     * Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
-     *            int id_Origin: ID de la parada de inicio,
-     *            int id_Destination: ID de la parada de destino,
-     *            String criterio: criterio de optimización ("tiempo", "distancia", "costo" o "trasbordo"),
-     *            List<Parada> rutaPrincipal: la ruta óptima ya calculada que se quiere evitar
-     * Objetivo: Encontrar la mejor ruta alternativa eliminando temporalmente una por una
-     *           cada conexión de la ruta principal en memoria, forzando a Dijkstra a buscar
-     *           otro camino. La conexión se restaura después de cada búsqueda
-     * Retorno: (List<Parada>) La mejor ruta alternativa encontrada.
-     *          Retorna null si no existe ningún camino alternativo
+    /*
+     Función: searchAlternativa
+     Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
+                 int id_Origin: ID de la parada de inicio,
+                 int id_Destination: ID de la parada de destino,
+                 String criterio: criterio de optimización ("tiempo", "distancia", "costo" o "trasbordo"),
+                 List<Parada> rutaPrincipal: la ruta óptima ya calculada que se quiere evitar
+      Objetivo: Encontrar la mejor ruta alternativa eliminando temporalmente una por una
+                cada conexión de la ruta principal en memoria, forzando a Dijkstra a buscar
+                otro camino. La conexión se restaura después de cada búsqueda
+      Retorno: (List<Parada>) La mejor ruta alternativa encontrada.
+               Retorna null si no existe ningún camino alternativo
      */
 
     private static List<Parada> searchAlternativa(Transporte transporte, int id_Origin, int id_Destination, String criterio, List<Parada> rutaPrincipal) {
@@ -88,14 +88,14 @@ public class RutasAlternativas {
         return mejorAlternativa;
     }
 
-    /**
-     * Función: calcWeightRuta
-     * Argumento: List<Parada> ruta: lista de paradas que forman el camino,
-     *            Transporte transporte: instancia del grafo con todas las paradas y rutas,
-     *            String criterio: criterio de optimización
-     * Objetivo: Calcular el costo total de una ruta sumando el peso de cada conexión
-     *           según el criterio indicado, usado para comparar alternativas entre sí
-     * Retorno: (double) Costo total acumulado de la ruta
+    /*
+      Función: calcWeightRuta
+      Argumento: List<Parada> ruta: lista de paradas que forman el camino,
+                 Transporte transporte: instancia del grafo con todas las paradas y rutas,
+                 String criterio: criterio de optimización
+      Objetivo: Calcular el costo total de una ruta sumando el peso de cada conexión
+                según el criterio indicado, usado para comparar alternativas entre sí
+      Retorno: (double) Costo total acumulado de la ruta
      */
 
     private static double calcWeightRuta(List<Parada> ruta, Transporte transporte, String criterio) {
