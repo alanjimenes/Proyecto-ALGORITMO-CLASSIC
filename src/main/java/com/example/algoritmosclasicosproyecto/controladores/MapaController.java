@@ -45,7 +45,6 @@ public class MapaController {
 
     private List<Ruta> colorCamino = new ArrayList<>();
 
-    // Variables para el arrastre del panel
     private double mouseX;
     private double mouseY;
 
@@ -54,7 +53,7 @@ public class MapaController {
         configurarUI();
         dibujarGrafo();
         panelInfo.setVisible(false);
-        arrastrar(); // Activar el drag del panel
+        arrastrar();
     }
 
     private void configurarUI() {

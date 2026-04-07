@@ -1,25 +1,47 @@
 package com.example.algoritmosclasicosproyecto.controladores;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Duration;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MenuController {
 
-    @FXML
-    public Button btnMapa, btnRutas, btnParadas;
+    @FXML public Button btnMapa, btnRutas, btnParadas;
+    @FXML public BorderPane pnlContenedor;
 
-    @FXML
-    public BorderPane pnlContenedor;
+    @FXML public Label lblBienvenida;
 
     @FXML
     public void initialize() {
-        // Carga la vista del mapa por defecto al iniciar la aplicación
+        iniciarReloj();
         btnMapaClick();
+    }
+
+
+    private void iniciarReloj() {
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("EEEE, dd/MM/yyyy | HH:mm:ss", new Locale("es", "ES"));
+
+        Timeline reloj = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            LocalDateTime ahora = LocalDateTime.now();
+            String fechaHora = formateador.format(ahora);
+            fechaHora = fechaHora.substring(0, 1).toUpperCase() + fechaHora.substring(1);
+            lblBienvenida.setText("Bienvenido | " + fechaHora);
+        }), new KeyFrame(Duration.seconds(1)));
+
+        reloj.setCycleCount(Animation.INDEFINITE);
+        reloj.play();
     }
 
     @FXML

@@ -278,28 +278,6 @@ public class Transporte {
     }
 
 
-    public double calcularTotalRuta(List<Parada> camino, String criterio) {
-        if (camino == null || camino.size() < 2) return 0;
-
-        double total = 0;
-        for (int i = 0; i < camino.size() - 1; i++) {
-            int origenId = camino.get(i).getId();
-            int destinoId = camino.get(i + 1).getId();
-
-            List<Ruta> rutasDisponibles = listaRuta.get(origenId);
-            if (rutasDisponibles != null) {
-                for (Ruta ruta : rutasDisponibles) {
-                    if (ruta.getDestino().getId() == destinoId) {
-                        total += ruta.getPeso(criterio);
-                        break;
-                    }
-                }
-            }
-        }
-        return total;
-    }
-
-
 
     /*
       Usamos el Singleton para que todas las pantallas compartan exactamente los mismos datos en memoria
