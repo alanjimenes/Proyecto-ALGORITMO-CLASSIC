@@ -46,7 +46,7 @@ public class ParadasController {
         anchoTabla();
     }
 
-    // Método transferido para inyección Base64 del CSS uniforme
+
     private void inyeccionCss(){
         String css = """
             .table-view {
