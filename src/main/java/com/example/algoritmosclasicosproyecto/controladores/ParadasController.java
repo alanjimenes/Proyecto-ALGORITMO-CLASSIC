@@ -132,7 +132,7 @@ public class ParadasController {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar Eliminacion");
         confirmacion.setHeaderText("¿Esta seguro de que desea eliminar la parada: " + nombreParada + "?");
-        confirmacion.setContentText("¡ADVERTENCIA! Eliminar esta parada borrará automáticamente TODAS las rutas (origen o destino) que estén conectadas a ella. Esta acción no se puede deshacer.");
+        confirmacion.setContentText("¡ADVERTENCIA! Eliminar esta parada borrará las rutas  que esten conectadas a ella.");
 
         confirmacion.showAndWait().ifPresent(respuesta -> {
             if (respuesta == ButtonType.OK) {
