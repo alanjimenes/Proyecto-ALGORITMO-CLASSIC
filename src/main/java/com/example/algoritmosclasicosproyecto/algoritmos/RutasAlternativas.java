@@ -1,6 +1,8 @@
-package com.example.algoritmosclasicosproyecto.logica;
+package com.example.algoritmosclasicosproyecto.algoritmos;
 
-import com.example.algoritmosclasicosproyecto.algoritmos.Dijkstra;
+import com.example.algoritmosclasicosproyecto.logica.Parada;
+import com.example.algoritmosclasicosproyecto.logica.Ruta;
+import com.example.algoritmosclasicosproyecto.logica.Transporte;
 
 import java.util.*;
 

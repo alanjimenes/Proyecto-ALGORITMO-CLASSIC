@@ -11,4 +11,6 @@ module com.example.algoritmosclasicosproyecto {
     opens com.example.algoritmosclasicosproyecto.controladores to javafx.fxml;
     exports com.example.algoritmosclasicosproyecto.logica;
     opens com.example.algoritmosclasicosproyecto.logica to javafx.fxml;
+    exports com.example.algoritmosclasicosproyecto.algoritmos;
+    opens com.example.algoritmosclasicosproyecto.algoritmos to javafx.fxml;
 }
