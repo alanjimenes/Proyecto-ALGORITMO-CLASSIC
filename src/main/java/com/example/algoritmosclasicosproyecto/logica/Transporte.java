@@ -263,13 +263,13 @@ public class Transporte {
         }
     }
 
-    void deleteRutaTemporal(int id_origin, int id_destination) {
+   public void deleteRutaTemporal(int id_origin, int id_destination) {
         if (listaRuta.containsKey(id_origin)) {
             listaRuta.get(id_origin).removeIf(r -> r.getDestino().getId() == id_destination);
         }
     }
 
-    void addRutaTemporal(int id_Origin, int id_Destination, double tiempo, double distancia, double costo, int trasbordo) {
+   public void addRutaTemporal(int id_Origin, int id_Destination, double tiempo, double distancia, double costo, int trasbordo) {
         if (paradaMap.containsKey(id_Origin) && paradaMap.containsKey(id_Destination)) {
             Parada origen = paradaMap.get(id_Origin);
             Parada destino = paradaMap.get(id_Destination);
