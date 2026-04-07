@@ -16,11 +16,5 @@ public class Conexion {
         }
     }
 
-/*
-    public static void main(String[] args) {
-        Connection prueba = conectar();
-        if (prueba != null) {
-            System.out.println("Conexion exitosa a Supabase");
-        }
-    }*/
+
 }

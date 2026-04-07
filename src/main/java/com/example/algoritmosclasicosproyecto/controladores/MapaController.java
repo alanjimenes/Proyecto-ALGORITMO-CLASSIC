@@ -44,7 +44,7 @@ public class MapaController {
     private final double RADIO_NODO = 20.0;
     private final double RADIO_VISUAL = 22.0;
 
-    private List<Ruta> colorCamino = new ArrayList<>();
+    private final List<Ruta> colorCamino = new ArrayList<>();
 
     private double mouseX;
     private double mouseY;
@@ -212,12 +212,12 @@ public class MapaController {
         List<Parada> caminoNodos;
 
 
-        String criterioBusqueda = criterio.toLowerCase();
+        String criterioSearch = criterio.toLowerCase();
 
         if (esAlternativa) {
 
             Map<String, List<List<Parada>>> mapaResultados = RutasAlternativas.getRutas(Transporte.getInstancia(), o.getId(), d.getId());
-            List<List<Parada>> opciones = mapaResultados.get(criterioBusqueda);
+            List<List<Parada>> opciones = mapaResultados.get(criterioSearch);
 
 
             if (opciones == null || opciones.size() < 2) {
@@ -227,7 +227,7 @@ public class MapaController {
             caminoNodos = opciones.get(1);
         } else {
 
-            caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterioBusqueda);
+            caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
         }
 
         colorCamino.clear();
@@ -249,7 +249,7 @@ public class MapaController {
             for (Ruta r : rutasDesdeActual) {
                 if (r.getDestino().getId() == siguiente.getId()) {
                     colorCamino.add(r);
-                    total += r.getPeso(criterioBusqueda);
+                    total += r.getPeso(criterioSearch);
                     break;
                 }
             }

@@ -33,13 +33,10 @@ public class MenuController {
     }
 
     private void cargarImagen() {
-        try {
             String rutaDirecta = "file:src/main/resources/img/logo_blanco.png";
             Image logo = new Image(rutaDirecta);
             imgLogo.setImage(logo);
-        } catch (Exception e) {
-            System.err.println("Error forzando la carga de la imagen: " + e.getMessage());
-        }
+
     }
 
     private void iniciarReloj() {

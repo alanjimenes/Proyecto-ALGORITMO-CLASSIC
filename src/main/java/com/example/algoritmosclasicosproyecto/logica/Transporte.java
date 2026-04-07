@@ -72,7 +72,7 @@ public class Transporte {
                         paradaMap.put(generatedId, nuevaParada);
                         listaRuta.put(generatedId, new ArrayList<>());
 
-                        System.out.println("Parada registrada en BD y memoria con ID: " + generatedId);
+                      //  System.out.println("Parada registrada en BD y memoria con ID: " + generatedId);
                     }
                 }
             }
@@ -199,10 +199,6 @@ public class Transporte {
             return;
         }
 
-        if (tiempo < 0 || distancia < 0 || costo < 0 || trasbordo < 0) {
-            System.err.println("Error: Los valores no pueden ser negativos.");
-            return;
-        }
         Parada origen = paradaMap.get(id_origin);
         Parada destino = paradaMap.get(id_destination);
         Ruta rutaEditada = new Ruta(origen, destino, tiempo, distancia, costo, trasbordo);
@@ -277,16 +273,6 @@ public class Transporte {
     }
 
 
-
-    /*
-      Usamos el Singleton para que todas las pantallas compartan exactamente los mismos datos en memoria
-      Primero limpiamos las listas primero para no duplicar datos si esta función se ejecuta más de una vez.
-      Luego cargamos las paradas fila por fila y le preparamos a cada una lista vacía para guardar sus futuras rutas.
-      Y finalmente cargamos las rutas, pero con una regla estricta: antes de agregar una ruta,
-      verificamos que la parada de origen y la de destino realmente existan en la memoria.
-
-
-     */
     public void load_data() {
         paradaMap.clear();
         listaRuta.clear();
