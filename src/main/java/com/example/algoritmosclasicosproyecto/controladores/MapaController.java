@@ -264,8 +264,11 @@ public class MapaController {
         panelInfo.setTranslateX(0);
         panelInfo.setTranslateY(0);
     }
+
+
+
     private void showInfoRuta(Parada origen, Parada destino, String criterio, double total) {
-        lblTrayecto.setText(origen.getNombre() + " ➔ " + destino.getNombre());
+        lblTrayecto.setText(origen.getNombre() + " -> " + destino.getNombre());
         lblCriterioInfo.setText(criterio);
 
 

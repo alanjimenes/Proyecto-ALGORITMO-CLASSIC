@@ -22,6 +22,7 @@ public class RutasAlternativas {
      *          con la ruta principal en la posición 0 y la alternativa en la posición 1
      */
 
+
     public static Map<String, List<List<Parada>>> getRutas(Transporte transporte, int id_Origin, int id_Destination) {
         Map<String, List<List<Parada>>> resultado = new LinkedHashMap<>();
 

@@ -1,5 +1,4 @@
 package com.example.algoritmosclasicosproyecto.logica;
-
 import com.example.algoritmosclasicosproyecto.bd.Conexion;
 import com.example.algoritmosclasicosproyecto.mappers.deleteRutaMapper;
 import com.example.algoritmosclasicosproyecto.mappers.insertRutaMapper;
