@@ -112,6 +112,8 @@ public class RutasController {
         colTrasbordo.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.14));
 
     }
+
+
     private void configTabla() {
         colOrigen.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getOrigen().getNombre()));
         colDestino.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getDestino().getNombre()));
@@ -241,7 +243,7 @@ public class RutasController {
     }
 
     private void alert(String titulo, String contenido) {
-        Alert alerta = new Alert(Alert.AlertType.WARNING); // Cambiado a WARNING para mayor claridad
+        Alert alerta = new Alert(Alert.AlertType.WARNING);
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);
         alerta.setContentText(contenido);

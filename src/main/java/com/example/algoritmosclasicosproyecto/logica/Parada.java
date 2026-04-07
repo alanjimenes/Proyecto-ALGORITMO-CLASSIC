@@ -1,10 +1,10 @@
 package com.example.algoritmosclasicosproyecto.logica;
 
 public class Parada {
-    private int id;
+    private final int  id;
     private String nombre;
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
 
     public Parada(int id, String nombre, double x, double y) {
         this.id = id;
@@ -17,9 +17,7 @@ public class Parada {
 
     public double getY() { return y; }
 
-    public void setX(double x) { this.x = x; }
 
-    public void setY(double y) { this.y = y; }
 
     public int getId() {
         return id;

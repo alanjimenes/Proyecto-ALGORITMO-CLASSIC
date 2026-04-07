@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -33,21 +34,30 @@ public class MapaController {
     @FXML private ComboBox<Parada> cmbDestino;
     @FXML private ComboBox<String> cmbCriterio;
 
+    // Componentes del HUD de Información
+    @FXML private VBox panelInfo;
+    @FXML private Label lblTrayecto;
+    @FXML private Label lblCriterioInfo;
+    @FXML private Label lblTotalInfo;
 
     private final double RADIO_NODO = 20.0;
     private final double RADIO_VISUAL = 22.0;
 
-
     private List<Ruta> colorCamino = new ArrayList<>();
+
+    // Variables para el arrastre del panel
+    private double mouseX;
+    private double mouseY;
 
     @FXML
     public void initialize() {
         configurarUI();
         dibujarGrafo();
+        panelInfo.setVisible(false);
+        arrastrar(); // Activar el drag del panel
     }
 
     private void configurarUI() {
-
         cmbCriterio.setItems(FXCollections.observableArrayList("Seleccione","Tiempo", "Distancia", "Costo", "Trasbordo"));
         cmbCriterio.setValue("Seleccione");
         ObservableList<Parada> paradas = FXCollections.observableArrayList(Transporte.getInstancia().getParadas());
@@ -60,6 +70,26 @@ public class MapaController {
         };
         cmbOrigen.setConverter(converter);
         cmbDestino.setConverter(converter);
+    }
+
+
+    private void arrastrar() {
+        panelInfo.setOnMousePressed(event -> {
+
+            mouseX = event.getSceneX() - panelInfo.getTranslateX();
+            mouseY = event.getSceneY() - panelInfo.getTranslateY();
+        });
+
+        panelInfo.setOnMouseDragged(event -> {
+            panelInfo.setTranslateX(event.getSceneX() - mouseX);
+            panelInfo.setTranslateY(event.getSceneY() - mouseY);
+        });
+    }
+
+
+    @FXML
+    void closepanel(ActionEvent event) {
+        panelInfo.setVisible(false);
     }
 
     public void dibujarGrafo() {
@@ -111,13 +141,11 @@ public class MapaController {
         txtNombre.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;");
         txtNombre.setTextAlignment(TextAlignment.CENTER);
 
-
         double anchoNombre = txtNombre.getLayoutBounds().getWidth();
         txtNombre.setX(-anchoNombre / 2);
         txtNombre.setY(RADIO_NODO + 15);
 
         contenedor.getChildren().addAll(circulo, txtId, txtNombre);
-
 
         return contenedor;
     }
@@ -126,7 +154,6 @@ public class MapaController {
         double dx = endX - startX;
         double dy = endY - startY;
         double angulo = Math.atan2(dy, dx);
-
 
         double inicioX = startX + RADIO_VISUAL * Math.cos(angulo);
         double inicioY = startY + RADIO_VISUAL * Math.sin(angulo);
@@ -156,9 +183,10 @@ public class MapaController {
         Parada d = cmbDestino.getValue();
         String criterio = cmbCriterio.getValue();
 
+        panelInfo.setVisible(false);
 
         if (o == null || d == null) {
-            alert("Error de Selección", "Debe seleccionar un origen y un destino.", Alert.AlertType.WARNING);
+            alert("Error de Seleccion", "Debe seleccionar un origen y un destino.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -168,7 +196,7 @@ public class MapaController {
         }
 
         if (criterio == null || criterio.equals("Seleccione")) {
-            alert("Error:", "Debe seleccionar un criterio de prioridad valido (Tiempo, Distancia, etc.).", Alert.AlertType.WARNING);
+            alert("Error:", "Debe seleccionar un criterio de prioridad válido (Tiempo, Distancia, etc.).", Alert.AlertType.WARNING);
             return;
         }
 
@@ -200,12 +228,28 @@ public class MapaController {
         }
 
         dibujarGrafo();
+        showInfoRuta(o, d, criterio, total);
 
 
-        String msg = "";
-        msg = String.format("Se ha trazado la ruta en el mapa.");
+        panelInfo.setTranslateX(0);
+        panelInfo.setTranslateY(0);
+    }
 
-        alert("Ruta encontrada: ", msg, Alert.AlertType.INFORMATION);
+    private void showInfoRuta(Parada origen, Parada destino, String criterio, double total) {
+        lblTrayecto.setText(origen.getNombre() + " ➔ " + destino.getNombre());
+        lblCriterioInfo.setText(criterio);
+
+        if (criterio.equalsIgnoreCase("Trasbordo")) {
+            lblTotalInfo.setText(String.format("%d unidades", (int)total));
+        } else if (criterio.equalsIgnoreCase("Costo")) {
+            lblTotalInfo.setText(String.format("RD$ %.2f", total));
+        } else if (criterio.equalsIgnoreCase("Tiempo")) {
+            lblTotalInfo.setText(String.format("%.2f min", total));
+        } else {
+            lblTotalInfo.setText(String.format("%.2f km", total));
+        }
+
+        panelInfo.setVisible(true);
     }
 
     @FXML
@@ -214,9 +258,9 @@ public class MapaController {
         cmbOrigen.getSelectionModel().clearSelection();
         cmbDestino.getSelectionModel().clearSelection();
         cmbCriterio.setValue("Seleccione");
+        panelInfo.setVisible(false);
         dibujarGrafo();
     }
-
 
     private void alert(String titulo, String contenido, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
