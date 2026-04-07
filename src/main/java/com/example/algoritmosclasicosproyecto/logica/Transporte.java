@@ -280,37 +280,39 @@ public class Transporte {
         String sqlParadas = "select * from parada";
         String sqlRutas = "select * from ruta";
 
-        try (Connection conn = Conexion.conectar();
-             Statement stmt = conn.createStatement()) {
-            ResultSet rsParadas = stmt.executeQuery(sqlParadas);
-            while (rsParadas.next()) {
-                int id = rsParadas.getInt("id");
-                Parada p = new Parada(id, rsParadas.getString("nombre"),
-                        rsParadas.getDouble("x"), rsParadas.getDouble("y"));
-                paradaMap.put(id, p);
-                listaRuta.put(id, new ArrayList<>());
-            }
-            rsParadas.close();
-
-            ResultSet rsRutas = stmt.executeQuery(sqlRutas);
-            while (rsRutas.next()) {
-                int idOrigen = rsRutas.getInt("id_origen");
-                int idDestino = rsRutas.getInt("id_destino");
-
-                if (paradaMap.containsKey(idOrigen) && paradaMap.containsKey(idDestino)) {
-                    Ruta r = new Ruta(
-                            paradaMap.get(idOrigen),
-                            paradaMap.get(idDestino),
-                            rsRutas.getDouble("tiempo_minuto"),
-                            rsRutas.getDouble("distancia_km"),
-                            rsRutas.getDouble("costo"),
-                            rsRutas.getInt("trasbordo")
-                    );
-                    listaRuta.get(idOrigen).add(r);
+        try (Connection conn = Conexion.conectar()) {
+            assert conn != null;
+            try (Statement stmt = conn.createStatement()) {
+                ResultSet rsParadas = stmt.executeQuery(sqlParadas);
+                while (rsParadas.next()) {
+                    int id = rsParadas.getInt("id");
+                    Parada p = new Parada(id, rsParadas.getString("nombre"),
+                            rsParadas.getDouble("x"), rsParadas.getDouble("y"));
+                    paradaMap.put(id, p);
+                    listaRuta.put(id, new ArrayList<>());
                 }
+                rsParadas.close();
+
+                ResultSet rsRutas = stmt.executeQuery(sqlRutas);
+                while (rsRutas.next()) {
+                    int idOrigen = rsRutas.getInt("id_origen");
+                    int idDestino = rsRutas.getInt("id_destino");
+
+                    if (paradaMap.containsKey(idOrigen) && paradaMap.containsKey(idDestino)) {
+                        Ruta r = new Ruta(
+                                paradaMap.get(idOrigen),
+                                paradaMap.get(idDestino),
+                                rsRutas.getDouble("tiempo_minuto"),
+                                rsRutas.getDouble("distancia_km"),
+                                rsRutas.getDouble("costo"),
+                                rsRutas.getInt("trasbordo")
+                        );
+                        listaRuta.get(idOrigen).add(r);
+                    }
+                }
+
+
             }
-
-
         } catch (SQLException e) {
             System.err.println("Error al cargar la BD: " + e.getMessage());
         }
