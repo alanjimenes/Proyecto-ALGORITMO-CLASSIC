@@ -9,11 +9,9 @@ import java.util.*;
 public class DFS {
 
     public static List<Parada> dfs(Transporte transporte, int id_Origin) {
-        // Recuperamos los mapas con llaves Integer
         Map<Integer, Parada> paradaMap = transporte.getParadaMap();
         Map<Integer, List<Ruta>> listaRuta = transporte.getListaRuta();
 
-        // 1. Cláusula de Guarda: Validar existencia
         if (!paradaMap.containsKey(id_Origin)) {
             System.err.println("Error: La parada origen con ID " + id_Origin + " no existe.");
             return null;
@@ -36,7 +34,6 @@ public class DFS {
         for (Ruta ruta : rutasVecinas) {
             int vecinoId = ruta.getDestino().getId();
 
-            // Si el vecino no ha sido visitado, profundizar
             if (!visitados.contains(vecinoId)) {
                 dfsRecursivo(vecinoId, paradaMap, listaRuta, visitados, orden_Visita);
             }

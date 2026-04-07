@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
@@ -20,15 +22,25 @@ public class MenuController {
 
     @FXML public Button btnMapa, btnRutas, btnParadas;
     @FXML public BorderPane pnlContenedor;
-
     @FXML public Label lblBienvenida;
+    @FXML public ImageView imgLogo;
 
     @FXML
     public void initialize() {
         iniciarReloj();
+        cargarImagen();
         btnMapaClick();
     }
 
+    private void cargarImagen() {
+        try {
+            String rutaDirecta = "file:src/main/resources/img/logo_blanco.png";
+            Image logo = new Image(rutaDirecta);
+            imgLogo.setImage(logo);
+        } catch (Exception e) {
+            System.err.println("Error forzando la carga de la imagen: " + e.getMessage());
+        }
+    }
 
     private void iniciarReloj() {
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("EEEE, dd/MM/yyyy | HH:mm:ss", new Locale("es", "ES"));

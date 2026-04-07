@@ -11,7 +11,7 @@
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="900.0" style="-fx-background-color: #3F326D;" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="70.0" prefWidth="193.0" text="Sistema de Rutas" textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="70.0" prefWidth="193.0" text="    Sistema de Rutas" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -29,44 +29,40 @@
       </HBox>
    </top>
    <left>
-      <VBox prefWidth="200.0" style="-fx-background-color: #62529C;" BorderPane.alignment="CENTER">
+      <VBox prefWidth="210.0" style="-fx-background-color: #62529C;" BorderPane.alignment="CENTER">
          <children>
             <Label alignment="CENTER" prefHeight="30.0" prefWidth="193.0" text="             " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="btnMapa" mnemonicParsing="false" onAction="#btnMapaClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Mapa">
+            <Button fx:id="btnMapa" mnemonicParsing="false" onAction="#btnMapaClick" prefHeight="60.0" prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Mapa">
                <font><Font name="System Bold" size="16.0" /></font>
             </Button>
-            <Label alignment="CENTER" prefHeight=".0" prefWidth="193.0" text="             " textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="2.0" prefWidth="193.0" text="             " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Button fx:id="btnParadas" mnemonicParsing="false" onAction="#btnParadasClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Paradas">
+            <Button fx:id="btnParadas" mnemonicParsing="false" onAction="#btnParadasClick" prefHeight="60.0" prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Paradas">
                <font><Font name="System Bold" size="16.0" /></font>
             </Button>
-            <Label alignment="CENTER" prefHeight="5.0" prefWidth="193.0" text="             " textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="2.0" prefWidth="193.0" text="             " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Button fx:id="btnRutas" mnemonicParsing="false" onAction="#btnRutasClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Rutas">
+            <Button fx:id="btnRutas" mnemonicParsing="false" onAction="#btnRutasClick" prefHeight="60.0" prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Rutas">
                <font><Font name="System Bold" size="16.0" /></font>
             </Button>
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <HBox alignment="CENTER">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                  </ImageView>
-               </children>
+            <ImageView fx:id="imgLogo" fitWidth="210.0" fitHeight="300.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
-            </HBox>
+            </ImageView>
          </children>
       </VBox>
    </left>

@@ -1,6 +1,7 @@
 package com.example.algoritmosclasicosproyecto.controladores;
 
 import com.example.algoritmosclasicosproyecto.algoritmos.Dijkstra;
+import com.example.algoritmosclasicosproyecto.algoritmos.RutasAlternativas;
 import com.example.algoritmosclasicosproyecto.logica.Parada;
 import com.example.algoritmosclasicosproyecto.logica.Ruta;
 import com.example.algoritmosclasicosproyecto.logica.Transporte;
@@ -34,7 +35,7 @@ public class MapaController {
     @FXML private ComboBox<Parada> cmbDestino;
     @FXML private ComboBox<String> cmbCriterio;
 
-    // Componentes del HUD de Información
+
     @FXML private VBox panelInfo;
     @FXML private Label lblTrayecto;
     @FXML private Label lblCriterioInfo;
@@ -71,10 +72,8 @@ public class MapaController {
         cmbDestino.setConverter(converter);
     }
 
-
     private void arrastrar() {
         panelInfo.setOnMousePressed(event -> {
-
             mouseX = event.getSceneX() - panelInfo.getTranslateX();
             mouseY = event.getSceneY() - panelInfo.getTranslateY();
         });
@@ -84,7 +83,6 @@ public class MapaController {
             panelInfo.setTranslateY(event.getSceneY() - mouseY);
         });
     }
-
 
     @FXML
     void closepanel(ActionEvent event) {
@@ -176,8 +174,20 @@ public class MapaController {
         paneMapa.getChildren().addAll(linea, flecha);
     }
 
+
+
     @FXML
     void best_ruta(ActionEvent event) {
+        ejecutarBusqueda(false);
+    }
+
+    @FXML
+    void ruta_alternativa(ActionEvent event) {
+        ejecutarBusqueda(true);
+    }
+
+
+    private void ejecutarBusqueda(boolean esAlternativa) {
         Parada o = cmbOrigen.getValue();
         Parada d = cmbDestino.getValue();
         String criterio = cmbCriterio.getValue();
@@ -199,7 +209,26 @@ public class MapaController {
             return;
         }
 
-        List<Parada> caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterio);
+        List<Parada> caminoNodos;
+
+
+        String criterioBusqueda = criterio.toLowerCase();
+
+        if (esAlternativa) {
+
+            Map<String, List<List<Parada>>> mapaResultados = RutasAlternativas.getRutas(Transporte.getInstancia(), o.getId(), d.getId());
+            List<List<Parada>> opciones = mapaResultados.get(criterioBusqueda);
+
+
+            if (opciones == null || opciones.size() < 2) {
+                alert("Sin Alternativas", "No se encontró una segunda ruta válida para este trayecto.", Alert.AlertType.INFORMATION);
+                return;
+            }
+            caminoNodos = opciones.get(1);
+        } else {
+
+            caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterioBusqueda);
+        }
 
         colorCamino.clear();
 
@@ -220,29 +249,33 @@ public class MapaController {
             for (Ruta r : rutasDesdeActual) {
                 if (r.getDestino().getId() == siguiente.getId()) {
                     colorCamino.add(r);
-                    total += r.getPeso(criterio);
+                    total += r.getPeso(criterioBusqueda);
                     break;
                 }
             }
         }
 
         dibujarGrafo();
-        showInfoRuta(o, d, criterio, total);
 
+
+        String etiquetaCriterio = esAlternativa ? criterio + " (Alternativa)" : criterio;
+        showInfoRuta(o, d, etiquetaCriterio, total);
 
         panelInfo.setTranslateX(0);
         panelInfo.setTranslateY(0);
     }
-
     private void showInfoRuta(Parada origen, Parada destino, String criterio, double total) {
         lblTrayecto.setText(origen.getNombre() + " ➔ " + destino.getNombre());
         lblCriterioInfo.setText(criterio);
 
-        if (criterio.equalsIgnoreCase("Trasbordo")) {
+
+        String critPuro = criterio.replace(" (Alternativa)", "");
+
+        if (critPuro.equalsIgnoreCase("Trasbordo")) {
             lblTotalInfo.setText(String.format("%d unidades", (int)total));
-        } else if (criterio.equalsIgnoreCase("Costo")) {
+        } else if (critPuro.equalsIgnoreCase("Costo")) {
             lblTotalInfo.setText(String.format("RD$ %.2f", total));
-        } else if (criterio.equalsIgnoreCase("Tiempo")) {
+        } else if (critPuro.equalsIgnoreCase("Tiempo")) {
             lblTotalInfo.setText(String.format("%.2f min", total));
         } else {
             lblTotalInfo.setText(String.format("%.2f km", total));

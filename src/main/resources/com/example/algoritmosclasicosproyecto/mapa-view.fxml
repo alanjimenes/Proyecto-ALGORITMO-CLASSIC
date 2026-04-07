@@ -98,6 +98,11 @@
                         <Button mnemonicParsing="false" onAction="#best_ruta" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #62529C; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Calcular Ruta">
                             <font><Font name="System Bold" size="13.0" /></font>
                         </Button>
+
+                        <Button mnemonicParsing="false" onAction="#ruta_alternativa" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #7A8B99; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Ruta Alternativa">
+                            <font><Font name="System Bold" size="13.0" /></font>
+                        </Button>
+
                         <Button mnemonicParsing="false" onAction="#limpiarBusqueda" prefHeight="40.0" prefWidth="104.0" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Limpiar">
                             <font>
                                 <Font name="System Bold" size="13.0" />
