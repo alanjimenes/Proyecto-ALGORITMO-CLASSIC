@@ -10,8 +10,8 @@ public class Dijkstra {
     /**
      * Función: NodoDistancia
      * Objetivo: Clase interna que agrupa el ID de una parada con su distancia acumulada.
-     *           Implementa Comparable para que la PriorityQueue ordene automáticamente
-     *           de menor a mayor distancia, siempre procesando primero la parada más barata
+     *           Implementa Comparable para que la PriorityQueue ordene automaticamente
+     *           de menor a mayor distancia siempre procesando primero la parada más barata
      */
 
     static class NodoDistancia implements Comparable<NodoDistancia> {

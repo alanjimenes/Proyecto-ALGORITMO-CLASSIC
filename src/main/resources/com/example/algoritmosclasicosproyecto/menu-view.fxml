@@ -6,69 +6,85 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="411.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.algoritmosclasicosproyecto.controladores.MenuController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="411.0"
+            prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.algoritmosclasicosproyecto.controladores.MenuController">
 
-   <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="900.0" style="-fx-background-color: #3F326D;" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER" prefHeight="70.0" prefWidth="193.0" text="    Sistema de Rutas" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Region HBox.hgrow="ALWAYS" />
-            <Label fx:id="lblBienvenida" minWidth="-Infinity" text="Cargando..." textFill="WHITE" HBox.hgrow="NEVER">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-   </top>
-   <left>
-      <VBox prefWidth="210.0" style="-fx-background-color: #62529C;" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER" prefHeight="30.0" prefWidth="193.0" text="             " textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Button fx:id="btnMapa" mnemonicParsing="false" onAction="#btnMapaClick" prefHeight="60.0" prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Mapa">
-               <font><Font name="System Bold" size="16.0" /></font>
-            </Button>
-            <Label alignment="CENTER" prefHeight="2.0" prefWidth="193.0" text="             " textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <Button fx:id="btnParadas" mnemonicParsing="false" onAction="#btnParadasClick" prefHeight="60.0" prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Paradas">
-               <font><Font name="System Bold" size="16.0" /></font>
-            </Button>
-            <Label alignment="CENTER" prefHeight="2.0" prefWidth="193.0" text="             " textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <Button fx:id="btnRutas" mnemonicParsing="false" onAction="#btnRutasClick" prefHeight="60.0" prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Rutas">
-               <font><Font name="System Bold" size="16.0" /></font>
-            </Button>
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="900.0" style="-fx-background-color: #3F326D;"
+              BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" prefHeight="70.0" prefWidth="193.0" text="    Sistema de Rutas"
+                       textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblBienvenida" minWidth="-Infinity" text="Cargando..." textFill="WHITE"
+                       HBox.hgrow="NEVER">
+                    <HBox.margin>
+                        <Insets right="20.0"/>
+                    </HBox.margin>
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+    </top>
+    <left>
+        <VBox prefWidth="210.0" style="-fx-background-color: #62529C;" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" prefHeight="30.0" prefWidth="193.0" text="             " textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <Button fx:id="btnMapa" mnemonicParsing="false" onAction="#btnMapaClick" prefHeight="60.0"
+                        prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Mapa">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Button>
+                <Label alignment="CENTER" prefHeight="2.0" prefWidth="193.0" text="             " textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Button fx:id="btnParadas" mnemonicParsing="false" onAction="#btnParadasClick" prefHeight="60.0"
+                        prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;"
+                        text="Paradas">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Button>
+                <Label alignment="CENTER" prefHeight="2.0" prefWidth="193.0" text="             " textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Button fx:id="btnRutas" mnemonicParsing="false" onAction="#btnRutasClick" prefHeight="60.0"
+                        prefWidth="210.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Rutas">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Button>
 
-            <Region VBox.vgrow="ALWAYS" />
+                <Region VBox.vgrow="ALWAYS"/>
 
-            <ImageView fx:id="imgLogo" fitWidth="210.0" fitHeight="300.0" pickOnBounds="true" preserveRatio="true">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-            </ImageView>
-         </children>
-      </VBox>
-   </left>
+                <ImageView fx:id="imgLogo" fitWidth="210.0" fitHeight="300.0" pickOnBounds="true" preserveRatio="true">
+                    <VBox.margin>
+                        <Insets bottom="20.0"/>
+                    </VBox.margin>
+                </ImageView>
+            </children>
+        </VBox>
+    </left>
 
-   <center>
-      <BorderPane fx:id="pnlContenedor" prefHeight="464.0" prefWidth="680.0" style="-fx-background-color: #F4F4F4;" BorderPane.alignment="CENTER" />
-   </center>
+    <center>
+        <BorderPane fx:id="pnlContenedor" prefHeight="464.0" prefWidth="680.0" style="-fx-background-color: #F4F4F4;"
+                    BorderPane.alignment="CENTER"/>
+    </center>
 
 </BorderPane>

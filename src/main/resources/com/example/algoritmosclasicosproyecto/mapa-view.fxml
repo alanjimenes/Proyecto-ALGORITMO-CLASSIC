@@ -5,110 +5,153 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="857.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.algoritmosclasicosproyecto.controladores.MapaController">
+<AnchorPane prefHeight="600.0" prefWidth="857.0" style="-fx-background-color: #f4f4f4;"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.algoritmosclasicosproyecto.controladores.MapaController">
     <children>
-        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0">
             <children>
                 <StackPane VBox.vgrow="ALWAYS">
-                    <Pane fx:id="paneMapa" prefHeight="520.0" prefWidth="818.0" />
+                    <Pane fx:id="paneMapa" prefHeight="520.0" prefWidth="818.0"/>
 
-                    <VBox fx:id="panelInfo" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-border-color: #62529C; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-cursor: move;" visible="false" StackPane.alignment="TOP_LEFT">
+                    <VBox fx:id="panelInfo" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity"
+                          style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-border-color: #62529C; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-cursor: move;"
+                          visible="false" StackPane.alignment="TOP_LEFT">
                         <StackPane.margin>
-                            <Insets left="20.0" top="20.0" />
+                            <Insets left="20.0" top="20.0"/>
                         </StackPane.margin>
                         <padding>
-                            <Insets bottom="15.0" left="20.0" right="20.0" top="10.0" />
+                            <Insets bottom="15.0" left="20.0" right="20.0" top="10.0"/>
                         </padding>
                         <children>
                             <HBox alignment="TOP_RIGHT">
                                 <children>
-                                    <Label maxWidth="Infinity" text="Resumen de Ruta" textFill="#62529c" HBox.hgrow="ALWAYS">
+                                    <Label maxWidth="Infinity" text="Resumen de Ruta" textFill="#62529c"
+                                           HBox.hgrow="ALWAYS">
                                         <font>
-                                            <Font name="Consolas Bold" size="16.0" />
+                                            <Font name="Consolas Bold" size="16.0"/>
                                         </font>
                                         <padding>
-                                            <Insets right="20.0" />
+                                            <Insets right="20.0"/>
                                         </padding>
                                     </Label>
-                                    <Button mnemonicParsing="false" onAction="#closepanel" style="-fx-background-color: transparent; -fx-text-fill: #d9534f; -fx-cursor: hand;" text="X">
+                                    <Button mnemonicParsing="false" onAction="#closepanel"
+                                            style="-fx-background-color: transparent; -fx-text-fill: #d9534f; -fx-cursor: hand;"
+                                            text="X">
                                         <font>
-                                            <Font name="System Bold" size="14.0" />
+                                            <Font name="System Bold" size="14.0"/>
                                         </font>
                                         <padding>
-                                            <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
+                                            <Insets bottom="0.0" left="0.0" right="0.0" top="0.0"/>
                                         </padding>
                                     </Button>
                                 </children>
                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
+                                    <Insets bottom="10.0"/>
                                 </VBox.margin>
                             </HBox>
 
                             <HBox spacing="5.0">
                                 <Label text="Trayecto: ">
-                                    <font><Font name="System Bold" size="13.0" /></font>
+                                    <font>
+                                        <Font name="System Bold" size="13.0"/>
+                                    </font>
                                 </Label>
                                 <Label fx:id="lblTrayecto" text="-">
-                                    <font><Font size="13.0" /></font>
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
                                 </Label>
                             </HBox>
                             <HBox spacing="5.0">
                                 <Label text="Criterio: ">
-                                    <font><Font name="System Bold" size="13.0" /></font>
+                                    <font>
+                                        <Font name="System Bold" size="13.0"/>
+                                    </font>
                                 </Label>
                                 <Label fx:id="lblCriterioInfo" text="-">
-                                    <font><Font size="13.0" /></font>
+                                    <font>
+                                        <Font size="13.0"/>
+                                    </font>
                                 </Label>
                             </HBox>
                             <HBox spacing="5.0">
                                 <Label text="Total: ">
-                                    <font><Font name="System Bold" size="13.0" /></font>
+                                    <font>
+                                        <Font name="System Bold" size="13.0"/>
+                                    </font>
                                 </Label>
                                 <Label fx:id="lblTotalInfo" text="-" textFill="#28a745">
-                                    <font><Font name="System Bold" size="13.0" /></font>
+                                    <font>
+                                        <Font name="System Bold" size="13.0"/>
+                                    </font>
                                 </Label>
                             </HBox>
                         </children>
                     </VBox>
                 </StackPane>
 
-                <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="15.0" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-width: 1 0 0 0;">
+                <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="15.0"
+                      style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-width: 1 0 0 0;">
                     <padding>
-                        <Insets left="20.0" right="20.0" />
+                        <Insets left="20.0" right="20.0"/>
                     </padding>
                     <children>
                         <VBox alignment="CENTER_LEFT" spacing="5.0">
                             <children>
-                                <Label text="Origen:"><font><Font name="System Bold" size="12.0" /></font></Label>
-                                <ComboBox fx:id="cmbOrigen" prefWidth="150.0" promptText="Origen" />
+                                <Label text="Origen:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0"/>
+                                    </font>
+                                </Label>
+                                <ComboBox fx:id="cmbOrigen" prefWidth="150.0" promptText="Origen"/>
                             </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" spacing="5.0">
                             <children>
-                                <Label text="Destino:"><font><Font name="System Bold" size="12.0" /></font></Label>
-                                <ComboBox fx:id="cmbDestino" prefWidth="150.0" promptText="Destino" />
+                                <Label text="Destino:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0"/>
+                                    </font>
+                                </Label>
+                                <ComboBox fx:id="cmbDestino" prefWidth="150.0" promptText="Destino"/>
                             </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" spacing="5.0">
                             <children>
-                                <Label text="Priorizar:"><font><Font name="System Bold" size="12.0" /></font></Label>
-                                <ComboBox fx:id="cmbCriterio" prefWidth="130.0" />
+                                <Label text="Priorizar:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0"/>
+                                    </font>
+                                </Label>
+                                <ComboBox fx:id="cmbCriterio" prefWidth="130.0"/>
                             </children>
                         </VBox>
-                        <Button mnemonicParsing="false" onAction="#best_ruta" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #62529C; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Calcular Ruta">
-                            <font><Font name="System Bold" size="13.0" /></font>
-                        </Button>
-
-                        <Button mnemonicParsing="false" onAction="#ruta_alternativa" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #7A8B99; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Ruta Alternativa">
-                            <font><Font name="System Bold" size="13.0" /></font>
-                        </Button>
-
-                        <Button mnemonicParsing="false" onAction="#limpiarBusqueda" prefHeight="40.0" prefWidth="104.0" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Limpiar">
+                        <Button mnemonicParsing="false" onAction="#best_ruta" prefHeight="40.0" prefWidth="120.0"
+                                style="-fx-background-color: #62529C; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;"
+                                text="Calcular Ruta">
                             <font>
-                                <Font name="System Bold" size="13.0" />
+                                <Font name="System Bold" size="13.0"/>
                             </font>
                         </Button>
-                        <Region HBox.hgrow="ALWAYS" />
+
+                        <Button mnemonicParsing="false" onAction="#ruta_alternativa" prefHeight="40.0" prefWidth="130.0"
+                                style="-fx-background-color: #7A8B99; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;"
+                                text="Ruta Alternativa">
+                            <font>
+                                <Font name="System Bold" size="13.0"/>
+                            </font>
+                        </Button>
+
+                        <Button mnemonicParsing="false" onAction="#limpiarBusqueda" prefHeight="40.0" prefWidth="104.0"
+                                style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;"
+                                text="Limpiar">
+                            <font>
+                                <Font name="System Bold" size="13.0"/>
+                            </font>
+                        </Button>
+                        <Region HBox.hgrow="ALWAYS"/>
                     </children>
                 </HBox>
             </children>
