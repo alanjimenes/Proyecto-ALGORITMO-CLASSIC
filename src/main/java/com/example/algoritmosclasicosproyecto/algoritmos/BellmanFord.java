@@ -11,6 +11,20 @@ import java.util.Map;
 
 public class BellmanFord {
 
+    /**
+     * Función: bellmanFord
+     * Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
+     *            int id_Origin: ID de la parada de inicio,
+     *            int id_Destination: ID de la parada de destino,
+     *            String criterio: criterio de optimización ("tiempo", "distancia", "costo" o "trasbordo")
+     * Objetivo: Encontrar la ruta más corta entre dos paradas según el criterio indicado.
+     *           A diferencia de Dijkstra, puede manejar pesos negativos como descuentos en tarifas.
+     *           Repite el proceso de relajación V-1 veces sobre todas las rutas del grafo,
+     *           donde V es el número total de paradas
+     * Retorno: (List<Parada>) Lista ordenada de paradas que forman la ruta más corta.
+     *          Retorna null si alguna parada no existe o no hay camino posible.
+     */
+
     public static List<Parada> bellmanFord(Transporte transporte, int id_Origin, int id_Destination, String criterio) {
         Map<Integer, Parada> paradaMap = transporte.getParadaMap();
         Map<Integer, List<Ruta>> listaRuta = transporte.getListaRuta();

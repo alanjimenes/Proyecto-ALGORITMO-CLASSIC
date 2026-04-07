@@ -226,7 +226,7 @@ public class Transporte {
                 i++;
             }
 
-            //avisos por dentro para confirmar
+
             System.out.println("Ruta editada exitosamente.");
 
         } catch (Exception e) {

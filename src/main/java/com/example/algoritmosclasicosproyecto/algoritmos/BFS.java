@@ -7,7 +7,16 @@ import com.example.algoritmosclasicosproyecto.logica.Transporte;
 import java.util.*;
 
 public class BFS {
-
+    /**
+     * Función: bfs (Búsqueda en Anchura)
+     * Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
+     *            int id_Origin: ID de la parada desde donde inicia el recorrido
+     * Objetivo: Recorrer el grafo por niveles desde una parada origen, visitando
+     *           primero las paradas más cercanas antes de avanzar a las más lejanas.
+     *           Útil para encontrar la ruta con menor número de paradas intermedias
+     * Retorno: (List<Parada>) Lista de paradas en el orden en que fueron visitadas.
+     *          Retorna null si la parada origen no existe.
+     */
     public static List<Parada> bfs(Transporte transporte, int id_Origin) {
 
         Map<Integer, Parada> paradaMap = transporte.getParadaMap();

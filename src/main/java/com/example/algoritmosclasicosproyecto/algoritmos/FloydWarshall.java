@@ -11,6 +11,19 @@ import java.util.Map;
 
 public class FloydWarshall {
 
+    /**
+     * Función: floydWarshall
+     * Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
+     *            int id_Origin: ID de la parada de inicio,
+     *            int id_Destination: ID de la parada de destino,
+     *            String criterio: criterio de optimización ("tiempo", "distancia", "costo" o "trasbordo")
+     * Objetivo: Calcular la ruta más corta entre todos los pares de paradas del mapa, no solo para una. A diferencia de Dijkstra, procesa todas las rutas
+     *           del grafo simultáneamente usando tres for anidados, probando cada parada
+     *           como posible punto de paso para encontrar el camino más barato
+     * Retorno: (List<Parada>) Lista ordenada de paradas que forman la ruta más corta.
+     *          Retorna null si no hay camino posible entre las dos paradas.
+     */
+
     public static List<Parada> floydWarshall(Transporte transporte, int id_Origin, int id_Destination, String criterio) {
         Map<Integer, Parada> paradaMap = transporte.getParadaMap();
         Map<Integer, List<Ruta>> listaRuta = transporte.getListaRuta();
