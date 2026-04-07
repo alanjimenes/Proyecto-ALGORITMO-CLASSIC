@@ -32,10 +32,6 @@ public class Ruta {
         return destino;
     }
 
-    public void setDestino(Parada destino) {
-        this.destino = destino;
-    }
-
     public Parada getOrigen() {
         return origen;
     }
