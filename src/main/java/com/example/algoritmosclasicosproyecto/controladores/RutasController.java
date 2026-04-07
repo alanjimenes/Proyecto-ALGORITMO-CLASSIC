@@ -5,12 +5,17 @@ import com.example.algoritmosclasicosproyecto.logica.Ruta;
 import com.example.algoritmosclasicosproyecto.logica.Transporte;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.TextFormatter;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
+import java.util.function.UnaryOperator;
 
 public class RutasController {
 
@@ -35,35 +40,69 @@ public class RutasController {
         configComboBoxes();
         configTabla();
         actualizarDatos();
+        aplicarFiltrosNumericos();
 
-        tablaRutas.getSelectionModel().selectedItemProperty().addListener((obs, antigua, nueva) -> {
-            if (nueva != null) {
-                cmbOrigen.setValue(nueva.getOrigen());
-                cmbDestino.setValue(nueva.getDestino());
-                txtTiempo.setText(String.valueOf(nueva.getTiempo()));
-                txtDistancia.setText(String.valueOf(nueva.getDistancia()));
-                txtCosto.setText(String.valueOf(nueva.getCosto()));
-                txtTrasbordo.setText(String.valueOf((int) nueva.getTrasbordo()));
+        tablaRutas.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ruta>() {
+            @Override
+            public void changed(ObservableValue<? extends Ruta> obs, Ruta antigua, Ruta nueva) {
+                if (nueva != null) {
+                    cmbOrigen.setValue(nueva.getOrigen());
+                    cmbDestino.setValue(nueva.getDestino());
+                    txtTiempo.setText(String.valueOf(nueva.getTiempo()));
+                    txtDistancia.setText(String.valueOf(nueva.getDistancia()));
+                    txtCosto.setText(String.valueOf(nueva.getCosto()));
+                    txtTrasbordo.setText(String.valueOf((int) nueva.getTrasbordo()));
 
-                cmbOrigen.setDisable(true);
-                cmbDestino.setDisable(true);
+                    cmbOrigen.setDisable(true);
+                    cmbDestino.setDisable(true);
 
-                btnAgregar.setDisable(true);
-                btnEditar.setDisable(false);
-                btnEliminar.setDisable(false);
-            } else {
-
-                cleanform();
+                    btnAgregar.setDisable(true);
+                    btnEditar.setDisable(false);
+                    btnEliminar.setDisable(false);
+                } else {
+                    cleanform();
+                }
             }
         });
 
         cleanform();
         inyeccionCss();
         anchoTabla();
-
     }
 
-    //por culpa de maven se debio hacer un apaño con la liberia base64 para traducir todo este css para las tablas
+    private void aplicarFiltrosNumericos() {
+        String regexDecimal = "^[0-9]*\\.?[0-9]*$";
+        String regexEntero = "^[0-9]*$";
+
+        UnaryOperator<TextFormatter.Change> filtroDecimal = new UnaryOperator<TextFormatter.Change>() {
+            @Override
+            public TextFormatter.Change apply(TextFormatter.Change change) {
+                String nuevoTexto = change.getControlNewText();
+                if (nuevoTexto.matches(regexDecimal)) {
+                    return change;
+                }
+                return null;
+            }
+        };
+
+        UnaryOperator<TextFormatter.Change> filtroEntero = new UnaryOperator<TextFormatter.Change>() {
+            @Override
+            public TextFormatter.Change apply(TextFormatter.Change change) {
+                String nuevoTexto = change.getControlNewText();
+                if (nuevoTexto.matches(regexEntero)) {
+                    return change;
+                }
+                return null;
+            }
+        };
+
+        txtTiempo.setTextFormatter(new TextFormatter<>(filtroDecimal));
+        txtDistancia.setTextFormatter(new TextFormatter<>(filtroDecimal));
+        txtCosto.setTextFormatter(new TextFormatter<>(filtroDecimal));
+
+        txtTrasbordo.setTextFormatter(new TextFormatter<>(filtroEntero));
+    }
+
     private void inyeccionCss(){
         String css = """
             .table-view {
@@ -110,17 +149,50 @@ public class RutasController {
         colDistancia.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.15));
         colCosto.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.15));
         colTrasbordo.prefWidthProperty().bind(tablaRutas.widthProperty().multiply(0.14));
-
     }
 
-
     private void configTabla() {
-        colOrigen.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getOrigen().getNombre()));
-        colDestino.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getDestino().getNombre()));
-        colTiempo.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getTiempo()));
-        colDistancia.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getDistancia()));
-        colCosto.setCellValueFactory(p -> new SimpleObjectProperty<>(p.getValue().getCosto()));
-        colTrasbordo.setCellValueFactory(p -> new SimpleObjectProperty<>((int) p.getValue().getTrasbordo()));
+        colOrigen.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ruta, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Ruta, String> p) {
+                return new SimpleStringProperty(p.getValue().getOrigen().getNombre());
+            }
+        });
+
+        colDestino.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ruta, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Ruta, String> p) {
+                return new SimpleStringProperty(p.getValue().getDestino().getNombre());
+            }
+        });
+
+        colTiempo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ruta, Double>, ObservableValue<Double>>() {
+            @Override
+            public ObservableValue<Double> call(TableColumn.CellDataFeatures<Ruta, Double> p) {
+                return new SimpleObjectProperty<>(p.getValue().getTiempo());
+            }
+        });
+
+        colDistancia.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ruta, Double>, ObservableValue<Double>>() {
+            @Override
+            public ObservableValue<Double> call(TableColumn.CellDataFeatures<Ruta, Double> p) {
+                return new SimpleObjectProperty<>(p.getValue().getDistancia());
+            }
+        });
+
+        colCosto.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ruta, Double>, ObservableValue<Double>>() {
+            @Override
+            public ObservableValue<Double> call(TableColumn.CellDataFeatures<Ruta, Double> p) {
+                return new SimpleObjectProperty<>(p.getValue().getCosto());
+            }
+        });
+
+        colTrasbordo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ruta, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Ruta, Integer> p) {
+                return new SimpleObjectProperty<>((int) p.getValue().getTrasbordo());
+            }
+        });
     }
 
     private void actualizarDatos() {
@@ -139,7 +211,6 @@ public class RutasController {
 
         Parada origen = cmbOrigen.getValue();
         Parada destino = cmbDestino.getValue();
-
 
         Transporte.getInstancia().addRuta(
                 origen.getId(),
@@ -160,7 +231,6 @@ public class RutasController {
 
         Parada origen = cmbOrigen.getValue();
         Parada destino = cmbDestino.getValue();
-
 
         Transporte.getInstancia().editRuta(
                 origen.getId(),
@@ -224,12 +294,17 @@ public class RutasController {
             return false;
         }
 
+        if (txtTiempo.getText().trim().isEmpty() || txtDistancia.getText().trim().isEmpty() ||
+                txtCosto.getText().trim().isEmpty() || txtTrasbordo.getText().trim().isEmpty()) {
+            alert("Campos Vacíos", "Todos los campos numéricos deben ser completados.");
+            return false;
+        }
+
         try {
             double tiempo = Double.parseDouble(txtTiempo.getText().trim());
             double distancia = Double.parseDouble(txtDistancia.getText().trim());
             double costo = Double.parseDouble(txtCosto.getText().trim());
-
-            Integer.parseInt(txtTrasbordo.getText().trim());
+            int trasbordo = Integer.parseInt(txtTrasbordo.getText().trim());
 
             if (tiempo <= 0 || distancia <= 0 || costo < 0) {
                 alert("Datos Inválidos", "El tiempo y la distancia deben ser mayores a 0. El costo no puede ser negativo.");
@@ -237,7 +312,7 @@ public class RutasController {
             }
             return true;
         } catch (NumberFormatException e) {
-            alert("Error de Formato", "Ingrese valores numéricos válidos en los campos correspondientes.");
+            alert("Error de Formato", "Ingrese valores numéricos válidos. Asegúrese de no dejar solo un punto (ej: '.').");
             return false;
         }
     }
@@ -251,8 +326,7 @@ public class RutasController {
     }
 
     private void configComboBoxes() {
-
-        StringConverter<Parada> converter = new StringConverter<>() {
+        StringConverter<Parada> converter = new StringConverter<Parada>() {
             @Override
             public String toString(Parada parada) {
                 return parada == null ? "" : parada.getNombre();
