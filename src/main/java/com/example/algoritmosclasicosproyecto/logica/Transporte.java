@@ -156,7 +156,7 @@ public class Transporte {
             System.err.println("Error: Tiempo, distancia y costo no pueden ser negativos.");
             return;
         }
-        List<Ruta> rutas_origin = listaRuta.get(id_Origin);
+
 
         for (Ruta r : listaRuta.get(id_Origin)) {
             if (r.getDestino().getId() == id_Destination) {
