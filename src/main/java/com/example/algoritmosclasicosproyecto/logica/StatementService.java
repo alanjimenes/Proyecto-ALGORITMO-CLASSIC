@@ -2,8 +2,7 @@ package com.example.algoritmosclasicosproyecto.logica;
 import com.example.algoritmosclasicosproyecto.mappers.PrepareStatementMapper;
 import com.example.algoritmosclasicosproyecto.bd.Conexion;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
 public final class StatementService<T> {
 
     private static StatementService<?> INSTANCE;
