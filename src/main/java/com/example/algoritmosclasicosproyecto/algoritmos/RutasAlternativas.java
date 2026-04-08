@@ -66,7 +66,7 @@ public class RutasAlternativas {
         for (int i = 0; i < rutaPrincipal.size() - 1; i++) {
             int paradaActual = rutaPrincipal.get(i).getId();
             int paradaSiguiente = rutaPrincipal.get(i + 1).getId();
-  Ruta conexion = transporte.getRuta(paradaActual, paradaSiguiente);
+             Ruta conexion = transporte.getRuta(paradaActual, paradaSiguiente);
             if (conexion == null) continue;
 
             transporte.deleteRutaTemporal(paradaActual, paradaSiguiente);
