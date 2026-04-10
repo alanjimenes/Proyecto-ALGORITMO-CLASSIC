@@ -7,17 +7,17 @@ public class Ruta {
     private double distancia;
     private double costo;
     private int trasbordo;
+    private boolean disponible;
 
-    private boolean disponible = true;
 
-
-    public Ruta(Parada origen, Parada destino, double tiempo, double distancia, double costo, int trasbordo) {
+    public Ruta(Parada origen, Parada destino, double tiempo, double distancia, double costo, int trasbordo, boolean disponible ) {
         this.origen = origen;
         this.destino = destino;
         this.tiempo = tiempo;
         this.distancia = distancia;
         this.costo = costo;
         this.trasbordo = trasbordo;
+        this.disponible = true;
     }
 
 
