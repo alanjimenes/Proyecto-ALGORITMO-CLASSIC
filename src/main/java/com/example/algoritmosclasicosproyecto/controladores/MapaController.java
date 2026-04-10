@@ -249,7 +249,7 @@ public class MapaController {
                 alert("Sin Alternativas", "No se encontró una segunda ruta válida para este trayecto.", Alert.AlertType.INFORMATION);
                 return;
             }
-            caminoNodos = opciones.getFirst();
+            caminoNodos = opciones.get(1);
         } else {
 
             caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
