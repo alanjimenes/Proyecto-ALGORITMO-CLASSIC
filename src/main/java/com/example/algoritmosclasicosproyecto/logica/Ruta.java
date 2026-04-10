@@ -8,6 +8,8 @@ public class Ruta {
     private double costo;
     private int trasbordo;
 
+    private boolean disponible = true;
+
 
     public Ruta(Parada origen, Parada destino, double tiempo, double distancia, double costo, int trasbordo) {
         this.origen = origen;
@@ -28,6 +30,15 @@ public class Ruta {
             default:          return tiempo;
         }
     }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
     public Parada getDestino() {
         return destino;
     }

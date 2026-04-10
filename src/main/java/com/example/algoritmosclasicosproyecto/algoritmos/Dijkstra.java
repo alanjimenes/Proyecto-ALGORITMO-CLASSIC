@@ -7,99 +7,88 @@ import java.util.*;
 
 public class Dijkstra {
 
-    /*
-      Función: NodoDistancia
-      Objetivo: Clase interna que agrupa el ID de una parada con su distancia acumulada.
-                Implementa Comparable para que la PriorityQueue ordene automaticamente
-                de menor a mayor distancia siempre procesando primero la parada más barata
-     */
 
     static class NodoDistancia implements Comparable<NodoDistancia> {
-        int id;
-        double distancia;
+        int idParada;
+        double costoAcumulado;
 
-        NodoDistancia(int id, double distancia) {
-            this.id = id;
-            this.distancia = distancia;
+        NodoDistancia(int idParada, double costoAcumulado) {
+            this.idParada = idParada;
+            this.costoAcumulado = costoAcumulado;
         }
 
-        /*
-          Función: compareTo
-          Argumento: NodoDistancia otro: el nodo con el que se compara
-          Objetivo: Definir el criterio de ordenamiento de la PriorityQueue,
-                    el nodo con menor distancia siempre sale primero
-          Retorno: (int) negativo si este nodo es menor, positivo si es mayor, 0 si son iguales
-         */
         @Override
         public int compareTo(NodoDistancia otro) {
-            return Double.compare(this.distancia, otro.distancia);
+            return Double.compare(this.costoAcumulado, otro.costoAcumulado);
         }
     }
-    /*
-      Función: dijkstra
-      Argumento: Transporte transporte: instancia del grafo con todas las paradas y rutas,
-                 int id_Origin: ID de la parada de inicio,
-                 int id_Destination: ID de la parada de destino,
-                 String criterio: criterio de optimización ("tiempo", "distancia", "costo" o "trasbordo")
-      Objetivo: Encontrar la ruta más corta entre dos paradas según el criterio indicado,
-                usando una PriorityQueue para procesar siempre la parada de menor costo acumulado
-      Retorno: (List<Parada>) Lista ordenada de paradas que forman la ruta más corta.
-               Retorna null si alguna parada no existe o no hay camino posible.
-     */
 
-    public static List<Parada> dijkstra(Transporte transporte, int id_Origin, int id_Destination, String criterio) {
-        Map<Integer, Parada> paradaMap = transporte.getParadaMap();
-        Map<Integer, List<Ruta>> listaRuta = transporte.getListaRuta();
 
-        if (!paradaMap.containsKey(id_Origin) || !paradaMap.containsKey(id_Destination)) {
-            System.err.println("Error: El origen o destino no existe.");
+    public static List<Parada> calcularRuta(Transporte transporte, int idOrigen, int idDestino, String criterio) {
+
+        Map<Integer, Parada> mapaParadas = transporte.getParadaMap();
+        Map<Integer, List<Ruta>> mapaRutas = transporte.getListaRuta();
+
+        if (!mapaParadas.containsKey(idOrigen) || !mapaParadas.containsKey(idDestino)) {
+            System.err.println("Origen o destino no existe");
             return null;
         }
 
-        Map<Integer, Double> distancias = new HashMap<>();
-        Map<Integer, Integer> anteriores = new HashMap<>();
 
-        for (Integer id : paradaMap.keySet()) {
-            distancias.put(id, Double.MAX_VALUE);
+        Map<Integer, Double> costoMinimo = new HashMap<>();
+
+
+        Map<Integer, Integer> paradaAnterior = new HashMap<>();
+
+
+        for (Integer id : mapaParadas.keySet()) {
+            costoMinimo.put(id, Double.POSITIVE_INFINITY);
         }
-        distancias.put(id_Origin, 0.0);
 
-        PriorityQueue<NodoDistancia> pq = new PriorityQueue<>();
-        pq.add(new NodoDistancia(id_Origin, 0.0));
+        costoMinimo.put(idOrigen, 0.0);
 
-        while (!pq.isEmpty()) {
-            NodoDistancia actual = pq.poll();
-            int idActual = actual.id;
+        PriorityQueue<NodoDistancia> colaPrioridad = new PriorityQueue<>();
+        colaPrioridad.add(new NodoDistancia(idOrigen, 0.0));
 
-            if (idActual == id_Destination) break;
+        while (!colaPrioridad.isEmpty()) {
 
-            if (actual.distancia > distancias.get(idActual)) continue;
+            NodoDistancia actual = colaPrioridad.poll();
+            int idActual = actual.idParada;
 
-            List<Ruta> rutasVecinas = listaRuta.getOrDefault(idActual, new ArrayList<>());
-            for (Ruta ruta : rutasVecinas) {
-                int vecinoId = ruta.getDestino().getId();
-                double nuevaDistancia = distancias.get(idActual) + ruta.getPeso(criterio);
-                if (nuevaDistancia < distancias.get(vecinoId)) {
-                    distancias.put(vecinoId, nuevaDistancia);
-                    anteriores.put(vecinoId, idActual);
-                    pq.add(new NodoDistancia(vecinoId, nuevaDistancia));
+            if (idActual == idDestino) break;
+
+            if (actual.costoAcumulado > costoMinimo.get(idActual)) continue;
+
+            List<Ruta> conexiones = mapaRutas.getOrDefault(idActual, new ArrayList<>());
+
+            for (Ruta conexion : conexiones) {
+                if (!conexion.isDisponible()) continue;
+                int idVecino = conexion.getDestino().getId();
+
+                double nuevoCosto = costoMinimo.get(idActual) + conexion.getPeso(criterio);
+
+                if (nuevoCosto < costoMinimo.get(idVecino)) {
+                    costoMinimo.put(idVecino, nuevoCosto);
+                    paradaAnterior.put(idVecino, idActual);
+                    colaPrioridad.add(new NodoDistancia(idVecino, nuevoCosto));
                 }
             }
         }
 
-        if (distancias.get(id_Destination) == Double.MAX_VALUE) {
-            System.err.println("No existe camino posible entre " + id_Origin + " y " + id_Destination);
+        if (costoMinimo.get(idDestino) == Double.POSITIVE_INFINITY) {
+            System.err.println("No hay camino");
             return null;
         }
 
 
-        List<Parada> camino = new ArrayList<>();
-        Integer paso = id_Destination;
-        while (paso != null) {
-            camino.add(0, paradaMap.get(paso));
-            paso = anteriores.get(paso);
+        List<Parada> rutaFinal = new ArrayList<>();
+        Integer nodoActual = idDestino;
+
+        while (nodoActual != null) {
+            rutaFinal.add(0, mapaParadas.get(nodoActual));
+            nodoActual = paradaAnterior.get(nodoActual);
         }
 
-        return camino;
+        return rutaFinal;
     }
 }
