@@ -119,10 +119,10 @@ public class MapaController {
 
     private Group createNodo(Parada parada) {
         Group contenedor = new Group();
-
         Circle circulo = new Circle(0, 0, RADIO_NODO, Color.web("#62529C"));
         circulo.setStroke(Color.WHITE);
         circulo.setStrokeWidth(2.0);
+
 
         Text txtId = new Text(String.valueOf(parada.getId()));
         txtId.setFill(Color.WHITE);
@@ -144,9 +144,34 @@ public class MapaController {
 
         contenedor.getChildren().addAll(circulo, txtId, txtNombre);
 
+
+        contenedor.setOnMouseClicked(event -> {
+            Parada origenActual = cmbOrigen.getValue();
+            Parada destinoActual = cmbDestino.getValue();
+
+            if (origenActual == null || (origenActual != null && destinoActual != null)) {
+                cmbOrigen.setValue(parada);
+                cmbDestino.setValue(null);
+            } else {
+
+                if (!parada.equals(origenActual)) {
+                    cmbDestino.setValue(parada);
+                }
+            }
+        });
+
+        contenedor.setOnMouseEntered(e -> {
+            circulo.setStroke(Color.GOLD);
+            contenedor.setCursor(javafx.scene.Cursor.HAND);
+        });
+
+        contenedor.setOnMouseExited(e -> {
+            circulo.setStroke(Color.WHITE);
+            contenedor.setCursor(javafx.scene.Cursor.DEFAULT);
+        });
+
         return contenedor;
     }
-
     private void dibujarRuta(double startX, double startY, double endX, double endY, Color color, double grosor) {
         double dx = endX - startX;
         double dy = endY - startY;
@@ -224,7 +249,7 @@ public class MapaController {
                 alert("Sin Alternativas", "No se encontró una segunda ruta válida para este trayecto.", Alert.AlertType.INFORMATION);
                 return;
             }
-            caminoNodos = opciones.get(1);
+            caminoNodos = opciones.getFirst();
         } else {
 
             caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
@@ -258,8 +283,8 @@ public class MapaController {
         dibujarGrafo();
 
 
-        String etiquetaCriterio = esAlternativa ? criterio + " (Alternativa)" : criterio;
-        showInfoRuta(o, d, etiquetaCriterio, total);
+        String criterioAux = esAlternativa ? criterio + " (Alternativa)" : criterio;
+        showInfoRuta(o, d, criterioAux, total);
 
         panelInfo.setTranslateX(0);
         panelInfo.setTranslateY(0);

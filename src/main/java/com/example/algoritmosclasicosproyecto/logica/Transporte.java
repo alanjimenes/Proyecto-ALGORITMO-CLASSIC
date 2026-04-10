@@ -114,12 +114,12 @@ public class Transporte {
             return;
         }
 
-        String sqlDeleteRutas = "delete from ruta where id_origen = ? or id_destino = ?";
-        String sqlDeleteParada = "delete from parada where id = ?";
+        String sqlDlRutas = "delete from ruta where id_origen = ? or id_destino = ?";
+        String sqlDlParada = "delete from parada where id = ?";
 
         try (Connection conn = Conexion.conectar();
-             PreparedStatement pstmtRutas = conn.prepareStatement(sqlDeleteRutas);
-             PreparedStatement pstmtParada = conn.prepareStatement(sqlDeleteParada)) {
+             PreparedStatement pstmtRutas = conn.prepareStatement(sqlDlRutas);
+             PreparedStatement pstmtParada = conn.prepareStatement(sqlDlParada)) {
 
             pstmtRutas.setInt(1, id);
             pstmtRutas.setInt(2, id);

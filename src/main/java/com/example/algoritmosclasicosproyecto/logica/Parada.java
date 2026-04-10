@@ -3,8 +3,8 @@ package com.example.algoritmosclasicosproyecto.logica;
 public class Parada {
     private final int  id;
     private String nombre;
-    private final double x;
-    private final double y;
+    private double x;
+    private double y;
 
     public Parada(int id, String nombre, double x, double y) {
         this.id = id;
