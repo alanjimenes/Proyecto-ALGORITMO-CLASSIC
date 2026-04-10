@@ -240,21 +240,10 @@ public class MapaController {
         String criterioSearch = criterio.toLowerCase();
 
         if (esAlternativa) {
-
-            Map<String, List<List<Parada>>> mapaResultados = RutasAlternativas.getRutas(Transporte.getInstancia(), o.getId(), d.getId());
-            List<List<Parada>> opciones = mapaResultados.get(criterioSearch);
-
-
-            if (opciones == null || opciones.size() < 2) {
-                alert("Sin Alternativas", "No se encontró una segunda ruta válida para este trayecto.", Alert.AlertType.INFORMATION);
-                return;
-            }
-            caminoNodos = opciones.get(1);
+            caminoNodos = RutasAlternativas.calcularAlternativa(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
         } else {
-
-            caminoNodos = Dijkstra.dijkstra(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
+            caminoNodos = Dijkstra.calcularRuta(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
         }
-
         colorCamino.clear();
 
         if (caminoNodos == null || caminoNodos.size() < 2) {

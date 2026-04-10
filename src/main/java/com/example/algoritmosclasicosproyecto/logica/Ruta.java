@@ -7,44 +7,42 @@ public class Ruta {
     private double distancia;
     private double costo;
     private int trasbordo;
-    private boolean disponible;
 
+    // Flag transitorio: No va al constructor ni a la BD
+    private boolean disponible = true;
 
-    public Ruta(Parada origen, Parada destino, double tiempo, double distancia, double costo, int trasbordo, boolean disponible ) {
+    public Ruta(Parada origen, Parada destino, double tiempo, double distancia, double costo, int trasbordo) {
         this.origen = origen;
         this.destino = destino;
         this.tiempo = tiempo;
         this.distancia = distancia;
         this.costo = costo;
         this.trasbordo = trasbordo;
-        this.disponible = true;
     }
 
 
     public double getPeso(String criterio) {
         switch (criterio.toLowerCase()) {
-            case "tiempo":    return tiempo;
-            case "distancia": return distancia;
-            case "costo":     return costo;
-            case "trasbordo": return trasbordo;
-            default:          return tiempo;
+            case "tiempo":
+                return tiempo;
+            case "distancia":
+                return distancia;
+            case "costo":
+                return costo;
+            case "trasbordo":
+                return (double) trasbordo;
+            default:
+                return tiempo;
         }
     }
 
-    public boolean isDisponible() {
-        return disponible;
-    }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
+    public Parada getOrigen() {
+        return origen;
     }
 
     public Parada getDestino() {
         return destino;
-    }
-
-    public Parada getOrigen() {
-        return origen;
     }
 
     public double getTiempo() {
@@ -70,12 +68,16 @@ public class Ruta {
     public void setCosto(double costo) {
         this.costo = costo;
     }
-
     public int getTrasbordo() {
         return trasbordo;
     }
-
     public void setTrasbordo(int trasbordo) {
         this.trasbordo = trasbordo;
+    }
+    public boolean isDisponible() {
+        return disponible;
+    }
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 }
