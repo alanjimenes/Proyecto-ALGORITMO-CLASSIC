@@ -8,7 +8,7 @@ public class Ruta {
     private double costo;
     private int trasbordo;
 
-
+    // Flag transitorio: No va al constructor ni a la BD
     private boolean disponible = true;
 
     public Ruta(Parada origen, Parada destino, double tiempo, double distancia, double costo, int trasbordo) {
