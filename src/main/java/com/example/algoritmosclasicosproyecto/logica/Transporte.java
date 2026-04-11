@@ -110,10 +110,6 @@ public class Transporte {
     }
 
     public void deleteParada(int id) {
-        if (!paradaMap.containsKey(id)) {
-            System.err.println("Error: La parada con ID " + id + " no existe.");
-            return;
-        }
 
         String sqlDlRutas = "delete from ruta where id_origen = ? or id_destino = ?";
         String sqlDlParada = "delete from parada where id = ?";
@@ -136,8 +132,6 @@ public class Transporte {
                 for (List<Ruta> rutas : listaRuta.values()) {
                     rutas.removeIf(ruta -> ruta.getDestino().getId() == id);
                 }
-
-                System.out.println("Parada " + id + " eliminada en cascada con éxito.");
             }
 
         } catch (SQLException e) {
@@ -177,12 +171,14 @@ public class Transporte {
             service.executeUpdate(nuevaRuta, new insertRutaMapper() {
             });
             listaRuta.get(id_Origin).add(nuevaRuta);
-            System.out.println("Ruta agregada exitosamente en BD y Grafo.");
 
         } catch (Exception e) {
             System.err.println("Error al procesar ruta: " + e.getMessage());
         }
     }
+
+
+
     public Ruta getRuta(int id_Origin, int id_Destination) {
         if (!listaRuta.containsKey(id_Origin)) return null;
         for (Ruta r : listaRuta.get(id_Origin)) {
@@ -194,12 +190,6 @@ public class Transporte {
     }
 
     public void editRuta(int id_origin, int id_destination, double tiempo, double distancia, double costo, int trasbordo) {
-
-        if (!paradaMap.containsKey(id_origin) || !paradaMap.containsKey(id_destination)) {
-            System.err.println("Origen o destino no existen.");
-            return;
-        }
-
         Parada origen = paradaMap.get(id_origin);
         Parada destino = paradaMap.get(id_destination);
         Ruta rutaEditada = new Ruta(origen, destino, tiempo, distancia, costo, trasbordo);
@@ -223,7 +213,7 @@ public class Transporte {
             }
 
 
-            System.out.println("Ruta editada exitosamente.");
+          //  System.out.println("Ruta editada exitosamente.");
 
         } catch (Exception e) {
             System.err.println("Error al editar " + e.getMessage());
@@ -252,7 +242,6 @@ public class Transporte {
             service.executeUpdate(ruta_deleted, new deleteRutaMapper() {
             });
             listaRuta.get(id_origin).removeIf(r -> r.getDestino().getId() == id_destination);
-            System.out.println("Ruta eliminada: " + origen.getNombre() + " => " + destino.getNombre());
 
         } catch (Exception e) {
             System.err.println("error " + e.getMessage());
