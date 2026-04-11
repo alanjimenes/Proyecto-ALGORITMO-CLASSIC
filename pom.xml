@@ -80,7 +80,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.algoritmosclasicosproyecto/com.example.algoritmosclasicosproyecto.MenuApplication
+                                com.example.algoritmosclasicosproyecto/com.example.algoritmosclasicosproyecto.controladores.MenuApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
