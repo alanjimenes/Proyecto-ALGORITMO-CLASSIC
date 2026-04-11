@@ -13,4 +13,8 @@ module com.example.algoritmosclasicosproyecto {
     opens com.example.algoritmosclasicosproyecto.logica to javafx.fxml;
     exports com.example.algoritmosclasicosproyecto.algoritmos;
     opens com.example.algoritmosclasicosproyecto.algoritmos to javafx.fxml;
+    exports com.example.algoritmosclasicosproyecto.mappers;
+    opens com.example.algoritmosclasicosproyecto.mappers to javafx.fxml;
+    exports com.example.algoritmosclasicosproyecto.bd;
+    opens com.example.algoritmosclasicosproyecto.bd to javafx.fxml;
 }

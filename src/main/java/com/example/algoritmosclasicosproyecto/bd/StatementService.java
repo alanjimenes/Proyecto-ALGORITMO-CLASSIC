@@ -1,6 +1,6 @@
-package com.example.algoritmosclasicosproyecto.logica;
+package com.example.algoritmosclasicosproyecto.bd;
 import com.example.algoritmosclasicosproyecto.mappers.PrepareStatementMapper;
-import com.example.algoritmosclasicosproyecto.bd.Conexion;
+
 import java.sql.*;
 
 public final class StatementService<T> {

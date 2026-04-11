@@ -1,12 +1,14 @@
 package com.example.algoritmosclasicosproyecto.mappers;
+
 import com.example.algoritmosclasicosproyecto.logica.Ruta;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public interface insertRutaMapper extends PrepareStatementMapper<Ruta> {
+
+public class insertRutaMapper implements PrepareStatementMapper<Ruta> {
 
     @Override
-    default int execute(Ruta ruta, PreparedStatement ps) throws SQLException {
+    public int execute(Ruta ruta, PreparedStatement ps) throws SQLException {
         ps.setInt(1, ruta.getOrigen().getId());
         ps.setInt(2, ruta.getDestino().getId());
         ps.setDouble(3, ruta.getTiempo());
@@ -17,8 +19,7 @@ public interface insertRutaMapper extends PrepareStatementMapper<Ruta> {
     }
 
     @Override
-    default String query() {
-        return "INSERT INTO ruta (id_origen, id_destino, tiempo_minuto, distancia_km, costo, trasbordo) VALUES (?, ?, ?, ?, ?, ?)";
+    public String query() {
+        return "insert INTO ruta (id_origen, id_destino, tiempo_minuto, distancia_km, costo, trasbordo) values (?, ?, ?, ?, ?, ?)";
     }
 }
-

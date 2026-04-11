@@ -1,12 +1,18 @@
 package com.example.algoritmosclasicosproyecto.mappers;
+
 import com.example.algoritmosclasicosproyecto.logica.Ruta;
-import com.example.algoritmosclasicosproyecto.mappers.PrepareStatementMapper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-public interface updateRutaMapper extends PrepareStatementMapper<Ruta> {
-    @Override
-    default int execute(Ruta ruta, PreparedStatement ps) throws SQLException {
 
+/**
+ * Implementación concreta para la actualización de rutas.
+ * Cumple con el principio de abstracción al separar la definición (interfaz)
+ * de la implementación técnica (esta clase).
+ */
+public class updateRutaMapper implements PrepareStatementMapper<Ruta> {
+
+    @Override
+    public int execute(Ruta ruta, PreparedStatement ps) throws SQLException {
         ps.setDouble(1, ruta.getTiempo());
         ps.setDouble(2, ruta.getDistancia());
         ps.setDouble(3, ruta.getCosto());
@@ -18,7 +24,7 @@ public interface updateRutaMapper extends PrepareStatementMapper<Ruta> {
     }
 
     @Override
-    default String query() {
-        return "update ruta set tiempo_minuto = ?, distancia_km = ?, costo = ?, trasbordo = ? where id_origen = ? AND id_destino = ?";
+    public String query() {
+        return "update ruta SET tiempo_minuto = ?, distancia_km = ?, costo = ?, trasbordo = ? where id_origen = ? and id_destino = ?";
     }
 }
