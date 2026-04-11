@@ -1,4 +1,4 @@
-package com.example.algoritmosclasicosproyecto.controladores;
+package com.example.algoritmosclasicosproyecto;
 
 import com.example.algoritmosclasicosproyecto.logica.Transporte;
 import javafx.application.Application;
@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class MenuApplication extends Application {

@@ -1,4 +1,4 @@
-package com.example.algoritmosclasicosproyecto.controladores;
+package com.example.algoritmosclasicosproyecto;
 
 import javafx.application.Application;
 

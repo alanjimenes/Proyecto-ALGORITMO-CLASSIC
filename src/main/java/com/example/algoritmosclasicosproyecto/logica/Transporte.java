@@ -1,10 +1,8 @@
 package com.example.algoritmosclasicosproyecto.logica;
 import com.example.algoritmosclasicosproyecto.bd.Conexion;
-
-import com.example.algoritmosclasicosproyecto.mappers.InsertRutaMapper;
-import com.example.algoritmosclasicosproyecto.mappers.UpdateRutaMapper;
-import com.example.algoritmosclasicosproyecto.mappers.DeleteRutaMapper;
-
+import com.example.algoritmosclasicosproyecto.mappers.deleteRutaMapper;
+import com.example.algoritmosclasicosproyecto.mappers.insertRutaMapper;
+import com.example.algoritmosclasicosproyecto.mappers.updateRutaMapper;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -23,12 +21,18 @@ public class Transporte {
     public static Transporte getInstancia() {
         if (instancia == null) {
             instancia = new Transporte();
+
         }
         return instancia;
     }
 
-    public Map<Integer, Parada> getParadaMap() { return paradaMap; }
-    public Map<Integer, List<Ruta>> getListaRuta() { return listaRuta; }
+    public Map<Integer, Parada> getParadaMap() {
+        return paradaMap;
+    }
+
+    public Map<Integer, List<Ruta>> getListaRuta() {
+        return listaRuta;
+    }
 
     public List<Ruta> getRutas() {
         List<Ruta> todas = new ArrayList<>();
@@ -42,6 +46,7 @@ public class Transporte {
         return new ArrayList<>(paradaMap.values());
     }
 
+
     public void addParada(String nombre) {
         double randomX = 50 + (Math.random() * 700);
         double randomY = 50 + (Math.random() * 400);
@@ -49,19 +54,25 @@ public class Transporte {
         final String SQL = "insert into parada (nombre, x, y) values (?, ?, ?)";
         Connection connection = Conexion.conectar();
 
+
         try (PreparedStatement pstmt = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, nombre);
             pstmt.setDouble(2, randomX);
             pstmt.setDouble(3, randomY);
 
             int rows = pstmt.executeUpdate();
+
             if (rows > 0) {
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int generatedId = generatedKeys.getInt(1);
+
+
                         Parada nuevaParada = new Parada(generatedId, nombre, randomX, randomY);
                         paradaMap.put(generatedId, nuevaParada);
                         listaRuta.put(generatedId, new ArrayList<>());
+
+                      //  System.out.println("Parada registrada en BD y memoria con ID: " + generatedId);
                     }
                 }
             }
@@ -85,8 +96,11 @@ public class Transporte {
             pstmt.setInt(2, id);
 
             int filas = pstmt.executeUpdate();
+
             if (filas > 0) {
+
                 paradaMap.get(id).setNombre(nombre);
+                //   System.out.println("Parada " + id + " modificada a: " + nombre);
             }
 
         } catch (SQLException e) {
@@ -117,9 +131,11 @@ public class Transporte {
             if (filas > 0) {
                 paradaMap.remove(id);
                 listaRuta.remove(id);
+
                 for (List<Ruta> rutas : listaRuta.values()) {
                     rutas.removeIf(ruta -> ruta.getDestino().getId() == id);
                 }
+
                 System.out.println("Parada " + id + " eliminada en cascada con éxito.");
             }
 
@@ -129,15 +145,18 @@ public class Transporte {
     }
 
     public void addRuta(int id_Origin, int id_Destination, double tiempo, double distancia, double costo, int trasbordo) {
+
         if (!paradaMap.containsKey(id_Origin) || !paradaMap.containsKey(id_Destination)) {
             System.err.println("Error: El origen o destino no existe.");
             return;
         }
 
+
         if (tiempo < 0 || distancia < 0 || costo < 0) {
             System.err.println("Error: Tiempo, distancia y costo no pueden ser negativos.");
             return;
         }
+
 
         for (Ruta r : listaRuta.get(id_Origin)) {
             if (r.getDestino().getId() == id_Destination) {
@@ -150,15 +169,19 @@ public class Transporte {
         Parada destino = paradaMap.get(id_Destination);
         Ruta nuevaRuta = new Ruta(origen, destino, tiempo, distancia, costo, trasbordo);
 
-        try (Connection conn = Conexion.conectar()) {
-            InsertRutaMapper.execute(nuevaRuta, conn);
+
+        StatementService<Ruta> service = (StatementService<Ruta>) StatementService.getInstance();
+
+        try {
+            service.executeUpdate(nuevaRuta, new insertRutaMapper() {
+            });
             listaRuta.get(id_Origin).add(nuevaRuta);
             System.out.println("Ruta agregada exitosamente en BD y Grafo.");
+
         } catch (Exception e) {
             System.err.println("Error al procesar ruta: " + e.getMessage());
         }
     }
-
     public Ruta getRuta(int id_Origin, int id_Destination) {
         if (!listaRuta.containsKey(id_Origin)) return null;
         for (Ruta r : listaRuta.get(id_Origin)) {
@@ -170,6 +193,7 @@ public class Transporte {
     }
 
     public void editRuta(int id_origin, int id_destination, double tiempo, double distancia, double costo, int trasbordo) {
+
         if (!paradaMap.containsKey(id_origin) || !paradaMap.containsKey(id_destination)) {
             System.err.println("Origen o destino no existen.");
             return;
@@ -178,9 +202,10 @@ public class Transporte {
         Parada origen = paradaMap.get(id_origin);
         Parada destino = paradaMap.get(id_destination);
         Ruta rutaEditada = new Ruta(origen, destino, tiempo, distancia, costo, trasbordo);
-
-        try (Connection conn = Conexion.conectar()) {
-            UpdateRutaMapper.execute(rutaEditada, conn);
+        StatementService<Ruta> service = (StatementService<Ruta>) StatementService.getInstance();
+        try {
+            service.executeUpdate(rutaEditada, new updateRutaMapper() {
+            });
             List<Ruta> rutas = listaRuta.get(id_origin);
             boolean encontrada = false;
             int i = 0;
@@ -195,7 +220,10 @@ public class Transporte {
                 }
                 i++;
             }
+
+
             System.out.println("Ruta editada exitosamente.");
+
         } catch (Exception e) {
             System.err.println("Error al editar " + e.getMessage());
         }
@@ -217,28 +245,20 @@ public class Transporte {
 
         Ruta ruta_deleted = new Ruta(origen, destino, 0, 0, 0, 0);
 
-        try (Connection conn = Conexion.conectar()) {
-            DeleteRutaMapper.execute(ruta_deleted, conn);
+        StatementService<Ruta> service = (StatementService<Ruta>) StatementService.getInstance();
+
+        try {
+            service.executeUpdate(ruta_deleted, new deleteRutaMapper() {
+            });
             listaRuta.get(id_origin).removeIf(r -> r.getDestino().getId() == id_destination);
             System.out.println("Ruta eliminada: " + origen.getNombre() + " => " + destino.getNombre());
+
         } catch (Exception e) {
             System.err.println("error " + e.getMessage());
         }
     }
 
-    public void deleteRutaTemporal(int id_origin, int id_destination) {
-        if (listaRuta.containsKey(id_origin)) {
-            listaRuta.get(id_origin).removeIf(r -> r.getDestino().getId() == id_destination);
-        }
-    }
 
-    public void addRutaTemporal(int id_Origin, int id_Destination, double tiempo, double distancia, double costo, int trasbordo) {
-        if (paradaMap.containsKey(id_Origin) && paradaMap.containsKey(id_Destination)) {
-            Parada origen = paradaMap.get(id_Origin);
-            Parada destino = paradaMap.get(id_Destination);
-            listaRuta.get(id_Origin).add(new Ruta(origen, destino, tiempo, distancia, costo, trasbordo));
-        }
-    }
 
     public void load_data() {
         paradaMap.clear();
@@ -277,6 +297,8 @@ public class Transporte {
                         listaRuta.get(idOrigen).add(r);
                     }
                 }
+
+
             }
         } catch (SQLException e) {
             System.err.println("Error al cargar la BD: " + e.getMessage());
