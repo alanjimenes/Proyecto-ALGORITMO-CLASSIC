@@ -285,12 +285,12 @@ public class RutasController {
         Parada destino = cmbDestino.getValue();
 
         if (origen == null || destino == null) {
-            alert("Error de Selección", "Debe seleccionar un origen y un destino válidos.");
+            alert("Error", "Debe seleccionar un origen y un destino válidos.");
             return false;
         }
 
         if (origen.getId() == destino.getId()) {
-            alert("Error de Lógica", "El origen y el destino no pueden ser la misma parada.");
+            alert("Error", "El origen y el destino no pueden ser la misma parada.");
             return false;
         }
 

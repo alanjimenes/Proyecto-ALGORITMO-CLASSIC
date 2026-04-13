@@ -172,6 +172,7 @@ public class MapaController {
 
         return contenedor;
     }
+
     private void dibujarRuta(double startX, double startY, double endX, double endY, Color color, double grosor) {
         double dx = endX - startX;
         double dy = endY - startY;

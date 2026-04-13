@@ -8,7 +8,8 @@ import com.example.algoritmosclasicosproyecto.mappers.updateRutaMapper;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.*;
-
+//en lista de rutas el integer no representa como tal la ruta si no el punto de partida en donde esa ruta empezara o sea
+//el id de origen
 public class Transporte {
     private Map<Integer, Parada> paradaMap;
     private Map<Integer, List<Ruta>> listaRuta;
@@ -35,6 +36,8 @@ public class Transporte {
         return listaRuta;
     }
 
+
+    //Toma el origen y va almacenando todas las rutas conectadas a ese origen y va cargando la lista de todas para su posterior uso en memoria
     public List<Ruta> getRutas() {
         List<Ruta> todas = new ArrayList<>();
         for (List<Ruta> rutas : listaRuta.values()) {
@@ -43,15 +46,15 @@ public class Transporte {
         return todas;
     }
 
+    //Toma todas las paradas y las devuelve para su uso proximo, se usa en el controlador de ruta para cargar los comboboxes, en parada controller para alimentar la lista
     public List<Parada> getParadas() {
         return new ArrayList<>(paradaMap.values());
     }
 
-
     public void addParada(String nombre) {
         double randomX = 50 + (Math.random() * 700);
         double randomY = 50 + (Math.random() * 400);
-
+        //al añadir parada se multiplica por 700 en X porque este es el ancho de las coordenadas y por 400 en Y porque es la altura de esta
         final String SQL = "insert into parada (nombre, x, y) values (?, ?, ?)";
         Connection connection = Conexion.conectar();
 
@@ -171,6 +174,7 @@ public class Transporte {
             service.executeUpdate(nuevaRuta, new insertRutaMapper() {
             });
             listaRuta.get(id_Origin).add(nuevaRuta);
+            //Aquí simplemente llenamos en memoria la lista en base al id de origen por ejemplo si L va a K y L va a Z se llenan todas las rutas de mi origen que es L en memoria
 
         } catch (Exception e) {
             System.err.println("Error al procesar ruta: " + e.getMessage());
@@ -179,7 +183,7 @@ public class Transporte {
 
 
 
-    public Ruta getRuta(int id_Origin, int id_Destination) {
+    public Ruta getConexion(int id_Origin, int id_Destination) {
         if (!listaRuta.containsKey(id_Origin)) return null;
         for (Ruta r : listaRuta.get(id_Origin)) {
             if (r.getDestino().getId() == id_Destination) {
@@ -287,6 +291,7 @@ public class Transporte {
                         listaRuta.get(idOrigen).add(r);
                     }
                 }
+                rsRutas.close();
 
 
             }
