@@ -37,7 +37,8 @@ public class Transporte {
     }
 
 
-    //Toma el origen y va almacenando todas las rutas conectadas a ese origen y va cargando la lista de todas para su posterior uso en memoria
+    //Toma el origen y va almacenando todas las rutas conectadas a ese origen y va cargando la lista
+    //de todas para su posterior uso en memoria
     public List<Ruta> getRutas() {
         List<Ruta> todas = new ArrayList<>();
         for (List<Ruta> rutas : listaRuta.values()) {
@@ -46,7 +47,8 @@ public class Transporte {
         return todas;
     }
 
-    //Toma todas las paradas y las devuelve para su uso proximo, se usa en el controlador de ruta para cargar los comboboxes, en parada controller para alimentar la lista
+    //Toma todas las paradas y las devuelve para su uso proximo,
+    //se usa en el controlador de ruta para cargar los comboboxes, en parada controller para alimentar la lista
     public List<Parada> getParadas() {
         return new ArrayList<>(paradaMap.values());
     }
