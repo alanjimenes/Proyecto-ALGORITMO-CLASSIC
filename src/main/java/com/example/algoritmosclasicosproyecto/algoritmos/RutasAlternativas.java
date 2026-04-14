@@ -17,21 +17,23 @@ public class RutasAlternativas {
         List<Parada> rutaPrincipal = Dijkstra.calcularRuta(
                 transporte, idOrigen, idDestino, criterio);
 
-        if (rutaPrincipal == null || rutaPrincipal.size() < 2) return null;
+        if (rutaPrincipal == null || rutaPrincipal.size() < 2) {
+            return null;
+        }
 
         int idInicio = rutaPrincipal.get(0).getId();
         int idSiguiente = rutaPrincipal.get(1).getId();
 
         Ruta conexion = transporte.getConexion(idInicio, idSiguiente);
-        if (conexion == null) return null;
+        if (conexion == null) {
+            return null;
+        }
 
 
         conexion.setDisponible(false);
 
         List<Parada> alternativa = Dijkstra.calcularRuta(
                 transporte, idOrigen, idDestino, criterio);
-
-
         conexion.setDisponible(true);
 
         return alternativa;

@@ -56,7 +56,8 @@ public class Transporte {
     public void addParada(String nombre) {
         double randomX = 50 + (Math.random() * 700);
         double randomY = 50 + (Math.random() * 400);
-        //al añadir parada se multiplica por 700 en X porque este es el ancho de las coordenadas y por 400 en Y porque es la altura de esta
+        //al añadir parada se multiplica por 700 en X porque este es el ancho de las coordenadas y
+        // por 400 en Y porque es la altura de esta
         final String SQL = "insert into parada (nombre, x, y) values (?, ?, ?)";
         Connection connection = Conexion.conectar();
 
@@ -78,7 +79,7 @@ public class Transporte {
                         paradaMap.put(generatedId, nuevaParada);
                         listaRuta.put(generatedId, new ArrayList<>());
 
-                      //  System.out.println("Parada registrada en BD y memoria con ID: " + generatedId);
+                      // System.out.println("Parada registrada en BD y memoria con ID: " + generatedId);
                     }
                 }
             }
@@ -93,7 +94,7 @@ public class Transporte {
             return;
         }
 
-        String sql = "UPDATE parada SET nombre = ? WHERE id = ?";
+        String sql = "update parada set nombre = ? where id = ?";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -176,7 +177,8 @@ public class Transporte {
             service.executeUpdate(nuevaRuta, new insertRutaMapper() {
             });
             listaRuta.get(id_Origin).add(nuevaRuta);
-            //Aquí simplemente llenamos en memoria la lista en base al id de origen por ejemplo si L va a K y L va a Z se llenan todas las rutas de mi origen que es L en memoria
+            //Aquí simplemente llenamos en memoria la lista en base al id de origen por ejemplo si
+            // L va a K y L va a Z se llenan todas las rutas de mi origen que es L en memoria
 
         } catch (Exception e) {
             System.err.println("Error al procesar ruta: " + e.getMessage());
