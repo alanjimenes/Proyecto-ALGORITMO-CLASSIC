@@ -15,7 +15,7 @@ public class Transporte {
     private Map<Integer, List<Ruta>> listaRuta;
     private static Transporte instancia;
 
-    public Transporte() {
+    private Transporte() {
         this.paradaMap = new HashMap<>();
         this.listaRuta = new HashMap<>();
     }

@@ -30,7 +30,7 @@ public class Ruta {
             case "costo":
                 return costo;
             case "trasbordo":
-                return (double) trasbordo;
+                return trasbordo;
             default:
                 return tiempo;
         }

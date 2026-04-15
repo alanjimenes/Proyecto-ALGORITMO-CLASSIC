@@ -5,7 +5,7 @@ import com.example.algoritmosclasicosproyecto.logica.Ruta;
 import com.example.algoritmosclasicosproyecto.logica.Transporte;
 
 import java.util.*;
-
+//Complejidad: 2 x  Dijkstra(O(V+E)LogV)
 public class RutasAlternativas {
 
     public static List<Parada> calcularAlternativa(

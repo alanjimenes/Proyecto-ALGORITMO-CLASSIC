@@ -1,6 +1,7 @@
 package com.example.algoritmosclasicosproyecto.controladores;
 
 import com.example.algoritmosclasicosproyecto.algoritmos.Dijkstra;
+import com.example.algoritmosclasicosproyecto.algoritmos.FloydWarshall;
 import com.example.algoritmosclasicosproyecto.algoritmos.RutasAlternativas;
 import com.example.algoritmosclasicosproyecto.logica.Parada;
 import com.example.algoritmosclasicosproyecto.logica.Ruta;
@@ -34,7 +35,7 @@ public class MapaController {
     @FXML private ComboBox<Parada> cmbOrigen;
     @FXML private ComboBox<Parada> cmbDestino;
     @FXML private ComboBox<String> cmbCriterio;
-
+    @FXML private ComboBox<String> cmbAlgoritmo;
 
     @FXML private VBox panelInfo;
     @FXML private Label lblTrayecto;
@@ -63,7 +64,8 @@ public class MapaController {
         ObservableList<Parada> paradas = FXCollections.observableArrayList(Transporte.getInstancia().getParadas());
         cmbOrigen.setItems(paradas);
         cmbDestino.setItems(paradas);
-
+        cmbAlgoritmo.getItems().addAll("Dijkstra", "Floyd-Warshall");
+        cmbAlgoritmo.setValue("Dijkstra");
         StringConverter<Parada> converter = new StringConverter<>() {
             @Override public String toString(Parada p) { return p == null ? "" : p.getNombre(); }
             @Override public Parada fromString(String s) { return null; }
@@ -217,34 +219,41 @@ public class MapaController {
         Parada o = cmbOrigen.getValue();
         Parada d = cmbDestino.getValue();
         String criterio = cmbCriterio.getValue();
+        String algoritmo = cmbAlgoritmo.getValue();
 
         panelInfo.setVisible(false);
+
 
         if (o == null || d == null) {
             alert("Error de Seleccion", "Debe seleccionar un origen y un destino.", Alert.AlertType.WARNING);
             return;
         }
-
         if (o.getId() == d.getId()) {
             alert("Error:", "El origen y el destino no pueden ser la misma parada.", Alert.AlertType.WARNING);
             return;
         }
-
         if (criterio == null || criterio.equals("Seleccione")) {
-            alert("Error:", "Debe seleccionar un criterio de prioridad válido (Tiempo, Distancia, etc.).", Alert.AlertType.WARNING);
+            alert("Error:", "Debe seleccionar un criterio de prioridad válido.", Alert.AlertType.WARNING);
+            return;
+        }
+        if (algoritmo == null) {
+            alert("Error:", "Debe seleccionar un algoritmo (Dijkstra o Floyd).", Alert.AlertType.WARNING);
             return;
         }
 
-        List<Parada> caminoNodos;
-
-
+        List<Parada> caminoNodos = null;
         String criterioSearch = criterio.toLowerCase();
 
         if (esAlternativa) {
             caminoNodos = RutasAlternativas.calcularAlternativa(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
         } else {
-            caminoNodos = Dijkstra.calcularRuta(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
+            if (algoritmo.equals("Floyd-Warshall")) {
+                caminoNodos = FloydWarshall.calcRuta(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
+            } else {
+                caminoNodos = Dijkstra.calcularRuta(Transporte.getInstancia(), o.getId(), d.getId(), criterioSearch);
+            }
         }
+
         colorCamino.clear();
 
         if (caminoNodos == null || caminoNodos.size() < 2) {
@@ -272,9 +281,8 @@ public class MapaController {
 
         dibujarGrafo();
 
-
-        String criterioAux = esAlternativa ? criterio + " (Alternativa)" : criterio;
-        showInfoRuta(o, d, criterioAux, total);
+        String info = esAlternativa ? algoritmo + " (Alternativa)" : algoritmo;
+        showInfoRuta(o, d, criterio + " en " + info + " ", total);
 
         panelInfo.setTranslateX(0);
         panelInfo.setTranslateY(0);
