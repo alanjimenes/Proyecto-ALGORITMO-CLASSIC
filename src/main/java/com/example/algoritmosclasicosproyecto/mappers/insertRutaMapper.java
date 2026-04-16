@@ -8,14 +8,14 @@ import java.sql.SQLException;
 public class insertRutaMapper implements PrepareStatementMapper<Ruta> {
 
     @Override
-    public int execute(Ruta ruta, PreparedStatement ps) throws SQLException {
+    public void execute(Ruta ruta, PreparedStatement ps) throws SQLException {
         ps.setInt(1, ruta.getOrigen().getId());
         ps.setInt(2, ruta.getDestino().getId());
         ps.setDouble(3, ruta.getTiempo());
         ps.setDouble(4, ruta.getDistancia());
         ps.setDouble(5, ruta.getCosto());
         ps.setInt(6, ruta.getTrasbordo());
-        return ps.executeUpdate();
+        ps.executeUpdate();
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.example.algoritmosclasicosproyecto.logica.Ruta;
 import com.example.algoritmosclasicosproyecto.logica.Transporte;
 
 import java.util.*;
-//Complejidad: 2 x  Dijkstra(O(V+E)LogV)
+//Complejidad: 2 x  Dijkstra(O(V+A)LogV)
 public class RutasAlternativas {
 
     public static List<Parada> calcularAlternativa(
@@ -16,7 +16,7 @@ public class RutasAlternativas {
 
         List<Parada> rutaPrincipal = Dijkstra.calcularRuta(
                 transporte, idOrigen, idDestino, criterio);
-
+        //no hay una tramo
         if (rutaPrincipal == null || rutaPrincipal.size() < 2) {
             return null;
         }
@@ -31,7 +31,6 @@ public class RutasAlternativas {
 
 
         conexion.setDisponible(false);
-
         List<Parada> alternativa = Dijkstra.calcularRuta(
                 transporte, idOrigen, idDestino, criterio);
         conexion.setDisponible(true);

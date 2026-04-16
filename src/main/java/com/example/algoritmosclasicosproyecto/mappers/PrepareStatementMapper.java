@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public interface PrepareStatementMapper<T> {
 
-    int execute(T object, PreparedStatement ps) throws SQLException;
+    void execute(T object, PreparedStatement ps) throws SQLException;
     String query();
 
 }
