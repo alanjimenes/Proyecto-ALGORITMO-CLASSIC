@@ -59,7 +59,7 @@ public class Dijkstra {
             List<Ruta> conexiones = mapaRutas.getOrDefault(idActual, new ArrayList<>());
 
             for (Ruta conexion : conexiones) {
-                if (!conexion.isDisponible()) continue;
+                if (!conexion.isDisponible()) continue;//saltar a la siguiente ruta si esta no esta disponible
                 int idVecino = conexion.getDestino().getId();
 
                 double nuevoCosto = costoMinimo.get(idActual) + conexion.getPeso(criterio);

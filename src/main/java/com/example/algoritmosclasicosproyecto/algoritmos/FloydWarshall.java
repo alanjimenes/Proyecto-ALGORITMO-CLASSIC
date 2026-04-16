@@ -40,8 +40,7 @@ public class FloydWarshall {
                 }
             }
         }
-    //si pasar por k es mas barato que el camino actual se actualiza la distancia y decimos que de ir de un punto
-    // i a j debe seguir el camino de k
+    //Es mas corto ir de i a j pasando primero por k que ir por el camino que ya conozco
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
@@ -68,7 +67,7 @@ public class FloydWarshall {
 
         List<Parada> camino = new ArrayList<>();
         camino.add(paradas.get(u));
-        //BUSCA UN CAMINO Y SE VA ACTUALIZANDO HASTA FINALMENTE ENCONTRAR UN CAMINO ENTRE U Y V
+        //VA AVANZANDO Y SE VA ACTUALIZANDO HASTA FINALMENTE ENCONTRAR UN CAMINO ENTRE U Y V
         while (!u.equals(v)) {
             u = siguiente[u][v];
             if (u == null) return null;

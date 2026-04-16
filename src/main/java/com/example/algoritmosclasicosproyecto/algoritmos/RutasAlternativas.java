@@ -24,7 +24,7 @@ public class RutasAlternativas {
         int idInicio = rutaPrincipal.get(0).getId();
         int idSiguiente = rutaPrincipal.get(1).getId();
 
-        Ruta conexion = transporte.getConexion(idInicio, idSiguiente);
+        Ruta conexion = transporte.getConexion(idInicio, idSiguiente);//Buscar esa ruta
         if (conexion == null) {
             return null;
         }
