@@ -186,7 +186,7 @@ public class Transporte {
     }
 
 
-
+//Busqueda de conexion
     public Ruta getConexion(int id_Origin, int id_Destination) {
         if (!listaRuta.containsKey(id_Origin)) return null;
         for (Ruta r : listaRuta.get(id_Origin)) {
@@ -296,8 +296,6 @@ public class Transporte {
                     }
                 }
                 rsRutas.close();
-
-
             }
         } catch (SQLException e) {
             System.err.println("Error al cargar la BD: " + e.getMessage());

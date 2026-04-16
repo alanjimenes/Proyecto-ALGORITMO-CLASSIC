@@ -27,7 +27,7 @@ public class FloydWarshall {
             Arrays.fill(distancias[i], Double.POSITIVE_INFINITY);
             distancias[i][i] = 0;
         }
-        //esti revisa la lista y si existe una ruta directa entre una parada y otra y anota su peso en la matriz
+        //esto revisa la lista y si existe una ruta directa entre una parada y otra, anota su peso en la matriz
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 int u = paradas.get(i).getId();
@@ -40,7 +40,8 @@ public class FloydWarshall {
                 }
             }
         }
-//si pasar por k es mas barato que el camino actual se actualiza la distancia y decimos que de ir de un punto i a j debe seguir el camino de k
+    //si pasar por k es mas barato que el camino actual se actualiza la distancia y decimos que de ir de un punto
+    // i a j debe seguir el camino de k
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
@@ -56,11 +57,14 @@ public class FloydWarshall {
         return buildCamino(idOrigen, idDestino, indice, paradas, siguiente, distancias);
     }
 
-    private static List<Parada> buildCamino(int startId, int endId, Map<Integer, Integer> map, List<Parada> paradas, Integer[][] siguiente, double[][] dist) {
-        Integer u = map.get(startId);
-        Integer v = map.get(endId);
 
-        if (u == null || v == null || dist[u][v] == Double.POSITIVE_INFINITY) return null;//Si despues de todo el proceso ejecutado sigue siendo infinito significa que es imposible llegar
+    //complejidad O(V)
+    private static List<Parada> buildCamino(int origen, int destino, Map<Integer, Integer> map, List<Parada> paradas, Integer[][] siguiente, double[][] dist) {
+        Integer u = map.get(origen);
+        Integer v = map.get(destino);
+
+        if (u == null || v == null || dist[u][v] == Double.POSITIVE_INFINITY) return null;
+        //Si despues de todo el proceso ejecutado sigue siendo infinito significa que es imposible llegar
 
         List<Parada> camino = new ArrayList<>();
         camino.add(paradas.get(u));

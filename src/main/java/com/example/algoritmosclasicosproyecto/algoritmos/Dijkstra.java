@@ -34,10 +34,7 @@ public class Dijkstra {
             return null;
         }
 
-
         Map<Integer, Double> costoMinimo = new HashMap<>();
-
-
         Map<Integer, Integer> paradaAnterior = new HashMap<>();
 
 

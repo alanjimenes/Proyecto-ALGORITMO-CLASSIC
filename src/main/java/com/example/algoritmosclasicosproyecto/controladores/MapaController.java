@@ -281,8 +281,8 @@ public class MapaController {
 
         dibujarGrafo();
 
-        String info = esAlternativa ? algoritmo + " (Alternativa)" : algoritmo;
-        showInfoRuta(o, d, criterio + " en " + info + " ", total);
+        String info = esAlternativa ? " (Alternativa)" : algoritmo;
+        showInfoRuta(o, d, criterio + " " + info + " ", total);
 
         panelInfo.setTranslateX(0);
         panelInfo.setTranslateY(0);
@@ -295,13 +295,13 @@ public class MapaController {
         lblCriterioInfo.setText(criterio);
 
 
-        String critPuro = criterio.replace(" (Alternativa)", "");
+        String busqueda = criterio.toLowerCase();
 
-        if (critPuro.equalsIgnoreCase("Trasbordo")) {
+        if (busqueda.contains("trasbordo")) {
             lblTotalInfo.setText(String.format("%d unidades", (int)total));
-        } else if (critPuro.equalsIgnoreCase("Costo")) {
+        } else if (busqueda.contains("costo")) {
             lblTotalInfo.setText(String.format("RD$ %.2f", total));
-        } else if (critPuro.equalsIgnoreCase("Tiempo")) {
+        } else if (busqueda.contains("tiempo")) {
             lblTotalInfo.setText(String.format("%.2f min", total));
         } else {
             lblTotalInfo.setText(String.format("%.2f km", total));
