@@ -49,15 +49,15 @@ public class Dijkstra {
 
         while (!colaPrioridad.isEmpty()) {
 
-            NodoDistancia actual = colaPrioridad.poll();
+            NodoDistancia actual = colaPrioridad.poll(); //saca el nodo con costo mas bajo disponible
             int idActual = actual.idParada;
 
             if (idActual == idDestino) break;
-
+            //si hay un camino mas largo que el que ya tenemos registrado para ese nodo se ignora
             if (actual.costoAcumulado > costoMinimo.get(idActual)) continue;
 
             List<Ruta> conexiones = mapaRutas.getOrDefault(idActual, new ArrayList<>());
-
+            //Relajacion de aristas
             for (Ruta conexion : conexiones) {
                 if (!conexion.isDisponible()) continue;//saltar a la siguiente ruta si esta no esta disponible
                 int idVecino = conexion.getDestino().getId();
@@ -77,6 +77,7 @@ public class Dijkstra {
             return null;
         }
 
+        //Reconstruccion de camino
 
         List<Parada> rutaFinal = new ArrayList<>();
         Integer nodoActual = idDestino;

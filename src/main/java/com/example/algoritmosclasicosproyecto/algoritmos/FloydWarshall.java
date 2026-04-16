@@ -69,6 +69,8 @@ public class FloydWarshall {
         camino.add(paradas.get(u));
         //VA AVANZANDO Y SE VA ACTUALIZANDO HASTA FINALMENTE ENCONTRAR UN CAMINO ENTRE U Y V
         while (!u.equals(v)) {
+
+
             u = siguiente[u][v];
             if (u == null) return null;
             camino.add(paradas.get(u));

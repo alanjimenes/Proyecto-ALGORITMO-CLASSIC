@@ -16,7 +16,7 @@ public class RutasAlternativas {
 
         List<Parada> rutaPrincipal = Dijkstra.calcularRuta(
                 transporte, idOrigen, idDestino, criterio);
-        //no hay una tramo
+        //no hay un tramo
         if (rutaPrincipal == null || rutaPrincipal.size() < 2) {
             return null;
         }
